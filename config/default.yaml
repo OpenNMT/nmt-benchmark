@@ -1,0 +1,28 @@
+OpenNMTBenchmark:
+  Database:
+    hosts:
+      - host: localhost
+        port: 27017
+    replicaSet: null
+    poolSize: 15
+    mongoose:
+      debug: false
+    ssl: false
+    sslValidate: false
+    sslCA: null # array of files or file
+    sslCert: null # file
+    sslKey: null # file
+    sslPass: null # file
+    addUser: false # add user to db as admin
+    User:
+      login:
+      password:
+  Defaults:
+    LP: enfr
+    metric: BLEU
+  Datapath: ./data
+  scorer_cli: ./bin/multibleu
+  passport:
+    clientID: 8ceac28889c3d476304b
+    clientSecret: 029d68fab478110f6a1db541f96978919233a317
+    callbackURL: http://www.opennmtbenchmark.com:3000/auth/github/callback

@@ -1,0 +1,27 @@
+extends layout
+
+block content
+  .testSetContainer
+    .inline.field
+      label Filter
+        #languagePairs.ui.selection.dropdown
+          input(type='hidden' name='#{name}' value='#{defaultLP}')
+          .text Any language pair
+          i.dropdown.icon
+          .menu
+            .item.active(data-value="" value="") Any language pair
+            for lp in languagePairs
+              .item(data-value='#{lp.sourceLanguage}#{lp.targetLanguage}') #{lp.sourceLanguage}#{lp.targetLanguage}
+    table#testSetTable.ui.collapsing.table
+      thead
+        tr
+          th.languagePair lp
+          th.fileName file name
+          th.download
+
+block scripts
+  script.
+    var languagePairs = !{JSON.stringify(languagePairs).replace(/<\//g, '<\\/')}
+    var testSets = !{JSON.stringify(testSets).replace(/<\//g, '<\\/')}
+  script(src='/javascripts/testSets.js')
+
