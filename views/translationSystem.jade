@@ -1,0 +1,136 @@
+extends layout.jade
+
+mixin field (label, name)
+  .inline.field
+    label #{label}
+    if mode === 'view'
+      span#systemName #{TSdata[name]}
+    else
+      .ui.input
+        if mode === 'edit'
+          input(name='#{name}' value="#{TSdata[name]}")
+        else
+          input(name='#{name}')
+
+mixin dropdown (label, name, side)
+  .inline.field
+    label #{label}
+    if mode === 'view'
+      span #{TSdata[name]}
+    else
+      .ui.selection.dropdown
+        //- mess
+        if side === 'src'
+          if mode === 'edit'
+            .text #{TSdata[name]}
+          else
+            .text #{src}
+          input(type='hidden' name='#{name}' value='#{src}')
+        else
+          if mode === 'edit'
+            .text #{TSdata[name]}
+          else
+            .text #{tgt}
+          input(type='hidden' name='#{name}' value='#{tgt}')
+        i.dropdown.icon
+        .menu
+          if side === 'src'
+            for lang in allSrc
+              if lang === src
+                .item.active(data-value='#{lang}') #{lang}
+              else
+                .item(data-value='#{lang}') #{lang}
+          else
+            for lang in allTgt
+              if lang === tgt
+                .item.active(data-value='#{lang}') #{lang}
+              else
+                .item(data-value='#{lang}') #{lang}
+
+mixin textarea (label, name)
+  .inline.field
+    label #{label}
+    if mode === 'view'
+      span #{TSdata[name]}
+    else
+      .ui.input
+        textarea(name='#{name}' placeholder='this is a test' value='#{TSdata[name]}') #{TSdata[name]}
+
+mixin testSet (ts, to)
+  .ui.raised.card
+    .content
+      .header(style="display: flex; justify-content: space-between; align-items: center")
+        | #{ts.fileName}
+        if to
+          i#deleteOutput.grey.trash.icon(data-testOutputId='#{to._id}')
+      .description
+        if to
+          ul
+            li Score: #{to.score}
+            li Date: #{to.date}
+            li File: #{to.fileName}
+    .extra.content
+      #getSource.ui.basic.button(data-fileId='#{ts._id}')
+        i.download.icon
+        | Get source
+      if !to
+        form(action='/testOutput/upload' enctype='multipart/form-data' method='post' style="display: inline-block")
+          .selectOutput.ui.basic.button(data-fileId="#{ts._id}")
+            i.folder.open.outline.icon
+            span Upload
+          .uploadOutput.ui.default.button(data-fileId="#{ts._id}" style="display: none")
+            i.upload.icon
+            span.fileName
+          input(type="file" name="file" style="display: none" data-fileId="#{ts._id}")
+          input(type='hidden' name='fileId' value='#{ts._id}')
+          input(type='hidden' name='systemId' value='#{systemId}')
+
+block content
+  h1(style="display: flex; align-items: center")
+    if mode === 'create'
+      | Add translation system
+    if mode === 'view'
+      | System description
+      span(style="margin-left: 40px")
+        //- i#editSystem.small.grey.write.icon(data-systemId='#{systemId}')
+        i#deleteSystem.small.grey.trash.icon(data-systemId='#{systemId}')
+    if mode === 'edit'
+      | Edit description
+  .ui.form
+    +field(__('System name'), 'systemName')
+    +field(__('Version'), 'version')
+    +field(__('Author'), 'user')
+    +dropdown(__('Source language'), 'sourceLanguage', 'src')
+    +dropdown(__('Target language'), 'targetLanguage', 'tgt')
+    +field(__('Type'), 'type')
+    +textarea(__('Recipe'), 'recipe')
+    .buttonContainer
+      if mode === 'edit'
+        #saveSystem.ui.primary.button
+          i.save.icon
+          span= __('Save')
+      if mode === 'create'
+        #createSystem.ui.primary.button
+          i.plus.icon
+          span= __('Create')
+
+  if mode === 'view'
+    .ui.horizontal.divider Test sets
+    for ts in testSets
+      if ts.sourceLanguage === TSdata.sourceLanguage && ts.targetLanguage === TSdata.targetLanguage
+        for to in TOdata
+          if to.fileId == ts._id
+            +testSet(ts, to)
+        else
+          +testSet(ts)
+
+block scripts
+  script.
+    var systemId = "#{systemId}"
+    var translationSystem = !{JSON.stringify(TSdata).replace(/<\//g, '<\\/')}
+    var testOutputs = !{JSON.stringify(TOdata).replace(/<\//g, '<\\/')}
+    var mode = "#{mode}"
+    var allSrc = !{JSON.stringify(allSrc).replace(/<\//g, '<\\/')}
+    var allTgt = !{JSON.stringify(allTgt).replace(/<\//g, '<\\/')}
+    var testSets = !{JSON.stringify(testSets).replace(/<\//g, '<\\/')}
+  script(src='/javascripts/addTranslationSystem.js')

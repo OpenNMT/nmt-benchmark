@@ -1,0 +1,27 @@
+{
+  "name": "opennmt-benchmark",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www"
+  },
+  "dependencies": {
+    "async": "^2.1.4",
+    "body-parser": "~1.15.2",
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.2.0",
+    "express": "~4.14.0",
+    "express-session": "^1.14.2",
+    "i18n": "^0.8.3",
+    "jade": "~1.11.0",
+    "js-yaml": "^3.7.0",
+    "mongodb": "^2.2.19",
+    "mongoose": "^4.7.6",
+    "multiparty": "^4.1.2",
+    "nconf": "^0.8.4",
+    "passport": "^0.3.2",
+    "passport-github": "^1.1.0",
+    "serve-favicon": "~2.3.0",
+    "winston": "^2.3.0"
+  }
+}

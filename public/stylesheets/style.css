@@ -1,0 +1,119 @@
+body {
+  margin: 0px;
+  padding: 0px;
+  margin-top: 75px; /* Menu bar */
+  margin-bottom: 20px; /* Status bar */
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00B7FF;
+}
+
+.footer > * {
+  display: inline-block;
+  margin-right: 15px;
+}
+
+.footer {
+  background: White;
+  position: fixed;
+  bottom: 0px;
+  padding: 5px;
+  margin: 0px;
+  text-align: center;
+  box-shadow: 0 -1px 3px 0 rgba(34, 36, 38, 0.15);
+  width: 100%;
+}
+
+.tableConfig {
+  margin: 15px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.dropdown .label {
+  display: inline-block;
+  margin-right: 5px;
+}
+
+.information {
+  font-size: 16px;
+  margin-bottom: 25px;
+}
+
+.information p {
+  margin-left: 10%;
+  margin-right: 10%;
+  text-align: justify;
+}
+
+.button.indented {
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+a {
+  cursor: pointer;
+}
+
+.nb {
+  color: Silver !important;
+  text-align: right !important;
+  padding-right: 25px !important;
+  width: 10px;
+}
+
+table.dataTable.no-footer {
+  border-bottom: 1px solid rgba(34,36,38,.15); /* semantic ui default */
+}
+
+.floated.right.pagination.menu {
+  margin: 5px;
+}
+
+th:not(.nb) {
+  cursor: pointer !important;
+}
+
+.ui.form label {
+  min-width: 150px;
+  width: 150px;
+  text-align: right;
+}
+
+.ui.form label::after {
+  content: ':';
+}
+
+.ui.form textarea {
+  display: inline-block;
+  width: 350px;
+}
+
+.buttonContainer {
+  margin-left: 160px;
+}
+
+.systemName {
+  color: #00B7F7;
+  cursor: pointer;
+}
+
+.systemName:hover {
+  text-decoration: underline;
+}
+
+.testSetContainer {
+  text-align: center;
+}
+
+.testSetContainer table {
+  margin: 10px auto !important;
+}
+
+#deleteSystem,
+#deleteOutput,
+#editSystem {
+  cursor: pointer;
+}
