@@ -1,0 +1,24 @@
+if user
+  .ui.dropdown.item
+    i.user.icon
+    span #{user.login}
+    i.dropdown.icon
+    .menu
+      a.item(href='/userSystems')
+        i.file.text.icon
+        span= __('My Systems')
+      a.item(href='/bugReport')
+        i.bug.icon
+        span= __('Report a bug')
+      a.item(href='/logout')
+        i.sign.out.icon
+        span= __('Log out')
+else
+  .ui.item
+    i.github.icon
+    a(href="/auth/github") log in
+    | or
+    a sign up
+    | with github
+    //- link to github delegated authentication
+    //- link to github signup
