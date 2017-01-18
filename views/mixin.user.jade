@@ -1,0 +1,9 @@
+mixin user (userData, external)
+  - var url
+  if external
+    - url = userData.gitProfile
+  else
+    - url = '/userSystems/' + userData.githubId
+  a(href="#{url}")
+    img.ui.avatar.image(src="#{userData.avatarURL}")
+    | #{userData.name}

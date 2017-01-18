@@ -1,51 +1,59 @@
 extends layout.jade
+include mixin.user.jade
 
 mixin field (label, name)
   .inline.field
     label #{label}
-    if mode === 'view'
-      span#systemName #{TSdata[name]}
+    if name === 'user'
+      if mode === 'create'
+        .ui.input
+          input(name="#{name}")
+      else
+        +user(uData)
     else
-      .ui.input
-        if mode === 'edit'
-          input(name='#{name}' value="#{TSdata[name]}")
-        else
-          input(name='#{name}')
+      if mode === 'view'
+        span(id="#{name}") #{TSdata[name]}
+      else
+        .ui.input
+          if mode === 'edit'
+            input(name='#{name}' value="#{TSdata[name]}")
+          else
+            input(name='#{name}')
 
 mixin dropdown (label, name, side)
   .inline.field
     label #{label}
     if mode === 'view'
-      span #{TSdata[name]}
+      span #{TSdata[name]} - #{c2l[TSdata[name]]}
     else
       .ui.selection.dropdown
         //- mess
         if side === 'src'
           if mode === 'edit'
-            .text #{TSdata[name]}
+            .text #{c2l[TSdata[name]]}
           else
-            .text #{src}
+            .text #{c2l[src]}
           input(type='hidden' name='#{name}' value='#{src}')
         else
           if mode === 'edit'
-            .text #{TSdata[name]}
+            .text #{c2l[TSdata[name]]}
           else
-            .text #{tgt}
+            .text #{c2l[tgt]}
           input(type='hidden' name='#{name}' value='#{tgt}')
         i.dropdown.icon
         .menu
           if side === 'src'
             for lang in allSrc
               if lang === src
-                .item.active(data-value='#{lang}') #{lang}
+                .item.active(data-value='#{lang}') #{c2l[lang]}
               else
-                .item(data-value='#{lang}') #{lang}
+                .item(data-value='#{lang}') #{c2l[lang]}
           else
             for lang in allTgt
               if lang === tgt
-                .item.active(data-value='#{lang}') #{lang}
+                .item.active(data-value='#{lang}') #{c2l[lang]}
               else
-                .item(data-value='#{lang}') #{lang}
+                .item(data-value='#{lang}') #{c2l[lang]}
 
 mixin textarea (label, name)
   .inline.field
@@ -56,11 +64,15 @@ mixin textarea (label, name)
       .ui.input
         textarea(name='#{name}' placeholder='this is a test' value='#{TSdata[name]}') #{TSdata[name]}
 
-mixin testSet (ts, to)
+mixin testSet (ts)
+  - var to
+  for output in TOdata
+    if output.fileId == ts._id
+      - to = output
   .ui.raised.card
     .content
       .header(style="display: flex; justify-content: space-between; align-items: center")
-        | #{ts.fileName}
+        | #{ts.source.fileName}
         if to
           i#deleteOutput.grey.trash.icon(data-testOutputId='#{to._id}')
       .description
@@ -85,6 +97,7 @@ mixin testSet (ts, to)
           input(type='hidden' name='fileId' value='#{ts._id}')
           input(type='hidden' name='systemId' value='#{systemId}')
 
+
 block content
   h1(style="display: flex; align-items: center")
     if mode === 'create'
@@ -92,7 +105,7 @@ block content
     if mode === 'view'
       | System description
       span(style="margin-left: 40px")
-        //- i#editSystem.small.grey.write.icon(data-systemId='#{systemId}')
+        //-i#editSystem.small.grey.write.icon(data-systemId='#{systemId}')
         i#deleteSystem.small.grey.trash.icon(data-systemId='#{systemId}')
     if mode === 'edit'
       | Edit description
@@ -117,12 +130,8 @@ block content
   if mode === 'view'
     .ui.horizontal.divider Test sets
     for ts in testSets
-      if ts.sourceLanguage === TSdata.sourceLanguage && ts.targetLanguage === TSdata.targetLanguage
-        for to in TOdata
-          if to.fileId == ts._id
-            +testSet(ts, to)
-        else
-          +testSet(ts)
+      if ts.source.language === TSdata.sourceLanguage && ts.target.language === TSdata.targetLanguage
+        +testSet(ts)
 
 block scripts
   script.
@@ -133,4 +142,4 @@ block scripts
     var allSrc = !{JSON.stringify(allSrc).replace(/<\//g, '<\\/')}
     var allTgt = !{JSON.stringify(allTgt).replace(/<\//g, '<\\/')}
     var testSets = !{JSON.stringify(testSets).replace(/<\//g, '<\\/')}
-  script(src='/javascripts/addTranslationSystem.js')
+  script(src='/javascripts/translationSystem.js')

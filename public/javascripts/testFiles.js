@@ -1,7 +1,6 @@
 $(document).ready(function () {
   // enable dropdowns
   $('.ui.dropdown').dropdown();
-  var defaultLP = 'enfr';
 
   // Language pair selection handler
   $('#languagePairs').dropdown({
@@ -28,17 +27,24 @@ function getTable (languagePair) {
     columns: [
       {data: 'languagePair', render: function (data, type, full) {
         // LP to human readable format
-        return full.sourceLanguage + full.targetLanguage
+        return full.source.language + full.target.language
       }},
-      {data: 'fileName'},
-      {data: 'download', sortable: false, sDefaultContent: '', render: function () {
-        return '<div class="downloadSrc circular ui icon button" data-fileId="587645a0909f6c553ae80420"><i class="download icon"></i></div>'
+      {data: 'source.fileName'},
+      {data: 'download', sortable: false, sDefaultContent: '', render: function (data, type, full) {
+        return '<div class="downloadSrc circular ui icon button" data-fileId="' + full._id + '"><i class="download icon"></i></div>'
       }}
     ],
     drawCallback: function (settings) {
-      $('.downloadSrc').on('click', function () {
-        var fileId = $(this).attr('data-fileId');
-        var downloadPage = window.open('/download?fileId=' + fileId);
+      $('#testSetTable').on('click', function (e) {
+        var target;
+        if (e.target.nodeName === 'I') {
+          target = $(e.target).closest('div');
+        } else if (e.target.nodeName === 'DIV') {
+          target = $(e.target);
+        }
+        if (target && $(target).attr('data-fileId')) {
+          var downloadPage = window.open('/download/' + $(target).attr('data-fileId'));
+        }
       });
     }
   });
