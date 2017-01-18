@@ -17,12 +17,15 @@ OpenNMTBenchmark:
     User:
       login:
       password:
-  Defaults:
+  default:
     LP: enfr
     metric: BLEU
-  Datapath: ./data
+    locale: en
+  locales: ['en']
+  datapath: ./data
   scorer_cli: ./bin/multibleu
+  URL: http://www.opennmtbenchmark.com:3000
   passport:
     clientID: 8ceac28889c3d476304b
     clientSecret: 029d68fab478110f6a1db541f96978919233a317
-    callbackURL: http://www.opennmtbenchmark.com:3000/auth/github/callback
+    callbackPath: /auth/github/callback

@@ -5,13 +5,14 @@ block content
     .dropdown
       .label= __('Search Systems')
       #languagePairs.ui.selection.dropdown
-        input(type='hidden' name='lp' value='enfr')
-        .text= __('English to French')
+        input(type='hidden' name='lp' value='enru')
+        .text= __('English - Russian')
         i.dropdown.icon
         .menu
-          for lp in languagePairs
-            .item(data-value='#{lp.sourceLanguage}#{lp.targetLanguage}') #{lp.sourceLanguage}#{lp.targetLanguage}
-      // for authenticated users only
+          //-
+            for lp in languagePairs
+              .item(data-value='#{lp.sourceLanguage}#{lp.targetLanguage}') #{c2l[lp.sourceLanguage]} - #{c2l[lp.targetLanguage]}
+      //- TODO - for authenticated users only
       #addSystemButton.ui.default.button.indented
         i.icon.plus
         span= __('Add new translation system')
@@ -28,19 +29,11 @@ block content
             .item(data-value='NIST') NIST
             .item(data-value='RIBES') RIBES
 
-  table#mainTable.ui.celled.table
-    thead
-      tr
-        //th.nb.no-sort #
-        //th.user= __('User')
-        //th.systemName= __('System name')
-        //-
-          each file in testSets
-            if file.targetLanguage == 'fr' && file.sourceLanguage == 'en'
-              th(data-id='id_#{file._id}') #{file.fileName}
+  #mainTable
 
-  form#addSystemForm(action='/translationSystem/add' method='get')
+  form#addSystemForm(action='/translationSystem/add' method='POST')
     input(type='hidden' name='languagePair' val='enfr')
+
   form#viewTranslationSystem(action='/translationSystem/view' method='post')
     input(type='hidden' name='systemId' val='')
 
@@ -52,8 +45,11 @@ block description
 
 block scripts
   script.
-    var languagePairs = !{JSON.stringify(languagePairs).replace(/<\//g, '<\\/')} // remove
     var testSets = !{JSON.stringify(testSets).replace(/<\//g, '<\\/')}
-    var alert = !{JSON.stringify(alert).replace(/<\//g, '<\\/')}
-  script(src='/javascripts/main.js')
+    //var alert = !{JSON.stringify(alert).replace(/<\//g, '<\\/')}
+    var languagePairs = !{JSON.stringify(languagePairs).replace(/<\//g, '<\\/')}
+    var c2l = !{JSON.stringify(c2l).replace(/<\//g, '<\\/')}
+    var defaultLP = "#{defaultLP}"
+  script(src='/javascripts/index.js')
+  //- TODO - i18n for table header
 
