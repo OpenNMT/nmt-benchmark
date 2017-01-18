@@ -4,12 +4,13 @@ if user
     span #{user.login}
     i.dropdown.icon
     .menu
-      a.item(href='/userSystems')
+      a.item(href='/userSystems?userId=#{user._id}')
         i.file.text.icon
         span= __('My Systems')
-      a.item(href='/bugReport')
-        i.bug.icon
-        span= __('Report a bug')
+      //-
+        a.item(href='/bugReport')
+          i.bug.icon
+          span= __('Report a bug')
       a.item(href='/logout')
         i.sign.out.icon
         span= __('Log out')

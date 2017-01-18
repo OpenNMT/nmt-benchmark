@@ -1,4 +1,4 @@
-var testSet = require('../lib/testSet');
+var testSet = require('../../lib/testSet');
 var router = require('express').Router();
 var winston = require('winston');
 var fs = require('fs');
@@ -16,7 +16,7 @@ router.use('/', function (req, res, next) {
       res.locals.languagePairs = lps.filter(function (lp) {
         return fs.statSync(path.resolve(dataPath, lp)).isDirectory();
       }).map(function (lp) {
-        return {
+        return { // TODO - uniq lps
           sourceLanguage: lp.substring(0, 2),
           targetLanguage: lp.substring(2)
         }
@@ -33,15 +33,28 @@ router.use('/', function (req, res, next) {
       winston.error('Unable to retrieve test sets:', err);
       res.locals.languagePairs = [];
     } else {
-      res.locals.languagePairs = data.map(function (file) {
-        return {
-          sourceLanguage: file.toObject().sourceLanguage,
-          targetLanguage: file.toObject().targetLanguage
-        }
-      });
+      // console.log('language pairs', data)
+      res.locals.languagePairs = getUniqueLPs(data);
     }
     next();
   });
 });
 
 module.exports = router;
+
+function getUniqueLPs (array) {
+  var tmp = {};
+  return array.map(function (file) {
+    return file.toObject().source.language + file.toObject().target.language;
+  }).filter(function (lp) {
+    if (!tmp.hasOwnProperty(lp)) {
+      tmp[lp] = 1;
+      return true;
+    }
+  }).map(function (lp) {
+    return {
+      sourceLanguage: lp.substring(0,2),
+      targetLanguage: lp.substring(2)
+    }
+  });
+}

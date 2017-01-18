@@ -1,36 +1,34 @@
 $(document).ready(function () {
   if (mode === 'view') {
     $('.ui.form .input').addClass('transparent');
-    $('.ui.selection.dropdown').removeClass('selection');
     setSystemDescription(translationSystem);
   }
   $('.ui.dropdown').dropdown();
   $('#createSystem, #saveSystem').on('click', function () {
     var params = getSystemDescription();
-    var url = params.system_id ? '/translationSystem/update' : '/translationSystem/add';
-    // show spinner
+    var url = params.system_id ? '/translationSystem/update' : '/translationSystem/create';
     $.post(url, params)
-    .success(function (data) {
-      // remove spinner
-      // change mode
-      // refresh
-      console.log('response data', data)
-      if (!data.error) {
-        // redirect to view + _id
+    .success(function (response) {
+      try {
+        response = JSON.parse(response);
+      } catch (e) {
+        console.log('Unable to parse server response', e);
+      }
+      if (response.error) {
+        console.log(response.error);
       } else {
-        // error
+        window.location = '/translationSystem/view/' + response.data._id;
       }
     })
     .fail(function (err) {
-      // remove spinner
       console.log(err, err.stack);
     });
   });
 
   $('#deleteSystem').on('click', function () {
-    // modal confirmation
-    var url = '/translationSystem/delete';
-    $.post(url, {system_id: translationSystem._id})
+    //TODO - modal confirmation
+    var url = '/translationSystem/delete/' + translationSystem._id;
+    $.post(url)
     .done(function (result) {
       if (!result.error) {
         window.location = '/'; // redirect to home with confirmation message
@@ -42,7 +40,7 @@ $(document).ready(function () {
   });
 
   $('#editSystem').on('click', function () {
-    window.location = '/translationSystem/edit?systemId=' + translationSystem._id;
+    window.location = '/translationSystem/edit/' + translationSystem._id;
   });
 
   // Customize file input
@@ -64,25 +62,22 @@ $(document).ready(function () {
     $(':file[data-fileId="' + fileId + '"]').trigger('click');
   });
 
-  // upload output
+  // Upload output
   $('.uploadOutput').on('click', function () {
     $(this).closest('form').submit();
   });
 
-/*
-  $('input[type="file"]').on('change', function (e) {
-    console.log('fake path', e.target.value)
-  });
-*/
-  // remove output
+  // Remove output
   $('#deleteOutput').on('click', function () {
-    console.log('delete output')
-    var params = {
-      testOutputId: $(this).attr('data-testOutputId')
-    };
-    var url = '/testOutput/delete';
-    $.post(url, params)
+    // TODO - modal confirmation
+    var url = '/testOutput/delete/' + $(this).attr('data-testOutputId');
+    $.get(url)
     .success(function (response) {
+      try {
+        response = JSON.parse(response);
+      } catch (e) {
+        console.log('Unable to parse server response', e);
+      }
       if (response.error) {
         console.log(response.error);
       } else {
@@ -94,9 +89,10 @@ $(document).ready(function () {
     });
   });
 
+  // Download source
   $('#getSource').on('click', function () {
     var fileId = $(this).attr('data-fileId');
-    var downloadPage = window.open('/download?fileId=' + fileId);
+    var downloadPage = window.open('/download/' + fileId);
   });
 });
 

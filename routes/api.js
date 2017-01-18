@@ -6,6 +6,8 @@ var testOutput = require('../lib/testOutput');
 var multiparty = require('multiparty');
 var fs = require('fs');
 var exec = require('child_process').exec;
+var User = require('../lib/user.js');
+var tmp = require('tmp');
 
 // TODO ?
 router.post('/translationSystem/update', function (req, res, next) {
@@ -23,16 +25,26 @@ router.post('/translationSystem/update', function (req, res, next) {
 });
 
 router.get('/getDataTable', function (req, res, next) {
-  var languagePair = url.parse(req.url, true).query || {sourceLanguage: 'en', targetLanguage: 'fr'};
-  tSystem.getTranslationSystems(languagePair, function (err, data) {
+  var languagePair = url.parse(req.url, true).query || {};
+  tSystem.getTranslationSystems(languagePair, function (err, tsData) {
     if (err) {
       console.log('Unable to retrieve translation systems:', err);
     }
-    res.json({data: data});
+    User.getUsers(function (err, uData) {
+      if (err) {
+        console.log('Unable to retrieve user list:', err);
+      }
+      tsData.map(function (ts) {
+        ts.user = uData.filter(function (user) {
+          return user.githubId == ts.user;
+        })[0];
+      });
+      res.json({data: tsData});
+    });
   });
 });
 
-router.post('/translationSystem/add', function (req, res, next) {
+router.post('/translationSystem/create', function (req, res, next) {
   // if (!authenticated) { res.json({error: 'No rights to create/update systems', data: null}); } else {}
   tSystem.createTranslationSystem(req.body, function (err, data) {
     if (err) {
@@ -44,10 +56,11 @@ router.post('/translationSystem/add', function (req, res, next) {
   });
 });
 
-router.post('/translationSystem/delete', function (req, res, next) {
+router.post('/translationSystem/delete/:systemId', function (req, res, next) {
   // if (!authenticated) { res.redirect('/'); } else {}
-  // delete all related test outputs
-  tSystem.deleteTranslationSystem(req.body.system_id, function (err) {
+  // TODO - delete all related test outputs
+  var systemId = req.params.systemId;
+  tSystem.deleteTranslationSystem(systemId, function (err) {
     if (err) {
       console.log('Unable to delete translation system');
     }
@@ -66,38 +79,38 @@ router.post('/testOutput/upload', function (req, res, next) {
   form.on('error', function(err) {
     console.log('Error parsing form: ' + err.stack);
     res.send('error');
-    res.redirect('/translationSystem/view?systemId=' + systemId);
+    res.redirect('/translationSystem/view/' + systemId);
   });
 
-  form.on('field', function (name, value) {
-    query[name] = value;
+  form.parse(req, function (err, fields, files) {
+    for (f in fields) {
+      query[f] = fields[f][0];
+    }
+    for (f in files) {
+      fs.readFile(files[f][0].path, function (err, content) {
+        if (err) {
+          console.log('Cannot read file:', err);
+        } else {
+          query.content = content;
+          query.fileName = files[f][0].originalFilename;
+          query.date = new Date();
+          testOutput.saveTestOutputs(query, function (err, data) {
+            var outputId = data[0]._id;
+            var fileId = query.fileId;
+            var hypothesis = files[f][0].path;
+            // calculateScores(outputId, fileId, hypothesis);
+            res.redirect('/translationSystem/view/' + query.systemId);
+          });
+        }
+      })
+    }
   });
-
-  form.on('file', function (name, file) {
-    fs.readFile(file.path, function (err, content) {
-      if (err) {
-        console.log('cannot read file:', err);
-      } else {
-        query.content = content.toString();
-        query.fileName = file.originalFilename;
-        testOutput.saveTestOutputs(query, function (err, data) {
-          var outputId = data[0]._id;
-          var fileId = query.fileId;
-          var hypothesis = file.path;
-          // calculateScores(outputId, fileId, hypothesis);
-          res.redirect('/translationSystem/view?systemId=' + query.systemId);
-        });
-      }
-    });
-  });
-
-  form.parse(req, function (err, fields, files) {});
 });
 
 // remove output file
-router.post('/testOutput/delete', function (req, res, next) {
+router.get('/testOutput/delete/:testOutputId', function (req, res, next) {
   // if (!authenticated) { res.redirect('/'); } else {}
-  var toId = req.body.testOutputId; // get?
+  var toId = req.params.testOutputId;
   testOutput.deleteTestOutput(toId, function (err) {
     if (err) {
       console.log('Unable to delete test output');
@@ -107,16 +120,15 @@ router.post('/testOutput/delete', function (req, res, next) {
 });
 
 // get test file source
-router.get('/download', function (req, res, next) {
-  var fileId = url.parse(req.url, true).query.fileId;
-
+router.get('/download/:fileId', function (req, res, next) {
+  var fileId = req.params.fileId;
   testSet.getTestSet({_id: fileId}, function (err, data) {
     if (err) {
       res.sendStatus(500);
     } else {
-      res.setHeader('Content-disposition', 'attachment; filename=' + data.fileName);
+      res.setHeader('Content-disposition', 'attachment; filename=' + data.source.fileName);
       res.setHeader('Content-type', 'text/plain');
-      res.send(data.sourceContent);
+      res.send(data.source.content);
     }
   });
 
@@ -151,59 +163,56 @@ router.get('/download', function (req, res, next) {
 router.post('/addTestSetR', function (req, res, next) {
   var form = new multiparty.Form();
   var query = {};
-  form.parse(req, function (err, fields, files) {});
+  form.parse(req, function (err, fields, files) {
+    for (f in fields) {
+      if (f.match(/_/)) {
+        var side = f.split('_')[0];
+        var field = f.split('_')[1];
+        query[side] = query[side] || {};
+        query[side][field] = fields[f][0];
+      } else {
+        query[f] = fields[f][0];
+      }
+    }
+    var readFiles = [];
+    for (f in files) {
+      var side = f.replace(/_.*$/, '');
+      query[side] = query[side] || {};
+      query[side].fileName = files[f][0].originalFilename;
+      (function (side, path) {
+        readFiles.push(new Promise(function (resolve, reject) {
+          fs.readFile(path, function (err, content) {
+            if (err) {
+              reject('Cannot read file:', err);
+            } else {
+              query[side].content = content;
+              resolve();
+            }
+          });
+        }));
+      })(side, files[f][0].path);
+    }
+    Promise.all(readFiles).then(function (result) {
+      testSet.saveTestSets(query, function (err, data) {
+        res.redirect('/addTestSet');
+      });
+    }).catch(function (error) {
+      console.log(error);
+      res.redirect('/addTestSet');
+    })
+  });
   form.on('error', function(err) {
     console.log('Error parsing form: ' + err.stack);
     res.redirect('/addTestSet');
-  });
-  form.on('field', function (name, value) {
-    console.log('field', name, value)
-    query[name] = value;
-  });
-  form.on('file', function (name, file) {
-    console.log('file', file)
-    fs.readFile(file.path, function (err, content) {
-      if (err) {
-        console.log('cannot read file:', err);
-      } else {
-        var sourceContent = content.toString()
-          .split('\n')
-          .map(function (bitext) {
-            return bitext.split('\t')[0];
-          })
-          .join('\n');
-        var targetContent = content.toString()
-          .split('\n')
-          .map(function (bitext) {
-            return bitext.split('\t')[1];
-          })
-          .join('\n');
-        if (!targetContent) {
-          console.log('not a bitext!')
-          res.redirect('/addTestSet');
-        } else {
-          query.label = file.originalFilename.replace(/\..*$/, '').replace(/([a-z])([A-Z])/g, '$1 $2');
-          query.fileName = file.originalFilename;
-          query.sourceContent = sourceContent;
-          query.targetContent = targetContent;
-          query.sourceLanguage = query.lp.substring(0, 2);
-          query.targetLanguage = query.lp.substring(2);
-          console.log('exec query', JSON.stringify(query))
-          testSet.saveTestSets(query, function (err, data) {
-            console.log('done')
-            res.redirect('/addTestSet');
-          });
-        }
-      }
-    });
   });
 });
 
 module.exports = router;
 
-/*
+
 function calculateScores (outputId, fileId, hypothesis) {
-  var reference = '../data/reference'
+
+  var tmpName
   getSource(fileId)
   fs.write(reference, function () {
 
@@ -219,4 +228,3 @@ function calculateScores (outputId, fileId, hypothesis) {
     }
   });
 }
-*/

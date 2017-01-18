@@ -3,7 +3,7 @@ var winston = require('winston');
 var fs = require('fs');
 var nconf = require('nconf');
 var path = require('path');
-var testSet = require('../lib/testSet');
+var testSet = require('../../lib/testSet');
 
 /*
 router.use('/', function (req, res, next) {
