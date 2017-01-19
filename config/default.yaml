@@ -26,6 +26,6 @@ OpenNMTBenchmark:
   scorer_cli: ./bin/multibleu
   URL: http://www.opennmtbenchmark.com:3000
   passport:
-    clientID: 8ceac28889c3d476304b
-    clientSecret: 029d68fab478110f6a1db541f96978919233a317
+    clientID: cdb6ff225507c68d0c4a
+    clientSecret: d1a90e6ff3ea1f8bcedc504d64ea2664428fc97f
     callbackPath: /auth/github/callback
