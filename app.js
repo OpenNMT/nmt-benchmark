@@ -48,10 +48,10 @@ passport.deserializeUser(function (obj, done) {
 });
 
 var github = require('./lib/githubPassport');
-github.init(app, passport);
 
 app.use(passport.initialize());
 app.use(passport.session());
+github.init(app, passport);
 
 app.use(function (req, res, next) {
   if (req.session.passport) {
