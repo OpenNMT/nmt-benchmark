@@ -12,6 +12,8 @@ def upload_func(testfiles, opt):
     content_src=myfile.read()
   with open(opt.tgt_file, 'r') as myfile:
     content_tgt=myfile.read()
+  assert testfiles.find_one({'source.fileName': os.path.basename(opt.src_file)}) == None and \
+     testfiles.find_one({'target.fileName': os.path.basename(opt.tgt_file)}) == None, "file already in DB"
   testid = testfiles.insert(
     {
       'source':{
