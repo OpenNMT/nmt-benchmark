@@ -63,6 +63,7 @@ function getTable (languagePair) {
 
   $.get('/getDataTable', lp)
   .done(function (response) {
+    console.log('everything:', response)
     var columns = [
       {data: 'user', sDefaultContent: '', sWidth: '130', render: function (data, type, full) {
         return ('<a href="/userSystems/' + data.githubId + '"><img class="ui avatar image" src="' + data.avatarURL + '" />' + data.name + '</a>');
@@ -78,8 +79,8 @@ function getTable (languagePair) {
           sDefaultContent: '',
           searchable: false,
           render: function (data, type, full) {
-            return 0;
-            // TODO
+            return full.scores.BLEU;
+            // TODO - take test file into account
             // return full.scores[ts._id][getMetrics()] || 0;
           }
         });
@@ -108,7 +109,7 @@ function getTable (languagePair) {
 }
 
 function getMetrics () {
-  return $('#metrics').dropdown('get value');
+  return $('#metrics').dropdown('get value') || 'BLEU';
 }
 
 function getLanguagePair () {

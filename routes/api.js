@@ -28,21 +28,60 @@ router.post('/translationSystem/update', function (req, res, next) {
 
 router.get('/getDataTable', function (req, res, next) {
   var languagePair = url.parse(req.url, true).query || {};
-  tSystem.getTranslationSystems(languagePair, function (err, tsData) {
-    if (err) {
-      console.log('Unable to retrieve translation systems:', err);
-    }
-    User.getUsers(function (err, uData) {
-      if (err) {
-        console.log('Unable to retrieve user list:', err);
-      }
-      tsData.map(function (ts) {
-        ts.user = uData.filter(function (user) {
-          return user.githubId == ts.user;
-        })[0];
+
+  (function getTS () {
+    return new Promise(function (resolve, reject) {
+      tSystem.getTranslationSystems(languagePair, function (err, tsData) {
+        if (err) {
+          reject('Unable to retrieve translation system data: ' + err);
+        } else {
+          resolve(tsData);
+        }
       });
-      res.json({data: tsData});
     });
+  })()
+  .then(function getUser (tsData) {
+    return new Promise(function (resolve, reject) {
+      User.getUsers(function (err, uData) {
+        if (err) {
+          reject('Unable to retrieve user list:', err);
+        } else {
+          tsData.map(function (ts) {
+            // Replace user id by user rich object
+            ts.user = uData.filter(function (user) {
+              return user.githubId == ts.user;
+            })[0];
+          });
+          resolve(tsData);
+        }
+      });
+    });
+  })
+  .then(function getTO (tsData) {
+    return new Promise(function (resolve, reject) {
+      testOutput.getTestOutputs(function (err, toData) {
+        if (err) {
+          reject(err);
+        } else {
+          tsData.map(function (ts) {
+            // Add scores from output collection
+            ts.scores = toData.filter(function (to) {
+              return to.systemId == ts._id;
+            }).map(function (to) {
+              return to.scores;
+            })[0];
+            // TODO - take test file into account
+          });
+          resolve(tsData);
+        }
+      });
+    });
+  })
+  .then(function (response) {
+    res.json({data: response});
+  })
+  .catch(function (error) {
+    console.log(error);
   });
 });
 
@@ -218,7 +257,7 @@ function calculateScores (outputId, referenceId, hypothesis) {
   var evalTool;
   var referenceContent;
   var reference;
-  var scores = [];
+  var scores = {};
 
   (function createDir () {
     // Create temporary folder for this particular output
@@ -247,15 +286,10 @@ function calculateScores (outputId, referenceId, hypothesis) {
           reject('Unable to run evalTool: ' + err);
         } else {
           // TODO - map to evalTool
-          scores.push(
-            (function () {
-              var list = stdout.match(/([0-9.]+)/g);
-              return {
-                value: parseFloat(list[0]) + parseFloat(list[1]), // Propably a bug of multi-bleu, inversigating
-                metric: 'BLEU'
-              };
-            })()
-          )
+          scores.BLEU = (function () {
+            var list = stdout.match(/([0-9.]+)/g); // Propably a bug of multi-bleu, inversigating
+            return parseFloat(list[0]) + parseFloat(list[1]);
+          })();
           resolve();
         }
       });
