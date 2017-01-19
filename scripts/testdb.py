@@ -1,6 +1,9 @@
 import argparse
 import os
+import json
+import codecs
 from pymongo import MongoClient
+from bson.objectid import ObjectId
 
 def ls_func(testfiles, opt):
   pattern = {}
@@ -16,9 +19,9 @@ def ls_func(testfiles, opt):
 def upload_func(testfiles, opt):
   content_src=''
   content_tgt=''
-  with open(opt.src_file, 'r') as myfile:
+  with codecs.open(opt.src_file, 'r', 'utf-8') as myfile:
     content_src=myfile.read()
-  with open(opt.tgt_file, 'r') as myfile:
+  with codecs.open(opt.tgt_file, 'r', 'utf-8') as myfile:
     content_tgt=myfile.read()
   assert testfiles.find_one({'source.fileName': os.path.basename(opt.src_file)}) == None or \
      testfiles.find_one({'target.fileName': os.path.basename(opt.tgt_file)}) == None, "file already in DB"
@@ -39,10 +42,39 @@ def upload_func(testfiles, opt):
     })
   return testid
 
-def download_func(opt):
+def download_func(testfiles,opt):
+  assert os.path.isdir(opt.output_dir), "output_dir should be an existing directory"
+  pattern = {}
+  if opt.src:
+    pattern['source.language']=opt.src
+  if opt.tgt:
+    pattern['target.language']=opt.tgt
+  c=testfiles.find(pattern)
+  lps={}
+  for tf in c:
+    lp=tf['source']['language']+tf['target']['language']
+    path=os.path.join(opt.output_dir,lp)
+    if not lp in lps:
+      assert not os.path.isdir(path), str(path)+" directory already exist - remove it first"
+      os.mkdir(path)
+    lps[lp]=True
+    path=os.path.join(path,tf['domain'])
+    if not os.path.isdir(path):
+      os.mkdir(path)
+    with codecs.open(os.path.join(path,tf['source']['fileName']), 'w', 'utf-8') as myfile:
+      myfile.write(tf['source']['content'])
+    with codecs.open(os.path.join(path,tf['target']['fileName']), 'w', 'utf-8') as myfile:
+      myfile.write(tf['target']['content'])
+    tf['source']['content']=None
+    tf['target']['content']=None
+    tf['_id']=str(tf['_id'])
+    with open(os.path.join(path,"README.json"), 'w') as myfile:
+      json.dump(tf, myfile, sort_keys=True, indent=4, separators=(',', ': '))
+    print "downloading...\t"+str(tf['_id'])+'\t'+tf['source']['language']+'\t'+tf['target']['language']+'\t'+tf['domain']+'\t'+tf['origin']
   return
 
-def delete_func(opt):
+def delete_func(testfiles,opt):
+  testfiles.remove({'_id':ObjectId(opt.id)})
   return
 
 
@@ -76,28 +108,14 @@ upload_parser.add_argument('-comment', action='store', help='description/comment
 
 download_parser = subparsers.add_parser('download', help='download help')
 download_parser.set_defaults(func=download_func)
+download_parser.add_argument('-src', action='store', help='source language')
+download_parser.add_argument('-tgt', action='store', help='target language')
+download_parser.add_argument('-output_dir', action='store', help='output directory where to download selected testfiles', default='.')
+
 
 delete_parser = subparsers.add_parser('delete', help='delete help')
 delete_parser.set_defaults(func=delete_func)
+delete_parser.add_argument('-id', action='store', required=True, help='id of the testfile to remove')
 
 opt = parser.parse_args()
 opt.func(testfiles, opt)
-
-
-#var testSetSchema = mongoose.Schema({
-#  source: {
-#    fileName: String,
-#    content: String,
-#     language: String
-#   },
-#   target: {
-#     fileName: String,
-#     content: String,
-#     language: String
-#   },
-#   domain: String,
-#   by: String,
-#   comment: String,
-#   evalTool: String
-# });
-
