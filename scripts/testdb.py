@@ -2,7 +2,15 @@ import argparse
 import os
 from pymongo import MongoClient
 
-def ls_func(opt):
+def ls_func(testfiles, opt):
+  pattern = {}
+  if opt.src:
+    pattern['source.language']=opt.src
+  if opt.tgt:
+    pattern['target.language']=opt.tgt
+  c=testfiles.find(pattern, {'source.content':0,'target.content':0})
+  for tf in c:
+    print str(tf['_id'])+'\t'+tf['source']['language']+'\t'+tf['target']['language']+'\t'+tf['domain']+'\t'+tf['origin']+'\t'+tf['comment']+'\t'+tf['evalTool']
   return
 
 def upload_func(testfiles, opt):
@@ -12,7 +20,7 @@ def upload_func(testfiles, opt):
     content_src=myfile.read()
   with open(opt.tgt_file, 'r') as myfile:
     content_tgt=myfile.read()
-  assert testfiles.find_one({'source.fileName': os.path.basename(opt.src_file)}) == None and \
+  assert testfiles.find_one({'source.fileName': os.path.basename(opt.src_file)}) == None or \
      testfiles.find_one({'target.fileName': os.path.basename(opt.tgt_file)}) == None, "file already in DB"
   testid = testfiles.insert(
     {
@@ -51,6 +59,9 @@ subparsers = parser.add_subparsers(help='sub-command help')
 
 ls_parser = subparsers.add_parser('ls', help='ls help')
 ls_parser.set_defaults(func=ls_func)
+ls_parser.add_argument('-src', action='store', help='source language')
+ls_parser.add_argument('-tgt', action='store', help='target language')
+ls_parser.add_argument('-domain', action='store', help='domain of the test file')
 
 upload_parser = subparsers.add_parser('upload', help='upload help')
 upload_parser.set_defaults(func=upload_func)
