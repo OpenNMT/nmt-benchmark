@@ -1,13 +1,15 @@
 var router = require('express').Router();
 var url = require('url');
+var fs = require('fs.extra');
+var path = require('path');
+var exec = require('child_process').exec;
+var tmp = require('tmp');
+var multiparty = require('multiparty');
+
 var tSystem = require('../lib/translationSystem');
 var testSet = require('../lib/testSet');
 var testOutput = require('../lib/testOutput');
-var multiparty = require('multiparty');
-var fs = require('fs');
-var exec = require('child_process').exec;
 var User = require('../lib/user.js');
-var tmp = require('tmp');
 
 // TODO ?
 router.post('/translationSystem/update', function (req, res, next) {
@@ -98,7 +100,7 @@ router.post('/testOutput/upload', function (req, res, next) {
             var outputId = data[0]._id;
             var fileId = query.fileId;
             var hypothesis = files[f][0].path;
-            // calculateScores(outputId, fileId, hypothesis);
+            calculateScores(outputId, fileId, hypothesis);
             res.redirect('/translationSystem/view/' + query.systemId);
           });
         }
@@ -210,21 +212,126 @@ router.post('/addTestSetR', function (req, res, next) {
 module.exports = router;
 
 
-function calculateScores (outputId, fileId, hypothesis) {
+function calculateScores (outputId, referenceId, hypothesis) {
 
-  var tmpName
-  getSource(fileId)
-  fs.write(reference, function () {
+  var tmpDir;
+  var evalTool;
+  var referenceContent;
+  var reference;
+  var scores = [];
 
+  (function createDir () {
+    // Create temporary folder for this particular output
+    return new Promise(function (resolve, reject) {
+      tmp.dir({template: '/tmp/XXXXXXXX'}, function (err, path) {
+        if (err) {
+          reject('Unable to create folder in /tmp: ' + err);
+        } else {
+          tmpDir = path;
+          resolve();
+        }
+      });
+    });
+  })()
+  .then(function () {
+    return Promise.all([createHypothesis(), createReference()]);
   })
-  var cmd = 'perl ../lib/multi-bleu.perl ' + reference + ' < ' + hypothesis
-  exec(cmd, function (err, stdout, stderr) {
-    if (err) {
-      console.log(err);
-    } else {
-      var score = stdout;
-      testOutput.update({score: score});
-      rm temp file
-    }
+  .then(function runScorer() {
+    // Run evaluation tool
+    // TODO map evalTool to cmd
+    var multibleu = path.resolve('./lib/multi-bleu.perl'); // path to tool might be changed...
+    var cmd = ['perl', multibleu, reference, '<', hypothesis].join(' ');
+    return new Promise(function (resolve, reject) {
+      exec(cmd, function (err, stdout, stderr) {
+        if (err) {
+          reject('Unable to run evalTool: ' + err);
+        } else {
+          // TODO - map to evalTool
+          scores.push(
+            (function () {
+              var list = stdout.match(/([0-9.]+)/g);
+              return {
+                value: parseFloat(list[0]) + parseFloat(list[1]), // Propably a bug of multi-bleu, inversigating
+                metric: 'BLEU'
+              };
+            })()
+          )
+          resolve();
+        }
+      });
+    });
+  })
+  .then(function saveScores () {
+    // Store scores in database
+    var query = {_id: outputId};
+    return new Promise(function (resolve, reject) {
+      testOutput.setScores(query, scores, function (err, output) {
+        if (err) {
+          reject('Unable to update scores: ' + err);
+        } else {
+          resolve();
+        }
+      });
+    });
+  })
+  .then(function cleanUp() {
+    // Remove tmp dir
+    return new Promise(function (resolve, reject) {
+      fs.rmrf(tmpDir, function (err) {
+        if (err) {
+          reject('Unable to remove temporary folder: ' + err);
+        } else {
+          resolve();
+        }
+      });
+    });
+  })
+  .then(function () {
+    console.log('Scores successfully added to database');
+  })
+  .catch(function (error) {
+    console.log(error);
   });
+
+  function createHypothesis () {
+    // Create link to uploaded hypothesis file in tmp folder
+    return new Promise(function (resolve, reject) {
+      fs.rename(hypothesis, tmpDir + '/hypothesis', function (err, data) {
+        if (err) {
+          reject('Unable to move hypothesis file: ' + err);
+        } else {
+          hypothesis = tmpDir + '/hypothesis';
+          resolve();
+        }
+      });
+    });
+  }
+
+  function createReference () {
+    // Retrive evalTool and reference content
+    var query = {_id: referenceId};
+    return new Promise(function (resolve, reject) {
+      testSet.getTestSet(query, function (err, result) {
+        if (err) {
+          reject('Unable to retrive reference file content: ' + err);
+        } else {
+          referenceContent = result.toObject().target.content;
+          evalTool = result.toObject().evalTool;
+          resolve();
+        }
+      });
+    }).then(function () {
+      // Write reference content to file
+      reference = tmpDir + '/reference';
+      return new Promise(function (resolve, reject) {
+        fs.writeFile(reference, referenceContent, function (err) {
+          if (err) {
+            reject('Unable to write reference content to file: ' + err);
+          } else {
+            resolve();
+          }
+        });
+      });
+    });
+  }
 }
