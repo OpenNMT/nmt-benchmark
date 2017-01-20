@@ -1,9 +1,9 @@
 mixin user (userData, external)
   - var url
   if external
-    - url = userData.gitProfile
+    - url = (userData.gitProfile || userData.profileUrl)
   else
-    - url = '/userSystems/' + userData.githubId
+    - url = '/userSystems/' + (userData.githubId || userData.id)
   a(href="#{url}")
-    img.ui.avatar.image(src="#{userData.avatarURL}")
-    | #{userData.name}
+    img.ui.avatar.image(src="#{userData.avatarURL || userData._json.avatar_url}")
+    | #{userData.name || userData.displayName}

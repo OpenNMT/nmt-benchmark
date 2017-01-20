@@ -5,18 +5,14 @@ mixin field (label, name)
   .inline.field
     label #{label}
     if name === 'user'
-      if mode === 'create'
-        .ui.input
-          input(name="#{name}")
-      else
-        +user(uData)
+      +user(uData)
     else
       if mode === 'view'
-        span(id="#{name}") #{TSdata[name]}
+        span(id="#{name}") #{tsData[name]}
       else
         .ui.input
           if mode === 'edit'
-            input(name='#{name}' value="#{TSdata[name]}")
+            input(name='#{name}' value="#{tsData[name]}")
           else
             input(name='#{name}')
 
@@ -24,19 +20,19 @@ mixin dropdown (label, name, side)
   .inline.field
     label #{label}
     if mode === 'view'
-      span #{TSdata[name]} - #{c2l[TSdata[name]]}
+      span #{tsData[name]} - #{c2l[tsData[name]]}
     else
       .ui.selection.dropdown
         //- mess
         if side === 'src'
           if mode === 'edit'
-            .text #{c2l[TSdata[name]]}
+            .text #{c2l[tsData[name]]}
           else
             .text #{c2l[src]}
           input(type='hidden' name='#{name}' value='#{src}')
         else
           if mode === 'edit'
-            .text #{c2l[TSdata[name]]}
+            .text #{c2l[tsData[name]]}
           else
             .text #{c2l[tgt]}
           input(type='hidden' name='#{name}' value='#{tgt}')
@@ -59,26 +55,26 @@ mixin textarea (label, name)
   .inline.field
     label #{label}
     if mode === 'view'
-      span #{TSdata[name]}
+      span #{tsData[name]}
     else
       .ui.input
-        textarea(name='#{name}' placeholder='this is a test' value='#{TSdata[name]}') #{TSdata[name]}
+        textarea(name='#{name}' placeholder='this is a test' value='#{tsData[name]}') #{tsData[name]}
 
 mixin testSet (ts)
   - var to
-  for output in TOdata
+  for output in toData
     if output.fileId == ts._id
       - to = output
-  .ui.raised.card
+  .ui.raised.centered.card(style="width: 450px")
     .content
       .header(style="display: flex; justify-content: space-between; align-items: center")
         | #{ts.source.fileName}
-        if to
+        if to && visitor && visitor.id == uData.githubId
           i#deleteOutput.grey.trash.icon(data-testOutputId='#{to._id}')
       .description
         if to
           ul
-            li Score: #{to.score}
+            li Score: #{to.scores.BLEU}
             li Date: #{to.date}
             li File: #{to.fileName}
     .extra.content
@@ -90,9 +86,10 @@ mixin testSet (ts)
           .selectOutput.ui.basic.button(data-fileId="#{ts._id}")
             i.folder.open.outline.icon
             span Upload
-          .uploadOutput.ui.default.button(data-fileId="#{ts._id}" style="display: none")
-            i.upload.icon
-            span.fileName
+          if visitor && visitor.id == uData.githubId
+            .uploadOutput.ui.default.button(data-fileId="#{ts._id}" style="display: none")
+              i.upload.icon
+              span.fileName
           input(type="file" name="file" style="display: none" data-fileId="#{ts._id}")
           input(type='hidden' name='fileId' value='#{ts._id}')
           input(type='hidden' name='systemId' value='#{systemId}')
@@ -105,8 +102,9 @@ block content
     if mode === 'view'
       | System description
       span(style="margin-left: 40px")
-        //-i#editSystem.small.grey.write.icon(data-systemId='#{systemId}')
-        i#deleteSystem.small.grey.trash.icon(data-systemId='#{systemId}')
+        if visitor && visitor.id == uData.githubId
+          //-i#editSystem.small.grey.write.icon(data-systemId='#{systemId}')
+          i#deleteSystem.small.grey.trash.icon(data-systemId='#{systemId}')
     if mode === 'edit'
       | Edit description
   .ui.form
@@ -130,16 +128,18 @@ block content
   if mode === 'view'
     .ui.horizontal.divider Test sets
     for ts in testSets
-      if ts.source.language === TSdata.sourceLanguage && ts.target.language === TSdata.targetLanguage
+      if ts.source.language === tsData.sourceLanguage && ts.target.language === tsData.targetLanguage
         +testSet(ts)
 
 block scripts
   script.
     var systemId = "#{systemId}"
-    var translationSystem = !{JSON.stringify(TSdata).replace(/<\//g, '<\\/')}
-    var testOutputs = !{JSON.stringify(TOdata).replace(/<\//g, '<\\/')}
+    var translationSystem = !{JSON.stringify(tsData).replace(/<\//g, '<\\/')}
+    var testOutputs = !{JSON.stringify(toData).replace(/<\//g, '<\\/')}
+    var uData = !{JSON.stringify(uData).replace(/<\//g, '<\\/')}
     var mode = "#{mode}"
     var allSrc = !{JSON.stringify(allSrc).replace(/<\//g, '<\\/')}
     var allTgt = !{JSON.stringify(allTgt).replace(/<\//g, '<\\/')}
     var testSets = !{JSON.stringify(testSets).replace(/<\//g, '<\\/')}
+    var visitor = !{JSON.stringify(visitor).replace(/<\//g, '<\\/')}
   script(src='/javascripts/translationSystem.js')

@@ -53,13 +53,6 @@ app.use(passport.initialize());
 app.use(passport.session());
 github.init(app, passport);
 
-app.use(function (req, res, next) {
-  if (req.session.passport) {
-    console.log('got user:', req.session.passport);
-  }
-  next();
-});
-
 // Log out
 app.get('/logout', function (req, res){
   req.logout();
@@ -89,6 +82,8 @@ app.use(require('./routes/globals/getLanguagePairs'));
 app.use(require('./routes/globals/getDefaultLP'));
 // Languages in human-readable format
 app.use(require('./routes/globals/langList'));
+// User, if authenicated
+app.use(require('./routes/globals/getUser'));
 
 // Paths
 app.use('/', require('./routes/index'));
