@@ -1,10 +1,10 @@
-if user
+if visitor
   .ui.dropdown.item
-    i.user.icon
-    span #{user.login}
+    img.ui.avatar.image(src="#{visitor._json.avatar_url}")
+    span #{visitor.displayName}
     i.dropdown.icon
     .menu
-      a.item(href='/userSystems?userId=#{user._id}')
+      a.item(href='/userSystems/#{visitor.id}')
         i.file.text.icon
         span= __('My Systems')
       //-

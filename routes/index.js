@@ -61,8 +61,9 @@ router.post('/translationSystem/add', function (req, res, next) {
     allSrc: uniq(res.locals.languagePairs, 'sourceLanguage'),
     allTgt: uniq(res.locals.languagePairs, 'targetLanguage'),
     mode: 'create',
-    TSdata: {},
-    TOdata: {}
+    tsData: {dummy: true},
+    toData: {dummy: true},
+    uData: req.user || {}
   });
 });
 
@@ -71,13 +72,14 @@ router.get('/testFiles', function (req, res, next) {
 });
 
 router.get('/userSystems/:userId', function (req, res, next) {
-  var author = true;
   var userId = req.params.userId;
-  tSystem.getTranslationSystems({user: userId}, function (err, tsData) {
-    User.getUser({githubId: userId}, function (err, uData) {
-      // TODO - author
-      res.render('userSystems', {systemList: tsData, author: author, user: uData});
-    });
+  gatherUS(userId, function (err, data) {
+    if (err) {
+      res.redirect('/'); // flash: err
+    } else {
+      console.log(data)
+      res.render('userSystems', data);
+    }
   });
 });
 
@@ -116,17 +118,17 @@ function uniq (array, column) {
   return uniq;
 }
 
-function gatherTS (systemId, cb) {
+function gatherUS (userId, cb) {
   var ts;
   var to;
   (function getTS () {
     return new Promise(function (resolve, reject) {
-      tSystem.getTranslationSystem({_id: systemId}, function (err, TSdata) {
+      tSystem.getTranslationSystems({user: userId}, function (err, tsData) {
         if (err) {
           reject('Unable to retrieve translation system data: ' + err);
         }
         else {
-          ts = TSdata;
+          ts = tsData;
           resolve();
         }
       });
@@ -134,11 +136,21 @@ function gatherTS (systemId, cb) {
   })()
   .then(function getTO () {
     return new Promise(function (resolve, reject) {
-      testOutput.getTestOutput({systemId: systemId}, function (err, TOdata) {
+      testOutput.getTestOutputs(function (err, toData) {
         if (err) {
           reject('Unable to retrieve test outputs data: ' + err);
         } else {
-          to = TOdata;
+          to = toData;
+
+          ts.forEach(function (ts) {
+            var scores = scores || {};
+            toData.forEach(function (to) {
+              if (to.systemId == ts._id) {
+                scores[to.fileId] = to.scores;
+              }
+            });
+            ts.scores = scores;
+          });
           resolve();
         }
       });
@@ -146,15 +158,67 @@ function gatherTS (systemId, cb) {
   })
   .then(function getUser () {
     return new Promise(function (resolve, reject) {
-      User.getUser({githubId: ts.user}, function (err, Udata) {
+      User.getUser({githubId: userId}, function (err, uData) {
+        if (err) {
+          reject('Unable to retrieve user: ' + err);
+        } else {
+          resolve({
+            tsData: ts,
+            uData: uData,
+            toData: to
+          });
+        }
+      });
+    });
+  })
+  .then(function(data) {
+    cb(null, data);
+  })
+  .catch(function (err) {
+    console.log(err)
+    cb(err);
+  });
+}
+
+function gatherTS (systemId, cb) {
+  var ts;
+  var to;
+  (function getTS () {
+    return new Promise(function (resolve, reject) {
+      tSystem.getTranslationSystem({_id: systemId}, function (err, tsData) {
+        if (err) {
+          reject('Unable to retrieve translation system data: ' + err);
+        }
+        else {
+          ts = tsData;
+          resolve();
+        }
+      });
+    });
+  })()
+  .then(function getTO () {
+    return new Promise(function (resolve, reject) {
+      testOutput.getTestOutput({systemId: systemId}, function (err, toData) {
+        if (err) {
+          reject('Unable to retrieve test outputs data: ' + err);
+        } else {
+          to = toData;
+          resolve();
+        }
+      });
+    });
+  })
+  .then(function getUser () {
+    return new Promise(function (resolve, reject) {
+      User.getUser({githubId: ts.user}, function (err, uData) {
         if (err) {
           reject('Unable to retrieve user: ' + err);
         } else {
           resolve({
             systemId: systemId,
-            TSdata: ts,
-            TOdata: to,
-            uData: Udata
+            tsData: ts,
+            toData: to,
+            uData: uData
           });
         }
       });
