@@ -5,6 +5,7 @@ mixin field (label, name)
   .inline.field
     label #{label}
     if name === 'user'
+      input(type='hidden' name='user' value='#{uData.githubId || uData.id}')
       +user(uData)
     else
       if mode === 'view'
@@ -74,19 +75,19 @@ mixin testSet (ts)
       .description
         if to
           ul
-            li Score: #{to.scores.BLEU}
+            if to.scores
+              li Score: #{to.scores.BLEU}
             li Date: #{to.date}
             li File: #{to.fileName}
     .extra.content
       #getSource.ui.basic.button(data-fileId='#{ts._id}')
         i.download.icon
         | Get source
-      if !to
+      if !to && visitor && visitor.id == uData.githubId
         form(action='/testOutput/upload' enctype='multipart/form-data' method='post' style="display: inline-block")
           .selectOutput.ui.basic.button(data-fileId="#{ts._id}")
             i.folder.open.outline.icon
             span Upload
-          if visitor && visitor.id == uData.githubId
             .uploadOutput.ui.default.button(data-fileId="#{ts._id}" style="display: none")
               i.upload.icon
               span.fileName

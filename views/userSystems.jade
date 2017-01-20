@@ -9,7 +9,7 @@ block content
       +user(uData, 'external')
 
   if visitor && visitor.id == uData.githubId
-    form#addSystemForm(action='/translationSystem/add' method='get')
+    form#addSystemForm(action='/translationSystem/add' method='post')
       input(type='hidden' name='languagePair' val='enfr')
     .tableConfig
       #addSystemButton.ui.default.button.indented

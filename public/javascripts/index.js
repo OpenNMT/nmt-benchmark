@@ -78,7 +78,7 @@ function getTable (languagePair) {
           sDefaultContent: '',
           searchable: false,
           render: function (data, type, full) {
-            return full.scores[ts._id][getMetrics()] || '';
+            return full.scores[ts._id] ? full.scores[ts._id][getMetrics()] : '';
           }
         });
       }
