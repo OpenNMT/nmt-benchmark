@@ -5,6 +5,7 @@ var path = require('path');
 var exec = require('child_process').exec;
 var tmp = require('tmp');
 var multiparty = require('multiparty');
+var winston = require('winston');
 
 var tSystem = require('../lib/translationSystem');
 var testSet = require('../lib/testSet');
@@ -16,10 +17,9 @@ router.post('/translationSystem/update', function (req, res, next) {
   if (!req.user) {
     res.json({error: 'Log in to edit translation systems', data: null});
   } else {
-    // if current user not author
     tSystem.getTranslationSystem({_id: req.body.system_id}, function (err, data) {
       if (err) {
-        console.log('Unable to update translation system:', err);
+        winston.warn('Unable to update translation system:', err);
         res.json({error: err, data: null});
       } else {
         res.json({error: null, data: data});
@@ -84,7 +84,7 @@ router.get('/getDataTable', function (req, res, next) {
     res.json({data: response});
   })
   .catch(function (error) {
-    console.log(error);
+    winston.error(error);
   });
 });
 
@@ -94,7 +94,7 @@ router.post('/translationSystem/create', function (req, res, next) {
   } else {
     tSystem.createTranslationSystem(req.body, function (err, data) {
       if (err) {
-        console.log('Unable to create translation system', err)
+        winston.warn('Unable to create translation system', err);
         res.json(JSON.stringify({error: err, data: null}));
       } else {
         res.json(JSON.stringify({error: null, data: data}));
@@ -111,7 +111,7 @@ router.post('/translationSystem/delete/:systemId', function (req, res, next) {
     var systemId = req.params.systemId;
     tSystem.deleteTranslationSystem(systemId, function (err) {
       if (err) {
-        console.log('Unable to delete translation system');
+        winston.warn('Unable to delete translation system', err);
       }
       res.json({error: err});
     });
@@ -127,7 +127,7 @@ router.post('/testOutput/upload', function (req, res, next) {
     var query = {};
 
     form.on('error', function(err) {
-      console.log('Error parsing form: ' + err.stack);
+      winston.warn('Error parsing form: ' + err.stack);
       // res.send('error');
       res.redirect('/translationSystem/view/' + systemId); // flash err
     });
@@ -139,7 +139,7 @@ router.post('/testOutput/upload', function (req, res, next) {
       for (f in files) {
         fs.readFile(files[f][0].path, function (err, content) {
           if (err) {
-            console.log('Cannot read file:', err);
+            winston.warn('Cannot read file:', err);
           } else {
             query.content = content;
             query.fileName = files[f][0].originalFilename;
@@ -152,13 +152,12 @@ router.post('/testOutput/upload', function (req, res, next) {
               res.redirect('/translationSystem/view/' + query.systemId);
             });
           }
-        })
+        });
       }
     });
   }
 });
 
-// remove output file
 router.get('/testOutput/delete/:testOutputId', function (req, res, next) {
   if (!req.user) {
     res.json({error: 'Log in to remove test outputs', data: null});
@@ -166,14 +165,13 @@ router.get('/testOutput/delete/:testOutputId', function (req, res, next) {
     var toId = req.params.testOutputId;
     testOutput.deleteTestOutput(toId, function (err) {
       if (err) {
-        console.log('Unable to delete test output');
+        winston.warn('Unable to delete test output', err);
       }
       res.json({error: err});
     });
   }
 });
 
-// get test file source
 router.get('/download/:fileId', function (req, res, next) {
   var fileId = req.params.fileId;
   testSet.getTestSet({_id: fileId}, function (err, data) {
@@ -185,31 +183,6 @@ router.get('/download/:fileId', function (req, res, next) {
       res.send(data.source.content);
     }
   });
-
-  /*
-    var request = require('request');
-    var winston = require('winston');
-    var nconf = require('nconf');
-
-    request.get(url)
-      .on('error', function (err) {
-        winston.error('Error on retrieving corpus: ' + err);
-      })
-      .on('response', function (response) {
-        serverStatus = response.statusCode;
-        winston.info('Retrieving corpus - Status: ', response.statusCode);
-      })
-      .on('data', function (data) {
-        if (serverStatus !== 200) {
-          try {
-            winston.error('Unable to retrieve corpus. Server complains: ', JSON.parse(data));
-          } catch (err) {
-            winston.info('Server response contains binary data');
-          }
-        }
-      })
-      .pipe(res);
-  */
 });
 
 module.exports = router;
@@ -240,7 +213,7 @@ function calculateScores (outputId, referenceId, hypothesis) {
   })
   .then(function runScorer() {
     // Run evaluation tool
-    // TODO map evalTool to cmd
+    // TODO - map evalTool to cmd
     var multibleu = path.resolve('./lib/multi-bleu.perl'); // path to tool might be changed...
     var cmd = ['perl', multibleu, reference, '<', hypothesis].join(' ');
     return new Promise(function (resolve, reject) {
@@ -284,10 +257,10 @@ function calculateScores (outputId, referenceId, hypothesis) {
     });
   })
   .then(function () {
-    console.log('Scores successfully added to database');
+    winston.info('Scores successfully added to database');
   })
   .catch(function (error) {
-    console.log(error);
+    winston.error(error);
   });
 
   function createHypothesis () {
