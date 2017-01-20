@@ -13,17 +13,19 @@ var User = require('../lib/user.js');
 
 // TODO ?
 router.post('/translationSystem/update', function (req, res, next) {
-  // if (!authenticated) { res.redirect('/'); } else {}
-  // if current user not author
-  tSystem.getTranslationSystem({_id: req.body.system_id}, function (err, data) { // id undefined should be handled by default?
-    if (err) {
-      console.log('Unable to update translation system:', err);
-      res.json({error: err, data: null});
-    } else {
-      console.log('Translation system updated:', data);
-      res.json({error: null, data: data});
-    }
-  });
+  if (!req.user) {
+    res.json({error: 'Log in to edit translation systems', data: null});
+  } else {
+    // if current user not author
+    tSystem.getTranslationSystem({_id: req.body.system_id}, function (err, data) {
+      if (err) {
+        console.log('Unable to update translation system:', err);
+        res.json({error: err, data: null});
+      } else {
+        res.json({error: null, data: data});
+      }
+    });
+  }
 });
 
 router.get('/getDataTable', function (req, res, next) {
@@ -87,78 +89,88 @@ router.get('/getDataTable', function (req, res, next) {
 });
 
 router.post('/translationSystem/create', function (req, res, next) {
-  // if (!authenticated) { res.json({error: 'No rights to create/update systems', data: null}); } else {}
-  tSystem.createTranslationSystem(req.body, function (err, data) {
-    if (err) {
-      console.log('Unable to create translation system', err)
-      res.json(JSON.stringify({error: err, data: null}));
-    } else {
-      res.json(JSON.stringify({error: null, data: data}));
-    }
-  });
+  if (!req.user) {
+    res.json({error: 'Log in to submit translation systems', data: null});
+  } else {
+    tSystem.createTranslationSystem(req.body, function (err, data) {
+      if (err) {
+        console.log('Unable to create translation system', err)
+        res.json(JSON.stringify({error: err, data: null}));
+      } else {
+        res.json(JSON.stringify({error: null, data: data}));
+      }
+    });
+  }
 });
 
 router.post('/translationSystem/delete/:systemId', function (req, res, next) {
-  // if (!authenticated) { res.redirect('/'); } else {}
-  // TODO - delete all related test outputs
-  var systemId = req.params.systemId;
-  tSystem.deleteTranslationSystem(systemId, function (err) {
-    if (err) {
-      console.log('Unable to delete translation system');
-    }
-    res.json({error: err});
-  });
+  if (!req.user) {
+    res.json({error: 'Log in to remove your translation systems', data: null});
+  } else {
+    // TODO - delete all related test outputs
+    var systemId = req.params.systemId;
+    tSystem.deleteTranslationSystem(systemId, function (err) {
+      if (err) {
+        console.log('Unable to delete translation system');
+      }
+      res.json({error: err});
+    });
+  }
 });
 
-// upload output file
 router.post('/testOutput/upload', function (req, res, next) {
-  // if (!authenticated) { res.redirect('/'); } else {}
+  if (!req.user) {
+    res.json({error: 'Log in to upload test outputs', data: null});
+  } else {
+    var form = new multiparty.Form();
+    var systemId = url.parse(req.url, true).query.systemId;
+    var query = {};
 
-  var form = new multiparty.Form();
-  var systemId = url.parse(req.url, true).query.systemId;
-  var query = {};
+    form.on('error', function(err) {
+      console.log('Error parsing form: ' + err.stack);
+      // res.send('error');
+      res.redirect('/translationSystem/view/' + systemId); // flash err
+    });
 
-  form.on('error', function(err) {
-    console.log('Error parsing form: ' + err.stack);
-    res.send('error');
-    res.redirect('/translationSystem/view/' + systemId);
-  });
-
-  form.parse(req, function (err, fields, files) {
-    for (f in fields) {
-      query[f] = fields[f][0];
-    }
-    for (f in files) {
-      fs.readFile(files[f][0].path, function (err, content) {
-        if (err) {
-          console.log('Cannot read file:', err);
-        } else {
-          query.content = content;
-          query.fileName = files[f][0].originalFilename;
-          query.date = new Date();
-          testOutput.saveTestOutputs(query, function (err, data) {
-            var outputId = data[0]._id;
-            var fileId = query.fileId;
-            var hypothesis = files[f][0].path;
-            calculateScores(outputId, fileId, hypothesis);
-            res.redirect('/translationSystem/view/' + query.systemId);
-          });
-        }
-      })
-    }
-  });
+    form.parse(req, function (err, fields, files) {
+      for (f in fields) {
+        query[f] = fields[f][0];
+      }
+      for (f in files) {
+        fs.readFile(files[f][0].path, function (err, content) {
+          if (err) {
+            console.log('Cannot read file:', err);
+          } else {
+            query.content = content;
+            query.fileName = files[f][0].originalFilename;
+            query.date = new Date();
+            testOutput.saveTestOutputs(query, function (err, data) {
+              var outputId = data[0]._id;
+              var fileId = query.fileId;
+              var hypothesis = files[f][0].path;
+              calculateScores(outputId, fileId, hypothesis);
+              res.redirect('/translationSystem/view/' + query.systemId);
+            });
+          }
+        })
+      }
+    });
+  }
 });
 
 // remove output file
 router.get('/testOutput/delete/:testOutputId', function (req, res, next) {
-  // if (!authenticated) { res.redirect('/'); } else {}
-  var toId = req.params.testOutputId;
-  testOutput.deleteTestOutput(toId, function (err) {
-    if (err) {
-      console.log('Unable to delete test output');
-    }
-    res.json({error: err});
-  });
+  if (!req.user) {
+    res.json({error: 'Log in to remove test outputs', data: null});
+  } else {
+    var toId = req.params.testOutputId;
+    testOutput.deleteTestOutput(toId, function (err) {
+      if (err) {
+        console.log('Unable to delete test output');
+      }
+      res.json({error: err});
+    });
+  }
 });
 
 // get test file source
@@ -198,59 +210,9 @@ router.get('/download/:fileId', function (req, res, next) {
       })
       .pipe(res);
   */
-
-});
-
-// add test file to mongodb
-router.post('/addTestSetR', function (req, res, next) {
-  var form = new multiparty.Form();
-  var query = {};
-  form.parse(req, function (err, fields, files) {
-    for (f in fields) {
-      if (f.match(/_/)) {
-        var side = f.split('_')[0];
-        var field = f.split('_')[1];
-        query[side] = query[side] || {};
-        query[side][field] = fields[f][0];
-      } else {
-        query[f] = fields[f][0];
-      }
-    }
-    var readFiles = [];
-    for (f in files) {
-      var side = f.replace(/_.*$/, '');
-      query[side] = query[side] || {};
-      query[side].fileName = files[f][0].originalFilename;
-      (function (side, path) {
-        readFiles.push(new Promise(function (resolve, reject) {
-          fs.readFile(path, function (err, content) {
-            if (err) {
-              reject('Cannot read file:', err);
-            } else {
-              query[side].content = content;
-              resolve();
-            }
-          });
-        }));
-      })(side, files[f][0].path);
-    }
-    Promise.all(readFiles).then(function (result) {
-      testSet.saveTestSets(query, function (err, data) {
-        res.redirect('/addTestSet');
-      });
-    }).catch(function (error) {
-      console.log(error);
-      res.redirect('/addTestSet');
-    })
-  });
-  form.on('error', function(err) {
-    console.log('Error parsing form: ' + err.stack);
-    res.redirect('/addTestSet');
-  });
 });
 
 module.exports = router;
-
 
 function calculateScores (outputId, referenceId, hypothesis) {
 

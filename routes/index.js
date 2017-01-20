@@ -34,37 +34,46 @@ router.get('/translationSystem/view/:systemId', function (req, res, next) {
 });
 
 router.get('/translationSystem/edit/:systemId', function (req, res, next) {
-  var systemId = req.params.systemId;
-  if (systemId) {
-    gatherTS(systemId, function (err, data) {
-      if (err) {
-        res.redirect('/'); // flash: system not found
-      } else {
-        data.mode = 'edit';
-        data.allSrc = uniq(res.locals.languagePairs, 'sourceLanguage');
-        data.allTgt = uniq(res.locals.languagePairs, 'targetLanguage');
-        res.render('translationSystem', data);
-      }
-    });
+  if (!req.user) {
+    console.log('Authentication issue');
+    res.redirect('/'); // flash: you don't have permission 
   } else {
-    console.log(systemId, 'system not found');
-    res.redirect('/'); // flash: system not found
+    var systemId = req.params.systemId;
+    if (systemId) {
+      gatherTS(systemId, function (err, data) {
+        if (err) {
+          res.redirect('/'); // flash: system not found
+        } else {
+          data.mode = 'edit';
+          data.allSrc = uniq(res.locals.languagePairs, 'sourceLanguage');
+          data.allTgt = uniq(res.locals.languagePairs, 'targetLanguage');
+          res.render('translationSystem', data);
+        }
+      });
+    } else {
+      console.log(systemId, 'system not found');
+      res.redirect('/'); // flash: system not found
+    }
   }
 });
 
 router.post('/translationSystem/add', function (req, res, next) {
-  // if (!authenticated) { res.json({error: 'No rights to create/update systems', data: null}); } else {}
-  var lp = req.body.languagePair || nconf.get('OpenNMTBenchmark:default:LP');
-  res.render('translationSystem', {
-    src: lp.substring(0,2),
-    tgt: lp.substring(2),
-    allSrc: uniq(res.locals.languagePairs, 'sourceLanguage'),
-    allTgt: uniq(res.locals.languagePairs, 'targetLanguage'),
-    mode: 'create',
-    tsData: {dummy: true},
-    toData: {dummy: true},
-    uData: req.user || {}
-  });
+  if (!req.user) {
+    console.log('Authentication issue');
+    res.redirect('/'); // flash: you don't have permission 
+  } else {
+    var lp = req.body.languagePair || nconf.get('OpenNMTBenchmark:default:LP');
+    res.render('translationSystem', {
+      src: lp.substring(0,2),
+      tgt: lp.substring(2),
+      allSrc: uniq(res.locals.languagePairs, 'sourceLanguage'),
+      allTgt: uniq(res.locals.languagePairs, 'targetLanguage'),
+      mode: 'create',
+      tsData: {dummy: true},
+      toData: {dummy: true},
+      uData: req.user || {}
+    });
+  }
 });
 
 router.get('/testFiles', function (req, res, next) {
@@ -77,30 +86,9 @@ router.get('/userSystems/:userId', function (req, res, next) {
     if (err) {
       res.redirect('/'); // flash: err
     } else {
-      console.log(data)
       res.render('userSystems', data);
     }
   });
-});
-
-// add test file to database - TURN OFF IN PRODUCTION
-router.get('/addTestSet', function (req, res, next) {
-  var buf = [
-    '<form action="/addTestSetR" method="POST" enctype="multipart/form-data" >',
-      'Domain*: <input name="domain"value="Generic"><br />',
-      'By*: <input name="by" value="WMT"><br />',
-      'Eval tool: <input name="evalTool"><br />',
-      'Comment: <input name="comment"><br />',
-      '<h1>Source</h1>',
-      '<input name="source_file" type="file"><br />',
-      'Language: <input name="source_language"><br />',
-      '<h1>Target</h1>',
-      'Language: <input name="target_language"><br />',
-      '<input name="target_file" type="file"><br />',
-      '<input type="submit">',
-    '</form>'
-  ];
-  res.send(buf.join(''));
 });
 
 module.exports = router;
