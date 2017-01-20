@@ -3,6 +3,7 @@ var url = require('url');
 var multiparty = require('multiparty');
 var fs = require('fs');
 var nconf = require('nconf');
+var winston = require('winston');
 
 var tSystem = require('../lib/translationSystem');
 var testOutput = require('../lib/testOutput');
@@ -28,14 +29,14 @@ router.get('/translationSystem/view/:systemId', function (req, res, next) {
       }
     });
   } else {
-    console.log(systemId, 'system not found');
+    winston.warn(systemId, 'system not found');
     res.redirect('/'); // flash: system not found
   }
 });
 
 router.get('/translationSystem/edit/:systemId', function (req, res, next) {
   if (!req.user) {
-    console.log('Authentication issue');
+    winston.warn('Authentication issue');
     res.redirect('/'); // flash: you don't have permission 
   } else {
     var systemId = req.params.systemId;
@@ -51,7 +52,7 @@ router.get('/translationSystem/edit/:systemId', function (req, res, next) {
         }
       });
     } else {
-      console.log(systemId, 'system not found');
+      winston.warn(systemId, 'system not found');
       res.redirect('/'); // flash: system not found
     }
   }
@@ -59,7 +60,7 @@ router.get('/translationSystem/edit/:systemId', function (req, res, next) {
 
 router.post('/translationSystem/add', function (req, res, next) {
   if (!req.user) {
-    console.log('Authentication issue');
+    winston.warn('Authentication issue');
     res.redirect('/'); // flash: you don't have permission 
   } else {
     var lp = req.body.languagePair || nconf.get('OpenNMTBenchmark:default:LP');
@@ -129,7 +130,6 @@ function gatherUS (userId, cb) {
           reject('Unable to retrieve test outputs data: ' + err);
         } else {
           to = toData;
-
           ts.forEach(function (ts) {
             var scores = scores || {};
             toData.forEach(function (to) {
@@ -163,7 +163,7 @@ function gatherUS (userId, cb) {
     cb(null, data);
   })
   .catch(function (err) {
-    console.log(err)
+    winston.error(err);
     cb(err);
   });
 }
@@ -216,7 +216,7 @@ function gatherTS (systemId, cb) {
     cb(null, data);
   })
   .catch(function (err) {
-    console.log(err)
+    winston.error(err);
     cb(err);
   });
 }
