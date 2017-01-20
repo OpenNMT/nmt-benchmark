@@ -30,16 +30,13 @@ function getTable () {
       return c2l[full.targetLanguage];
     }},
     {data: 'scores', sDefaultContent: '', sWidth: '130', render: function (data, type, full) {
-      if (full.scores) {
-        return full.scores.map(function (testFile) {
-          var score = testFile.scores.find(function (s) {
-            return s.metric === getMetrics();
-          });
-          return '<div class="metric">' + score.value + '</div>';
-        })
-      } else {
-        return '';
-      }
+      var buf = [];
+      testSets.filter(function (test) {
+        return test.source.language == full.sourceLanguage && test.target.language == full.targetLanguage;
+      }).forEach(function (test) {
+        buf.push('<div>' + test.source.fileName + ': ' + full.scores[test._id].BLEU + '</div>');
+      });
+      return buf.join('');
     }}
   ];
 
@@ -51,7 +48,7 @@ function getTable () {
     pagingType: 'full_numbers',
     dom: 'tp',
     'sAjaxDataProp': '',
-    data: systemList,
+    data: tsData,
     columns: columns,
     drawCallback: function (settings) {
       $('.pagination.menu').addClass('floated right');

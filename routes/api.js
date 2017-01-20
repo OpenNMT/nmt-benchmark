@@ -63,14 +63,15 @@ router.get('/getDataTable', function (req, res, next) {
         if (err) {
           reject(err);
         } else {
-          tsData.map(function (ts) {
+          tsData.forEach(function (ts) {
             // Add scores from output collection
-            ts.scores = toData.filter(function (to) {
+            var scores = scores || {};
+            toData.filter(function (to) {
               return to.systemId == ts._id;
-            }).map(function (to) {
-              return to.scores;
-            })[0];
-            // TODO - take test file into account
+            }).forEach(function (to) {
+              scores[to.fileId] = to.scores;
+            });
+            ts.scores = scores;
           });
           resolve(tsData);
         }

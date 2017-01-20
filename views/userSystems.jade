@@ -2,13 +2,15 @@ extends layout
 include mixin.user.jade
 
 block content
-  if !author
+  if visitor && visitor.id == uData.githubId
     h1 These are your systems
   else
     h1 These are systems provided by
-      +user(user, 'external')
+      +user(uData, 'external')
 
-  if !author
+  if visitor && visitor.id == uData.githubId
+    form#addSystemForm(action='/translationSystem/add' method='get')
+      input(type='hidden' name='languagePair' val='enfr')
     .tableConfig
       #addSystemButton.ui.default.button.indented
         i.icon.plus
@@ -34,9 +36,6 @@ block content
         th.tgt= __('Target language')
         th.scores= __('Scores')
 
-  form#addSystemForm(action='/translationSystem/add' method='get')
-    input(type='hidden' name='languagePair' val='enfr')
-
   form#viewTranslationSystem(action='/translationSystem/view' method='post')
     input(type='hidden' name='systemId' val='')
 
@@ -44,8 +43,10 @@ block scripts
   script.
     // var languagePairs = !{JSON.stringify(languagePairs).replace(/<\//g, '<\\/')} // remove
     var testSets = !{JSON.stringify(testSets).replace(/<\//g, '<\\/')}
-    var systemList = !{JSON.stringify(systemList).replace(/<\//g, '<\\/')}
+    var toData = !{JSON.stringify(toData).replace(/<\//g, '<\\/')}
+    var tsData = !{JSON.stringify(tsData).replace(/<\//g, '<\\/')}
     var c2l = !{JSON.stringify(c2l).replace(/<\//g, '<\\/')}
-    // var user = !{JSON.stringify(user).replace(/<\//g, '<\\/')}
+    var visitor = !{JSON.stringify(visitor).replace(/<\//g, '<\\/')}
+    var uData = !{JSON.stringify(uData).replace(/<\//g, '<\\/')}
     // var author = #{author}
   script(src='/javascripts/userSystems.js')
