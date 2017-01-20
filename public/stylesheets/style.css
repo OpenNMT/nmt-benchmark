@@ -117,3 +117,8 @@ th:not(.nb) {
 #editSystem {
   cursor: pointer;
 }
+
+.fileName,
+.languagePair {
+  white-space: nowrap;
+}
