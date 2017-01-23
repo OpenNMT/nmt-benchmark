@@ -1,11 +1,11 @@
 $(document).ready(function () {
   if (mode === 'view') {
     $('.ui.form .input').addClass('transparent');
-    setSystemDescription(translationSystem);
+    setDescription(translationSystem);
   }
   $('.ui.dropdown').dropdown();
   $('#createSystem, #saveSystem').on('click', function () {
-    var params = getSystemDescription();
+    var params = getDescription();
     var url = params.system_id ? '/translationSystem/update' : '/translationSystem/create';
     $.post(url, params)
     .success(function (response) {
@@ -53,13 +53,15 @@ $(document).ready(function () {
   $(':file[name=file]').on('fileselect', function (e, fileName, $form) {
     var $selectOutput = $form.find('.selectOutput');
     var $uploadOutput = $form.find('.uploadOutput');
-    $uploadOutput.find('.fileName').text(fileName);
-    $selectOutput.hide();
-    $uploadOutput.show();
+    $selectOutput.find('input').val(fileName);
+    fileName ? $uploadOutput.removeClass('disabled') : $uploadOutput.addClass('disabled');
   });
   $('.selectOutput').on('click', function () {
     var fileId = $(this).attr('data-fileId');
     $(':file[data-fileId="' + fileId + '"]').trigger('click');
+  });
+  $('.fileName').on('focus', function () {
+    $(this).blur();
   });
 
   // Upload output
@@ -96,7 +98,7 @@ $(document).ready(function () {
   });
 });
 
-function getSystemDescription () {
+function getDescription () {
   var description = {};
   $('.ui.form input, .ui.form textarea').each(function (i, input) {
     description[$(input).attr('name')] = $(input).val();
@@ -104,7 +106,7 @@ function getSystemDescription () {
   return description;
 }
 
-function setSystemDescription (description) {
+function setDescription (description) {
   $('.ui.form input, .ui.form textarea').each(function (i, input) {
     var field = $(input).attr('name');
     $(input).val(description[field] || '');

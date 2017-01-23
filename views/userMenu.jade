@@ -5,21 +5,16 @@ if visitor
     i.dropdown.icon
     .menu
       a.item(href='/userSystems/#{visitor.id}')
-        i.file.text.icon
+        i.file.text.fireBrick.icon
         span= __('My Systems')
       //-
         a.item(href='/bugReport')
           i.bug.icon
           span= __('Report a bug')
       a.item(href='/logout')
-        i.sign.out.icon
+        i.sign.out.fireBrick.icon
         span= __('Log out')
 else
   .ui.item
     i.github.icon
-    a(href="/auth/github") log in
-    | or
-    a sign up
-    | with github
-    //- link to github delegated authentication
-    //- link to github signup
+    | <a href="/auth/github">Log in</a>&nbsp;with github

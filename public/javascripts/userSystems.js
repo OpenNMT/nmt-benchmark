@@ -29,12 +29,14 @@ function getTable () {
     {data: 'tgt', sDefaultContent: '', sWidth: '30', render: function (data, type, full) {
       return c2l[full.targetLanguage];
     }},
-    {data: 'scores', sDefaultContent: '', sWidth: '130', render: function (data, type, full) {
+    {data: 'scores', sDefaultContent: '', orderable: false, sWidth: '130', render: function (data, type, full) {
       var buf = [];
       testSets.filter(function (test) {
         return test.source.language == full.sourceLanguage && test.target.language == full.targetLanguage;
       }).forEach(function (test) {
-        buf.push('<div>' + test.source.fileName + ': ' + full.scores[test._id].BLEU + '</div>');
+        if (full.scores[test._id]) {
+          buf.push('<div>' + test.source.fileName + ': ' + full.scores[test._id].BLEU + '</div>');
+        }
       });
       return buf.join('');
     }}
