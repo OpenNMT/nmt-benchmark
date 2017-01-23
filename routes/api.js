@@ -14,6 +14,8 @@ var User = require('../lib/user.js');
 
 // TODO ?
 router.post('/translationSystem/update', function (req, res, next) {
+  res.redirect('/translationSystem/view');
+  /*
   if (!req.user) {
     res.json({error: 'Log in to edit translation systems', data: null});
   } else {
@@ -26,6 +28,7 @@ router.post('/translationSystem/update', function (req, res, next) {
       }
     });
   }
+  */
 });
 
 router.get('/getDataTable', function (req, res, next) {
@@ -107,13 +110,20 @@ router.post('/translationSystem/delete/:systemId', function (req, res, next) {
   if (!req.user) {
     res.json({error: 'Log in to remove your translation systems', data: null});
   } else {
-    // TODO - delete all related test outputs
     var systemId = req.params.systemId;
     tSystem.deleteTranslationSystem(systemId, function (err) {
       if (err) {
         winston.warn('Unable to delete translation system', err);
+        res.json({error: err});
+      } else {
+        // TODO - delete all related test outputs
+        testOutput.deleteTestOutput({systemId: systemId}, function (err) {
+          if (err) {
+            winston.warn('Unable to delete output', err);
+          }
+          res.json({error: err});
+        });
       }
-      res.json({error: err});
     });
   }
 });
@@ -163,7 +173,7 @@ router.get('/testOutput/delete/:testOutputId', function (req, res, next) {
     res.json({error: 'Log in to remove test outputs', data: null});
   } else {
     var toId = req.params.testOutputId;
-    testOutput.deleteTestOutput(toId, function (err) {
+    testOutput.deleteTestOutput({_id: toId}, function (err) {
       if (err) {
         winston.warn('Unable to delete test output', err);
       }
