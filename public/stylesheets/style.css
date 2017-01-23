@@ -1,14 +1,50 @@
 body {
   margin: 0px;
   padding: 0px;
-  margin-top: 75px; /* Menu bar */
+  margin-top: 100px; /* Menu bar */
   margin-bottom: 20px; /* Status bar */
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
-a {
-  color: #00B7FF;
+/* Header */
+
+#logo {
+  font-size: 24pt;
 }
+
+.fireBrick {
+  background: #AC4142 !important;
+  color: rgba(255, 255, 255, .5) !important;
+}
+
+.basic.fireBrick.button {
+  color: #AC4142 !important;
+  box-shadow: 0 0 0 1px #AC4142 inset;
+}
+
+.basic.fireBrick.button:hover {
+  color: White !important;
+  background: #AC4142 !important;
+}
+
+.basic.fireBrick.button:active {
+  background: rgba(140, 33, 34, .95) !important;
+}
+
+.fireBrick .item {
+  color: White !important;
+}
+
+.fireBrick a {
+  color: White;
+}
+
+i.fireBrick.icon {
+  background: inherit !important;
+  color: #AC4142 !important;
+}
+
+/* Footer */
 
 .footer > * {
   display: inline-block;
@@ -16,7 +52,6 @@ a {
 }
 
 .footer {
-  background: White;
   position: fixed;
   bottom: 0px;
   padding: 5px;
@@ -26,46 +61,10 @@ a {
   width: 100%;
 }
 
-.tableConfig {
-  margin: 15px;
-  display: flex;
-  justify-content: space-between;
-}
-
-.dropdown .label {
-  display: inline-block;
-  margin-right: 5px;
-}
-
-.information {
-  font-size: 16px;
-  margin-bottom: 25px;
-}
-
-.information p {
-  margin-left: 10%;
-  margin-right: 10%;
-  text-align: justify;
-}
-
-.button.indented {
-  margin-left: 20px;
-  margin-right: 20px;
-}
-
-a {
-  cursor: pointer;
-}
-
-.nb {
-  color: Silver !important;
-  text-align: right !important;
-  padding-right: 25px !important;
-  width: 10px;
-}
+/* Table */
 
 table.dataTable.no-footer {
-  border-bottom: 1px solid rgba(34,36,38,.15); /* semantic ui default */
+  border-bottom: 1px solid rgba(34, 36, 38, .15); /* semantic ui default */
 }
 
 .floated.right.pagination.menu {
@@ -74,6 +73,45 @@ table.dataTable.no-footer {
 
 th:not(.nb) {
   cursor: pointer !important;
+}
+
+.tableConfig {
+  margin: 15px;
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Cards & controls */
+
+#deleteSystem,
+#deleteOutput {
+  cursor: pointer;
+}
+
+#deleteSystem:hover,
+#deleteOutput:hover {
+  color: #AC4142 !important;
+}
+
+.fileName,
+.languagePair {
+  white-space: nowrap;
+}
+
+.selectOutput {
+  flex-grow: 2;
+  margin-right: 5px;
+}
+
+.ui.card form {
+  display: flex;
+}
+
+/* Form */
+
+.dropdown .label {
+  display: inline-block;
+  margin-right: 5px;
 }
 
 .ui.form label {
@@ -95,13 +133,31 @@ th:not(.nb) {
   margin-left: 160px;
 }
 
-.systemName {
-  color: #00B7F7;
+/* Everything else */
+
+a {
+  color: #00B7FF;
+  /*color: #276767;*/
   cursor: pointer;
+
 }
 
-.systemName:hover {
+a:hover {
   text-decoration: underline;
+}
+
+.information {
+  font-size: 16px;
+  margin-bottom: 30px;
+  margin-left: 10%;
+  margin-right: 10%;
+  padding-top: 40px;
+  text-align: justify;
+}
+
+.button.indented {
+  margin-left: 20px;
+  margin-right: 20px;
 }
 
 .testSetContainer {
@@ -110,15 +166,4 @@ th:not(.nb) {
 
 .testSetContainer table {
   margin: 10px auto !important;
-}
-
-#deleteSystem,
-#deleteOutput,
-#editSystem {
-  cursor: pointer;
-}
-
-.fileName,
-.languagePair {
-  white-space: nowrap;
 }

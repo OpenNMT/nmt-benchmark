@@ -73,64 +73,71 @@ mixin testSet (ts)
         if to && visitor && visitor.id == uData.githubId
           i#deleteOutput.grey.trash.icon(data-testOutputId='#{to._id}')
       .description
-        if to
-          ul
+        ul
+          li Size: #{ts.source.content.split('\n').length} lines
+          li Domain: #{ts.domain}
+          li Origin: #{ts.origin}
+          if to
+            li Date: #{to.date.toLocaleDateString()}
+            li File: #{to.fileName}
             if to.scores
               li Score: #{to.scores.BLEU}
-            li Date: #{to.date}
-            li File: #{to.fileName}
-    .extra.content
-      #getSource.ui.basic.button(data-fileId='#{ts._id}')
+      #getSource.ui.basic.fireBrick.button(data-fileId='#{ts._id}')
         i.download.icon
         | Get source
-      if !to && visitor && visitor.id == uData.githubId
-        form(action='/testOutput/upload' enctype='multipart/form-data' method='post' style="display: inline-block")
-          .selectOutput.ui.basic.button(data-fileId="#{ts._id}")
-            i.folder.open.outline.icon
-            span Upload
-            .uploadOutput.ui.default.button(data-fileId="#{ts._id}" style="display: none")
-              i.upload.icon
-              span.fileName
+    if !to && visitor && visitor.id == uData.githubId
+      .extra.content
+        .header(style="margin-bottom: 10px; margin-top: 5px;")
+          | Translaton
+        form(action='/testOutput/upload' enctype='multipart/form-data' method='post')
+          .selectOutput.ui.icon.input(data-fileId="#{ts._id}")
+            input.fileName
+            i.folder.open.icon
+          .uploadOutput.ui.icon.basic.fireBrick.disabled.button(data-fileId="#{ts._id}")
+            i.upload.icon
+            | Upload
           input(type="file" name="file" style="display: none" data-fileId="#{ts._id}")
           input(type='hidden' name='fileId' value='#{ts._id}')
           input(type='hidden' name='systemId' value='#{systemId}')
 
 
 block content
-  h1(style="display: flex; align-items: center")
-    if mode === 'create'
-      | Add translation system
-    if mode === 'view'
-      | System description
-      span(style="margin-left: 40px")
-        if visitor && visitor.id == uData.githubId
-          //-i#editSystem.small.grey.write.icon(data-systemId='#{systemId}')
-          i#deleteSystem.small.grey.trash.icon(data-systemId='#{systemId}')
-    if mode === 'edit'
-      | Edit description
-  .ui.form
-    +field(__('System name'), 'systemName')
-    +field(__('Version'), 'version')
-    +field(__('Author'), 'user')
-    +dropdown(__('Source language'), 'sourceLanguage', 'src')
-    +dropdown(__('Target language'), 'targetLanguage', 'tgt')
-    +field(__('Type'), 'type')
-    +textarea(__('Recipe'), 'recipe')
-    .buttonContainer
-      if mode === 'edit'
-        #saveSystem.ui.primary.button
-          i.save.icon
-          span= __('Save')
+  .information
+    h1(style="display: flex; align-items: center")
       if mode === 'create'
-        #createSystem.ui.primary.button
-          i.plus.icon
-          span= __('Create')
+        | Add translation system
+      if mode === 'view'
+        | System description
+        span(style="margin-left: 40px")
+          if visitor && visitor.id == uData.githubId
+            //-i#editSystem.small.grey.write.icon(data-systemId='#{systemId}')
+            i#deleteSystem.small.grey.trash.icon(data-systemId='#{systemId}')
+      //-
+        if mode === 'edit'
+          | Edit description
+    .ui.form
+      +field(__('System name'), 'systemName')
+      +field(__('Version'), 'version')
+      +field(__('Author'), 'user')
+      +dropdown(__('Source language'), 'sourceLanguage', 'src')
+      +dropdown(__('Target language'), 'targetLanguage', 'tgt')
+      +field(__('Type'), 'type')
+      +textarea(__('Recipe'), 'recipe')
+      .buttonContainer
+        if mode === 'edit'
+          #saveSystem.ui.basic.fireBrick.button
+            i.save.icon
+            span= __('Save')
+        if mode === 'create'
+          #createSystem.ui.basic.fireBrick.button
+            i.plus.icon
+            span= __('Create')
 
-  if mode === 'view'
-    .ui.horizontal.divider Test sets
-    for ts in testSets
-      if ts.source.language === tsData.sourceLanguage && ts.target.language === tsData.targetLanguage
-        +testSet(ts)
+    if mode === 'view'
+      .ui.horizontal.divider= __('Test sets')
+      for ts in testSets
+        if ts.source.language === tsData.sourceLanguage && ts.target.language === tsData.targetLanguage
+          +testSet(ts)
 
 block scripts
   script.
