@@ -1,7 +1,7 @@
 body {
   margin: 0px;
   padding: 0px;
-  margin-top: 100px; /* Menu bar */
+  margin-top: 92px; /* Menu bar */
   margin-bottom: 20px; /* Status bar */
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
@@ -103,8 +103,13 @@ th:not(.nb) {
   margin-right: 5px;
 }
 
+.raised.card {
+  box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.3) !important;
+}
+
 .ui.card form {
   display: flex;
+  align-items: center;
 }
 
 /* Form */
@@ -166,4 +171,12 @@ a:hover {
 
 .testSetContainer table {
   margin: 10px auto !important;
+}
+
+.alert {
+  display: none;
+}
+
+.ui.centered.message {
+  text-align: center;
 }

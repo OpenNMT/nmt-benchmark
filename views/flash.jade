@@ -1,0 +1,8 @@
+if messages
+  .alert
+    if messages.error
+      .ui.centered.error.message #{messages.error}
+    if messages.warning
+      .ui.centered.warning.message #{messages.warning}
+    if messages.info
+      .ui.centered.info.message #{messages.info}

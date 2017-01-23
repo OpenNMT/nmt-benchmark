@@ -9,9 +9,13 @@ var tSystem = require('../lib/translationSystem');
 var testOutput = require('../lib/testOutput');
 var User = require('../lib/user.js');
 
-router.get('/', function(req, res, next) {
+router.get('/', function (req, res, next) {
   res.render('index', {
-    alert: '' // flash
+    messages: {
+      info: req.flash('info')[0],
+      warning: req.flash('warning')[0],
+      error: req.flash('error')[0]
+    }
   });
 });
 
@@ -20,7 +24,8 @@ router.get('/translationSystem/view/:systemId', function (req, res, next) {
   if (systemId) {
     gatherTS(systemId, function (err, data) {
       if (err) {
-        res.redirect('/'); // flash: err
+        req.flash('warning', 'Required translation system not found');
+        res.redirect('/');
       } else {
         data.mode = 'view';
         data.allSrc = uniq(res.locals.languagePairs, 'sourceLanguage');
@@ -30,20 +35,23 @@ router.get('/translationSystem/view/:systemId', function (req, res, next) {
     });
   } else {
     winston.warn(systemId, 'system not found');
-    res.redirect('/'); // flash: system not found
+    req.flash('warning', 'Required translation system not found');
+    res.redirect('/');
   }
 });
 
 router.get('/translationSystem/edit/:systemId', function (req, res, next) {
   if (!req.user) {
     winston.warn('Authentication issue');
-    res.redirect('/'); // flash: you don't have permission 
+    req.flash('warning', "You don't have permission to view this page.");
+    res.redirect('/');
   } else {
     var systemId = req.params.systemId;
     if (systemId) {
       gatherTS(systemId, function (err, data) {
         if (err) {
-          res.redirect('/'); // flash: system not found
+          req.flash('warning', 'Unable to retrieve data. Translation system not found.');
+          res.redirect('/');
         } else {
           data.mode = 'edit';
           data.allSrc = uniq(res.locals.languagePairs, 'sourceLanguage');
@@ -53,7 +61,8 @@ router.get('/translationSystem/edit/:systemId', function (req, res, next) {
       });
     } else {
       winston.warn(systemId, 'system not found');
-      res.redirect('/'); // flash: system not found
+      req.flash('warning', 'Translation system not found.');
+      res.redirect('/');
     }
   }
 });
@@ -61,7 +70,8 @@ router.get('/translationSystem/edit/:systemId', function (req, res, next) {
 router.post('/translationSystem/add', function (req, res, next) {
   if (!req.user) {
     winston.warn('Authentication issue');
-    res.redirect('/'); // flash: you don't have permission 
+    req.flash('warning', "You don't have permission to view this page.");
+    res.redirect('/');
   } else {
     var lp = req.body.languagePair || nconf.get('OpenNMTBenchmark:default:LP');
     res.render('translationSystem', {
@@ -85,7 +95,8 @@ router.get('/userSystems/:userId', function (req, res, next) {
   var userId = req.params.userId;
   gatherUS(userId, function (err, data) {
     if (err) {
-      res.redirect('/'); // flash: err
+      req.flash('warning', 'Unable to retrieve user systems.');
+      res.redirect('/');
     } else {
       res.render('userSystems', data);
     }
