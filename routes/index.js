@@ -19,6 +19,28 @@ router.get('/', function (req, res, next) {
   });
 });
 
+// TODO
+router.get('/help', function (req, res, next) {
+  res.render('index', {
+    messages: {
+      info: req.flash('info')[0],
+      warning: req.flash('warning')[0],
+      error: req.flash('error')[0]
+    }
+  });
+});
+
+// TODO
+router.get('/about', function (req, res, next) {
+  res.render('index', {
+    messages: {
+      info: req.flash('info')[0],
+      warning: req.flash('warning')[0],
+      error: req.flash('error')[0]
+    }
+  });
+});
+
 router.get('/translationSystem/view/:systemId', function (req, res, next) {
   var systemId = req.params.systemId;
   if (systemId) {
@@ -87,8 +109,13 @@ router.post('/translationSystem/add', function (req, res, next) {
   }
 });
 
-router.get('/testFiles', function (req, res, next) {
-  res.render('testFiles');
+router.get('/testSets', function (req, res, next) {
+  res.render('testSets');
+});
+
+// TODO
+router.get('/trainingSets', function (req, res, next) {
+  res.render('trainingSets');
 });
 
 router.get('/userSystems/:userId', function (req, res, next) {
