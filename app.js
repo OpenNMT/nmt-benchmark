@@ -9,6 +9,7 @@ var session = require('express-session');
 var yaml = require('js-yaml');
 var mongoose = require('mongoose');
 var passport = require('passport');
+var flash = require('connect-flash');
 var nconf = require('nconf');
 nconf.file({
   file: './config/default.yaml',
@@ -37,6 +38,7 @@ app.use(session({
   resave: true,
   saveUninitialized: true
 }));
+app.use(flash());
 
 // GitHub authentication
 passport.serializeUser(function (user, done) {
