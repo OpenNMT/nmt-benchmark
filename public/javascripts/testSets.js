@@ -29,6 +29,7 @@ function getTable (languagePair) {
         return [c2l[full.source.language], c2l[full.target.language]].join(' - ');
       }},
       {data: 'domain'},
+      {data: 'origin'},
       {data: 'source.fileName', sWidth: '130'},
       {data: 'download', sortable: false, sDefaultContent: '', render: function (data, type, full) {
         return '<div class="downloadSrc circular ui basic icon button" data-fileId="' + full._id + '"><i class="download icon"></i></div>'

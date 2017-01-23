@@ -22,7 +22,7 @@ module.exports = router;
 function getUniqueLPs (array) {
   var tmp = {};
   return array.map(function (file) {
-    return file.toObject().source.language + file.toObject().target.language;
+    return file.source.language + file.target.language;
   }).filter(function (lp) {
     if (!tmp.hasOwnProperty(lp)) {
       tmp[lp] = 1;
