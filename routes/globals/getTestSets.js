@@ -11,9 +11,7 @@ router.use('/', function (req, res, next) {
       winston.warn('Unable to retrieve test sets:', err);
       res.locals.testSets = [];
     } else {
-      res.locals.testSets = data.map(function (file) {
-        return file.toObject();
-      });
+      res.locals.testSets = data;
     }
     next();
   });
