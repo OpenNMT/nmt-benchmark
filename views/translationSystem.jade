@@ -135,9 +135,10 @@ block content
 
     if mode === 'view'
       .ui.horizontal.divider= __('Test sets')
-      for ts in testSets
-        if ts.source.language === tsData.sourceLanguage && ts.target.language === tsData.targetLanguage
-          +testSet(ts)
+      .ui.cards
+        for ts in testSets
+          if ts.source.language === tsData.sourceLanguage && ts.target.language === tsData.targetLanguage
+            +testSet(ts)
 
 block scripts
   script.
