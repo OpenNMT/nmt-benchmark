@@ -19,9 +19,6 @@ nconf.file({
   }
 });
 
-var testSets = require('./lib/testSet');
-testSets.init(nconf.get('OpenNMTBenchmark:Database'));
-
 var app = express();
 
 app.set('views', path.resolve(__dirname, 'views'));

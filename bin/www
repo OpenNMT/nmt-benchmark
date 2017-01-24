@@ -7,6 +7,11 @@
 var app = require('../app');
 var debug = require('debug')('opennmt-benchmark:server');
 var http = require('http');
+var db = require('../lib/mongodb');
+var nconf = require('nconf');
+
+// Init database connection
+db.init(nconf.get('OpenNMTBenchmark:Database'));
 
 /**
  * Get port from environment and store in Express.
@@ -25,9 +30,16 @@ var server = http.createServer(app);
  * Listen on provided port, on all network interfaces.
  */
 
-server.listen(port);
-server.on('error', onError);
-server.on('listening', onListening);
+// Open database
+db.open('opennmtbenchmark', function (err, dbOpened) {
+  if (err) {
+    console.log('Error', err);
+    return;
+  }
+  server.listen(port);
+  server.on('error', onError);
+  server.on('listening', onListening);
+});
 
 /**
  * Normalize a port into a number, string, or false.
