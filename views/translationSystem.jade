@@ -88,7 +88,7 @@ mixin testSet (ts)
     if !to && visitor && visitor.id == uData.githubId
       .extra.content
         .header(style="margin-bottom: 10px; margin-top: 5px;")
-          | Translaton
+          | Translation
         form(action='/testOutput/upload' enctype='multipart/form-data' method='post')
           .selectOutput.ui.icon.input(data-fileId="#{ts._id}")
             input.fileName
@@ -116,13 +116,19 @@ block content
         if mode === 'edit'
           | Edit description
     .ui.form
-      +field(__('System name'), 'systemName')
-      +field(__('Version'), 'version')
-      +field(__('Author'), 'user')
-      +dropdown(__('Source language'), 'sourceLanguage', 'src')
-      +dropdown(__('Target language'), 'targetLanguage', 'tgt')
-      +field(__('Type'), 'type')
-      +textarea(__('Recipe'), 'recipe')
+      for field in fieldSet
+        case field.type
+          when 'user'
+            +field(__(field.label), field.name)
+          when 'textarea'
+            +textarea(__(field.label), field.name)
+          when 'dropdown'
+            if field.name == 'sourceLanguage'
+              +dropdown(__(field.label), field.name, 'src')
+            else
+              +dropdown(__(field.label), field.name, 'tgt')
+          default
+            +field(__(field.label), field.name)
       .buttonContainer
         if mode === 'edit'
           #saveSystem.ui.basic.fireBrick.button
@@ -151,4 +157,6 @@ block scripts
     var allTgt = !{JSON.stringify(allTgt).replace(/<\//g, '<\\/')}
     var testSets = !{JSON.stringify(testSets).replace(/<\//g, '<\\/')}
     var visitor = !{JSON.stringify(visitor).replace(/<\//g, '<\\/')}
+    var fieldSet = !{JSON.stringify(fieldSet).replace(/<\//g, '<\\/')}
   script(src='/javascripts/translationSystem.js')
+  // TODO - i18n

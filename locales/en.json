@@ -31,5 +31,11 @@
 	"Test Sets": "Test Sets",
 	"About": "About",
 	"Help": "Help",
-	"Origin": "Origin"
+	"Origin": "Origin",
+	"Filter": "Filter",
+	"Any language pair": "Any language pair",
+	"Size": "Size",
+	"NMT-Benchmark": "NMT-Benchmark",
+	"Info": "Info",
+	"#{field.label}": "#{field.label}"
 }
