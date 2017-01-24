@@ -4,6 +4,7 @@ $(document).ready(function () {
 
   // DataTable configuration
   var dtConfig = {
+    url: '/download/test/',
     target: '#testSetTable',
     type: 'test',
     columns: [

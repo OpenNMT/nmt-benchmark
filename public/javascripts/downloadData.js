@@ -16,8 +16,8 @@ function getTable (list, config) {
         } else if (e.target.nodeName === 'DIV') {
           target = $(e.target);
         }
-        if (target && $(target).attr('data-fileId')) {
-          var downloadPage = window.open('/download/' + config.type + '/' + $(target).attr('data-fileId'));
+        if (target && ($(target).attr('data-fileId') || $(target).attr('data-fileName'))) {
+          var downloadPage = window.open(config.url + ($(target).attr('data-fileId') || $(target).attr('data-fileName')));
         }
       });
     }

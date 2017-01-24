@@ -4,21 +4,21 @@ $(document).ready(function () {
 
   // DataTable configuration
   var dtConfig = {
+    url: 'https://s3.amazonaws.com/opennmt-trainingdata/',
     target: '#trainingSetTable',
     type: 'training',
     columns: [
       {data: 'languagePair', sWidth: '130', render: function (data, type, full) {
-        return '-';
-        // return [c2l[full.source.language], c2l[full.target.language]].join(' - ');
+        return [c2l[full.source.language], c2l[full.target.language]].join(' - ');
       }},
       {data: 'fileName', sWidth: '130', render: function (data, type, full) {
-        return full;
+        return full.fileName;
       }},
-      {data: 'size', render: function (data, type, full) {
+      /*{data: 'size', render: function (data, type, full) {
         return '-';
-      }},
+      }},*/
       {data: 'download', sortable: false, sDefaultContent: '', render: function (data, type, full) {
-        return '<div class="downloadSrc circular ui basic icon fireBrick disabled button" data-fileId="' + full._id + '"><i class="download icon"></i></div>';
+        return '<div class="downloadSrc circular ui basic icon fireBrick button" data-fileName="' + full.fileName + '.tgz"><i class="download icon"></i></div>';
       }}
     ]
   }
