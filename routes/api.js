@@ -6,6 +6,7 @@ var exec = require('child_process').exec;
 var tmp = require('tmp');
 var multiparty = require('multiparty');
 var winston = require('winston');
+var http = require('http');
 
 var tSystem = require('../lib/translationSystem');
 var testSet = require('../lib/testSet');
@@ -195,20 +196,15 @@ router.get('/download/test/:fileId', function (req, res, next) {
   });
 });
 
-// TODO
 router.get('/download/training/:fileId', function (req, res, next) {
   var fileId = req.params.fileId;
-  ///
-  testSet.getTestSet({_id: fileId}, function (err, data) {
-    if (err) {
-      res.sendStatus(500);
-    } else {
-      res.setHeader('Content-disposition', 'attachment; filename=' + data.source.fileName);
-      res.setHeader('Content-type', 'text/plain');
-      res.send(data.source.content);
-    }
+  var fileName = fileId + '.tgz'
+  var path2file = 'https://s3.amazonaws.com/opennmt-trainingdata/' + fileName;
+
+  var file = fs.createWriteStream(fileName);
+  http.get(path2file, function () {
+    res.pipe(file);
   });
-  ////
 });
 
 module.exports = router;
