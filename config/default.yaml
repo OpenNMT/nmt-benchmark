@@ -23,7 +23,7 @@ OpenNMTBenchmark:
     locale: en
   locales: ['en']
   datapath: ./data
-  scorer_cli: ./bin/multibleu
+  scorer_cli: ./scripts/multi-bleu.perl
   URL: http://www.opennmtbenchmark.com:3000
   passport:
     clientID: cdb6ff225507c68d0c4a
