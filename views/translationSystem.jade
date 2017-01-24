@@ -1,21 +1,21 @@
 extends layout.jade
 include mixin.user.jade
 
-mixin field (label, name)
+mixin field (f)
   .inline.field
-    label.large #{label}
-    if name === 'user'
+    label.large= __(f.label)
+    if f.type === 'user'
       input(type='hidden' name='user' value='#{uData.githubId || uData.id}')
       +user(uData)
     else
       if mode === 'view'
-        span(id='#{name}') #{tsData[name]}
+        span(id='#{f.name}') #{tsData[name]}
       else
         .ui.input
           if mode === 'edit'
-            input(name='#{name}' value='#{tsData[name]}')
+            input(name='#{f.name}' value='#{tsData[name]}' placeholder='#{f.placeholder}' required='#{f.required}')
           else
-            input(name='#{name}')
+            input(name='#{f.name}' placeholder='#{f.placeholder}' required='#{f.required}')
 
 mixin dropdown (label, name, side)
   .inline.field
@@ -52,14 +52,14 @@ mixin dropdown (label, name, side)
               else
                 .item(data-value='#{lang}') #{c2l[lang]}
 
-mixin textarea (label, name)
+mixin textarea (f)
   .inline.field
-    label.large #{label}
+    label.large= __(f.label)
     if mode === 'view'
       span #{tsData[name]}
     else
       .ui.input
-        textarea(name='#{name}' placeholder='this is a test' value='#{tsData[name]}') #{tsData[name]}
+        textarea(name='#{f.name}' placeholder='#{f.placeholder}' value='#{tsData[name]}' required='#{f.required}') #{tsData[name]}
 
 mixin testSet (ts)
   - var to
@@ -103,46 +103,57 @@ mixin testSet (ts)
           input(type='hidden' name='fileId' value='#{ts._id}')
           input(type='hidden' name='systemId' value='#{systemId}')
 
-mixin radio (label, name)
+mixin radio (f)
   .inline.field
-    label.large #{label}
+    label.large= __(f.label)
     if mode == 'view'
       span #{tsData[name] ? 'On' : 'Off'}
     else
       .ui.toggle.checkbox
-        input.hidden(type='checkbox' name='#{name}' checked='checked')
+        input.hidden(type='checkbox' name='#{f.name}' checked='checked')
         label On
-  .inline.field.trainSet
-    label.large Select training data set
+  .inline.field.trainSet(style='display: none;')
+    label.large Training data set
     if mode == 'view'
       span #{tsData.trainSet}
     else
+      .ui.input
+        input(name='#{trainSet}' placeholder="trainSet")
+
+mixin set (f)
+  .inline.field.trainSet
+    label.large= __(f.label)
+    if mode == 'view'
+      span #{tsData[f.name]}
+    else
       .ui.selection.dropdown
-        .text #{trainingSets[0]}
-        input(name='trainSet' type='hidden' value='#{trainingSets[0]}')
+        .text #{f.values[0]}
+        input(name='#{f.name}' type='hidden' value='#{f.values[0]}')
         i.dropdown.icon
         .menu
-          each train, i in trainingSets
+          each element, i in f.values
             if i == 0
-              .item.active(data-value='#{train}') #{train}
+              .item.active(data-value='#{element}') #{element}
             else
-              .item(data-value='#{train}') #{train}
+              .item(data-value='#{element}') #{element}
 
 mixin render (field)
   case field.type
     when 'user'
-      +field(__(field.label), field.name)
+      +field(field)
     when 'textarea'
-      +textarea(__(field.label), field.name)
+      +textarea(field)
+    when 'set'
+      +set(field)
     when 'dropdown'
       if field.name == 'sourceLanguage'
         +dropdown(__(field.label), field.name, 'src')
       else
         +dropdown(__(field.label), field.name, 'tgt')
     when 'radio'
-      +radio(__(field.label), field.name)
+      +radio(field)
     default
-      +field(__(field.label), field.name)
+      +field(field)
 
 block content
   .information
@@ -173,7 +184,9 @@ block content
           for field in fieldSet
             if field.layer == 3
               +render(field)
-
+      for field in fieldSet
+        if field.layer == 0
+          +render(field)
 
     .buttonContainer
       if mode === 'edit'
