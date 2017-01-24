@@ -128,12 +128,13 @@ label.large {
 .ui.form label::after {
   content: ':';
 }
-
+/*
+*/
 .ui.form textarea {
   display: inline-block;
-  width: 350px;
+  /*width: 350px;*/
+  min-width: 100% !important;
 }
-
 .buttonContainer {
   margin-left: 160px;
 }
