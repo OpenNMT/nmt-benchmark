@@ -7,12 +7,12 @@ var testSet = require('../../lib/testSet');
 var Output = require('../../lib/testOutput');
 
 router.use('/', function (req, res, next) {
-  testSet.getTestSets(function (err, tsData) {
+  testSet.getTestSetHeaders(function (err, tsData) {
     if (err) {
       winston.warn('Unable to retrieve test sets: ' + err);
       res.locals.testSets = [];
     } else {
-      Output.getTestOutputs(function (err, toData) {
+      Output.getTestOutputHeaders(function (err, toData) {
         if (err) {
           winston.warn('Unable to retrieve output data: ' + err);
         }
