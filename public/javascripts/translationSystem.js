@@ -70,7 +70,7 @@ $(document).ready(function () {
   });
 
   // Remove output
-  $('#deleteOutput').on('click', function () {
+  $('.deleteOutput').on('click', function () {
     // TODO - modal confirmation
     var url = '/testOutput/delete/' + $(this).attr('data-testOutputId');
     $.get(url)
