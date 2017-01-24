@@ -1,5 +1,5 @@
 function getTable (list, config) {
-  $('#testSetTable').dataTable({
+  $(config.target).dataTable({
     destroy: true,
     searching: false,
     info: false,
@@ -29,7 +29,9 @@ function filterByLp (list, languagePair) {
     var src = languagePair.substring(0,2);
     var tgt = languagePair.substring(2);
     return list.filter(function (item) {
-      return item.source.language === src && item.target.language === tgt;
+      if (item.source && item.target) {
+        return item.source.language === src && item.target.language === tgt;
+      }
     });
   } else {
     return list;

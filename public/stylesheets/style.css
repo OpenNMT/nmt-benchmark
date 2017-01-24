@@ -119,9 +119,9 @@ th:not(.nb) {
   margin-right: 5px;
 }
 
-.ui.form label {
-  min-width: 150px;
-  width: 150px;
+label.large {
+  min-width: 140px;
+  width: 140px;
   text-align: right;
 }
 
@@ -165,11 +165,13 @@ a:hover {
   margin-right: 20px;
 }
 
-.testSetContainer {
+.testSetContainer,
+.trainingSetContainer {
   text-align: center;
 }
 
-.testSetContainer table {
+.testSetContainer table,
+.trainingSetContainer table {
   margin: 10px auto !important;
 }
 

@@ -10,6 +10,8 @@ var testOutput = require('../lib/testOutput');
 var User = require('../lib/user.js');
 var fieldSet = require('../config/systemSubmitForm').systemDescription;
 
+var trainingSets = require('../lib/trainingSets').list;
+
 router.get('/', function (req, res, next) {
   res.render('index', {
     messages: {
@@ -51,6 +53,7 @@ router.get('/translationSystem/view/:systemId', function (req, res, next) {
       } else {
         data.mode = 'view';
         data.fieldSet = fieldSet;
+        data.trainingSets = trainingSets;
         data.allSrc = uniq(res.locals.languagePairs, 'sourceLanguage');
         data.allTgt = uniq(res.locals.languagePairs, 'targetLanguage');
         res.render('translationSystem', data);
@@ -99,6 +102,7 @@ router.post('/translationSystem/add', function (req, res, next) {
   } else {
     var lp = req.body.languagePair || nconf.get('OpenNMTBenchmark:default:LP');
     res.render('translationSystem', {
+      trainingSets: trainingSets,
       fieldSet: fieldSet,
       src: lp.substring(0,2),
       tgt: lp.substring(2),
@@ -120,7 +124,7 @@ router.get('/testSets', function (req, res, next) {
 router.get('/trainingSets', function (req, res, next) {
   // trainingSets
   // languagePairs
-  res.render('trainingSets');
+  res.render('trainingSets', {trainingSets: trainingSets});
 });
 
 router.get('/userSystems/:userId', function (req, res, next) {
