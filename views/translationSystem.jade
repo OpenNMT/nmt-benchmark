@@ -100,6 +100,19 @@ mixin testSet (ts)
           input(type='hidden' name='fileId' value='#{ts._id}')
           input(type='hidden' name='systemId' value='#{systemId}')
 
+mixin render (field)
+  case field.type
+    when 'user'
+      +field(__(field.label), field.name)
+    when 'textarea'
+      +textarea(__(field.label), field.name)
+    when 'dropdown'
+      if field.name == 'sourceLanguage'
+        +dropdown(__(field.label), field.name, 'src')
+      else
+        +dropdown(__(field.label), field.name, 'tgt')
+    default
+      +field(__(field.label), field.name)
 
 block content
   .information
@@ -115,20 +128,24 @@ block content
       //-
         if mode === 'edit'
           | Edit description
-    .ui.form
-      for field in fieldSet
-        case field.type
-          when 'user'
-            +field(__(field.label), field.name)
-          when 'textarea'
-            +textarea(__(field.label), field.name)
-          when 'dropdown'
-            if field.name == 'sourceLanguage'
-              +dropdown(__(field.label), field.name, 'src')
-            else
-              +dropdown(__(field.label), field.name, 'tgt')
-          default
-            +field(__(field.label), field.name)
+    .ui.small.form
+      .ui.three.column.grid
+        .column
+          for field in fieldSet
+            if field.layer == 1
+              +render(field)
+
+        .column
+          for field in fieldSet
+            if field.layer == 2
+              +render(field)
+        .column
+          for field in fieldSet
+            if field.layer == 3
+              +render(field)
+
+      .ui.horizontal.divider ops
+
       .buttonContainer
         if mode === 'edit'
           #saveSystem.ui.basic.fireBrick.button
@@ -157,6 +174,5 @@ block scripts
     var allTgt = !{JSON.stringify(allTgt).replace(/<\//g, '<\\/')}
     var testSets = !{JSON.stringify(testSets).replace(/<\//g, '<\\/')}
     var visitor = !{JSON.stringify(visitor).replace(/<\//g, '<\\/')}
-    var fieldSet = !{JSON.stringify(fieldSet).replace(/<\//g, '<\\/')}
   script(src='/javascripts/translationSystem.js')
   // TODO - i18n

@@ -37,5 +37,20 @@
 	"Size": "Size",
 	"NMT-Benchmark": "NMT-Benchmark",
 	"Info": "Info",
-	"#{field.label}": "#{field.label}"
+	"#{field.label}": "#{field.label}",
+	"Global NN architecture": "Global NN architecture",
+	"Use of side features": "Use of side features",
+	"Tokenization type": "Tokenization type",
+	"Vocabulary Size": "Vocabulary Size",
+	"Number of layers": "Number of layers",
+	"RNN type": "RNN type",
+	"Dropout": "Dropout",
+	"Word Embedding": "Word Embedding",
+	"Encoder specific": "Encoder specific",
+	"Decoder specific": "Decoder specific",
+	"Attention specific": "Attention specific",
+	"Generator": "Generator",
+	"OOV Replacement": "OOV Replacement",
+	"Optimization": "Optimization",
+	"Training Specific": "Training Specific"
 }
