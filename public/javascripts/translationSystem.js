@@ -4,6 +4,16 @@ $(document).ready(function () {
     setDescription(translationSystem);
   }
   $('.ui.dropdown').dropdown();
+  $('.ui.toggle.checkbox').checkbox({
+    onChange: function () {
+      var state = $(this).prop('checked') ? 'On' : 'Off'; // i18n
+      $(this).next('label').text(state)
+      $('.trainSet').transition({
+        animation: 'slide down',
+        duration: '0.5s'
+      });
+    }
+  });
   $('#createSystem, #saveSystem').on('click', function () {
     var params = getDescription();
     var url = params.system_id ? '/translationSystem/update' : '/translationSystem/create';

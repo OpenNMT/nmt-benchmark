@@ -9,6 +9,15 @@ var systemDescription = [
     "layer": 1
   },
   {
+    "name": "constraint",
+    "default": "",
+    "placeholder": "",
+    "type": "radio",
+    "label": "Constrainted system",
+    "required": false,
+    "layer": 1
+  },
+  {
     "name": "version",
     "default": "",
     "placeholder": "",

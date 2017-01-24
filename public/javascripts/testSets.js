@@ -4,6 +4,7 @@ $(document).ready(function () {
 
   // DataTable configuration
   var dtConfig = {
+    target: '#testSetTable',
     type: 'test',
     columns: [
       {data: 'languagePair', sWidth: '130', render: function (data, type, full) {

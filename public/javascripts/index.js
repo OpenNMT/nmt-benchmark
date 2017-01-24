@@ -61,10 +61,8 @@ function getTable (languagePair) {
     '<th class="user">User</th>',
     '<th class="systemName">System name</th>'
   ];
-  testSets.filter(function (file) {
-    if (file.source.language + file.target.language === languagePair) {
-      table.push('<th data-id="' + file.source.fileName + '">' + file.source.fileName + '</th>');
-    }
+  getBest(testSets, languagePair).forEach(function (file) {
+    table.push('<th data-id="' + file.source.fileName + '">' + file.source.fileName + '</th>');
   });
   table.push('</tr></thead></table>');
   $('#mainTable').html(table.join(''));
@@ -79,7 +77,7 @@ function getTable (languagePair) {
         return ('<a href="/translationSystem/view/' + full._id + '">' + data + '</a>');
       }}
     ];
-    $.each(testSets, function (i, ts) {
+    $.each(getBest(testSets, languagePair), function (i, ts) {
       if (ts.source.language + ts.target.language === languagePair) {
         columns.push({
           data: ts.source.fileName,
@@ -120,4 +118,12 @@ function getMetrics () {
 
 function getLanguagePair () {
   return $('#languagePairs').dropdown('get value') || defaultLP;
+}
+
+function getBest (testSets, languagePair) {
+  return testSets.filter(function (file) {
+    return (file.source.language + file.target.language === languagePair);
+  }).sort(function (a, b) {
+    return b.nbOutputs - a.nbOutputs;
+  }).slice(0, 1);
 }

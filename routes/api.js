@@ -240,7 +240,7 @@ function calculateScores (outputId, referenceId, hypothesis) {
   .then(function runScorer() {
     // Run evaluation tool
     // TODO - map evalTool to cmd
-    var multibleu = path.resolve('./lib/multi-bleu.perl'); // path to tool might be changed...
+    var multibleu = path.resolve('./scripts/multi-bleu.perl'); // path to tool might be changed...
     var cmd = ['perl', multibleu, reference, '<', hypothesis].join(' ');
     return new Promise(function (resolve, reject) {
       exec(cmd, function (err, stdout, stderr) {
