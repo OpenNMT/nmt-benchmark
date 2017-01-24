@@ -84,12 +84,12 @@ th:not(.nb) {
 /* Cards & controls */
 
 #deleteSystem,
-#deleteOutput {
+.deleteOutput {
+  margin-left: 5px !important;
   cursor: pointer;
 }
 
-#deleteSystem:hover,
-#deleteOutput:hover {
+#deleteSystem:hover {
   color: #AC4142 !important;
 }
 
