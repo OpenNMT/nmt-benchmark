@@ -2,10 +2,10 @@ var systemDescription = [
   {
     "name": "systemName",
     "default": "",
-    "placeholder": "",
+    "placeholder": "ORG-xxyy-dd/mm/yyyy",
     "type": "text",
     "label": "System name",
-    "required": false,
+    "required": true,
     "layer": 1
   },
   {
@@ -14,7 +14,16 @@ var systemDescription = [
     "placeholder": "",
     "type": "radio",
     "label": "Constrainted system",
-    "required": false,
+    "required": true,
+    "layer": 1
+  },
+  {
+    "name": "framework",
+    "default": "",
+    "placeholder": "OpenNMT",
+    "type": "text",
+    "label": "Framework",
+    "required": true,
     "layer": 1
   },
   {
@@ -22,8 +31,8 @@ var systemDescription = [
     "default": "",
     "placeholder": "",
     "type": "text",
-    "label": "Version",
-    "required": false,
+    "label": "Framework version",
+    "required": true,
     "layer": 1
   },
   {
@@ -32,7 +41,7 @@ var systemDescription = [
     "placeholder": "",
     "type": "user",
     "label": "Author",
-    "required": false,
+    "required": true,
     "layer": 1
   },
   {
@@ -41,7 +50,7 @@ var systemDescription = [
     "placeholder": "",
     "type": "dropdown",
     "label": "Source language",
-    "required": false,
+    "required": true,
     "layer": 1
   },
   {
@@ -50,16 +59,17 @@ var systemDescription = [
     "placeholder": "",
     "type": "dropdown",
     "label": "Target language",
-    "required": false,
+    "required": true,
     "layer": 1
   },
   {
     "name": "type",
     "default": "",
     "placeholder": "",
-    "type": "text",
+    "values": ["NMT", "SMT", "Hybrid", "Rulebased"],
+    "type": "set",
     "label": "Type",
-    "required": false,
+    "required": true,
     "layer": 1
   },
   {
@@ -68,143 +78,143 @@ var systemDescription = [
     "placeholder": "",
     "type": "textarea",
     "label": "Recipe",
-    "required": false,
-    "layer": 1
+    "required": true,
+    "layer": 0
   },
 
   {
     "name": "architecture",
     "default": "seq2seq-attn",
-    "placeholder": "",
+    "placeholder": "seq2seq-attn",
     "type": "text",
     "label": "Global NN architecture",
-    "required": false,
+    "required": true,
     "layer": 2
   },
   {
     "name": "features",
     "default": "case",
-    "placeholder": "",
+    "placeholder": "case",
     "type": "text",
     "label": "Use of side features",
-    "required": false,
+    "required": true,
     "layer": 2
   },
   {
     "name": "tokenization",
     "default": "generic+BPE",
-    "placeholder": "",
+    "placeholder": "generic+BPE",
     "type": "text",
     "label": "Tokenization type",
-    "required": false,
+    "required": true,
     "layer": 2
   },
   {
     "name": "vocabulary",
     "default": "50000/50000",
-    "placeholder": "",
+    "placeholder": "50000/50000",
     "type": "text",
     "label": "Vocabulary Size",
-    "required": false,
+    "required": true,
     "layer": 2
   },
   {
     "name": "layers",
     "default": "2x4",
-    "placeholder": "",
+    "placeholder": "2x4",
     "type": "text",
     "label": "Number of layers",
-    "required": false,
+    "required": true,
     "layer": 2
   },
   {
     "name": "rnnType",
     "default": "1000 LSTM",
-    "placeholder": "",
+    "placeholder": "1000 LSTM",
     "type": "text",
     "label": "RNN type",
-    "required": false,
+    "required": true,
     "layer": 2
   },
   {
     "name": "dropout",
     "default": "0.3",
-    "placeholder": "",
+    "placeholder": "0.3",
     "type": "text",
     "label": "Dropout",
-    "required": false,
+    "required": true,
     "layer": 2
   },
   {
     "name": "embedding",
     "default": "600",
-    "placeholder": "",
+    "placeholder": "600",
     "type": "text",
     "label": "Word Embedding",
-    "required": false,
+    "required": true,
     "layer": 2
   },
   {
     "name": "encoder",
-    "default": "",
-    "placeholder": "",
+    "default": "none",
+    "placeholder": "none",
     "type": "text",
     "label": "Encoder specific",
-    "required": false,
+    "required": true,
     "layer": 3
   },
   {
     "name": "decoder",
-    "default": "",
-    "placeholder": "",
+    "default": "none",
+    "placeholder": "none",
     "type": "text",
     "label": "Decoder specific",
-    "required": false,
+    "required": true,
     "layer": 3
   },
   {
     "name": "attention",
     "default": "Global Attention",
-    "placeholder": "",
+    "placeholder": "Global Attention",
     "type": "text",
     "label": "Attention specific",
-    "required": false,
+    "required": true,
     "layer": 3
   },
   {
     "name": "generator",
     "default": "SoftMax",
-    "placeholder": "",
+    "placeholder": "SoftMax",
     "type": "text",
     "label": "Generator",
-    "required": false,
+    "required": true,
     "layer": 3
   },
   {
     "name": "oov",
-    "default": "",
-    "placeholder": "",
+    "default": "none",
+    "placeholder": "none",
     "type": "text",
     "label": "OOV Replacement",
-    "required": false,
+    "required": true,
     "layer": 3
   },
   {
     "name": "optimization",
     "default": "sgd",
-    "placeholder": "",
+    "placeholder": "sgd",
     "type": "text",
     "label": "Optimization",
-    "required": false,
+    "required": true,
     "layer": 3
   },
   {
     "name": "training",
     "default": "13 epochs",
-    "placeholder": "",
+    "placeholder": "13 epochs",
     "type": "text",
     "label": "Training Specific",
-    "required": false,
+    "required": true,
     "layer": 3
   }
 ];
