@@ -33,6 +33,7 @@ body {
 
 .fireBrick .item {
   color: White !important;
+  font-size: larger;
 }
 
 .fireBrick a {
