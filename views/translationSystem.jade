@@ -3,23 +3,23 @@ include mixin.user.jade
 
 mixin field (label, name)
   .inline.field
-    label #{label}
+    label.large #{label}
     if name === 'user'
       input(type='hidden' name='user' value='#{uData.githubId || uData.id}')
       +user(uData)
     else
       if mode === 'view'
-        span(id="#{name}") #{tsData[name]}
+        span(id='#{name}') #{tsData[name]}
       else
         .ui.input
           if mode === 'edit'
-            input(name='#{name}' value="#{tsData[name]}")
+            input(name='#{name}' value='#{tsData[name]}')
           else
             input(name='#{name}')
 
 mixin dropdown (label, name, side)
   .inline.field
-    label #{label}
+    label.large #{label}
     if mode === 'view'
       span #{tsData[name]} - #{c2l[tsData[name]]}
     else
@@ -54,7 +54,7 @@ mixin dropdown (label, name, side)
 
 mixin textarea (label, name)
   .inline.field
-    label #{label}
+    label.large #{label}
     if mode === 'view'
       span #{tsData[name]}
     else
@@ -66,12 +66,12 @@ mixin testSet (ts)
   for output in toData
     if output.fileId == ts._id
       - to = output
-  .ui.raised.centered.fluid.card(style="width: 450px;")
+  .ui.raised.centered.fluid.card(style='width: 450px;')
     .content
       if ts.primary
-        .ui.right.blue.corner.label(style="border-color: #00B7FF !important")
+        .ui.right.blue.corner.label(style='border-color: #00B7FF !important')
           i.star.icon
-      .header(style="display: flex; justify-content: space-between; align-items: center")
+      .header(style='display: flex; justify-content: space-between; align-items: center')
         | #{ts.source.fileName}
       .description
         ul
@@ -90,18 +90,43 @@ mixin testSet (ts)
         | Get source
     if !to && visitor && visitor.id == uData.githubId
       .extra.content
-        .header(style="margin-bottom: 10px; margin-top: 5px;")
+        .header(style='margin-bottom: 10px; margin-top: 5px;')
           | Translation
         form(action='/testOutput/upload' enctype='multipart/form-data' method='post')
-          .selectOutput.ui.icon.input(data-fileId="#{ts._id}")
+          .selectOutput.ui.icon.input(data-fileId='#{ts._id}')
             input.fileName
             i.folder.open.icon
-          .uploadOutput.ui.icon.basic.fireBrick.disabled.button(data-fileId="#{ts._id}")
+          .uploadOutput.ui.icon.basic.fireBrick.disabled.button(data-fileId='#{ts._id}')
             i.upload.icon
             | Upload
-          input(type="file" name="file" style="display: none" data-fileId="#{ts._id}")
+          input(type='file' name='file' style='display: none' data-fileId='#{ts._id}')
           input(type='hidden' name='fileId' value='#{ts._id}')
           input(type='hidden' name='systemId' value='#{systemId}')
+
+mixin radio (label, name)
+  .inline.field
+    label.large #{label}
+    if mode == 'view'
+      span #{tsData[name] ? 'On' : 'Off'}
+    else
+      .ui.toggle.checkbox
+        input.hidden(type='checkbox' name='#{name}' checked='checked')
+        label On
+  .inline.field.trainSet
+    label.large Select training data set
+    if mode == 'view'
+      span #{tsData.trainSet}
+    else
+      .ui.selection.dropdown
+        .text #{trainingSets[0]}
+        input(name='trainSet' type='hidden' value='#{trainingSets[0]}')
+        i.dropdown.icon
+        .menu
+          each train, i in trainingSets
+            if i == 0
+              .item.active(data-value='#{train}') #{train}
+            else
+              .item(data-value='#{train}') #{train}
 
 mixin render (field)
   case field.type
@@ -114,17 +139,19 @@ mixin render (field)
         +dropdown(__(field.label), field.name, 'src')
       else
         +dropdown(__(field.label), field.name, 'tgt')
+    when 'radio'
+      +radio(__(field.label), field.name)
     default
       +field(__(field.label), field.name)
 
 block content
   .information
-    h1(style="display: flex; align-items: center")
+    h1(style='display: flex; align-items: center')
       if mode === 'create'
         | Add translation system
       if mode === 'view'
         | System description
-        span(style="margin-left: 40px")
+        span(style='margin-left: 40px')
           if visitor && visitor.id == uData.githubId
             //-i#editSystem.small.grey.write.icon(data-systemId='#{systemId}')
             i#deleteSystem.small.grey.trash.icon(data-systemId='#{systemId}')
@@ -168,11 +195,11 @@ block content
 
 block scripts
   script.
-    var systemId = "#{systemId}"
+    var systemId = '#{systemId}'
     var translationSystem = !{JSON.stringify(tsData).replace(/<\//g, '<\\/')}
     var testOutputs = !{JSON.stringify(toData).replace(/<\//g, '<\\/')}
     var uData = !{JSON.stringify(uData).replace(/<\//g, '<\\/')}
-    var mode = "#{mode}"
+    var mode = '#{mode}'
     var allSrc = !{JSON.stringify(allSrc).replace(/<\//g, '<\\/')}
     var allTgt = !{JSON.stringify(allTgt).replace(/<\//g, '<\\/')}
     var testSets = !{JSON.stringify(testSets).replace(/<\//g, '<\\/')}

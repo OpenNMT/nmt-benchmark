@@ -4,14 +4,25 @@ var fs = require('fs');
 var nconf = require('nconf');
 var path = require('path');
 var testSet = require('../../lib/testSet');
+var Output = require('../../lib/testOutput');
 
 router.use('/', function (req, res, next) {
-  testSet.getTestSets(function (err, data) {
+  testSet.getTestSets(function (err, tsData) {
     if (err) {
-      winston.warn('Unable to retrieve test sets:', err);
+      winston.warn('Unable to retrieve test sets: ' + err);
       res.locals.testSets = [];
     } else {
-      res.locals.testSets = data;
+      Output.getTestOutputs(function (err, toData) {
+        if (err) {
+          winston.warn('Unable to retrieve output data: ' + err);
+        }
+        tsData.forEach(function (ts) {
+          ts.nbOutputs = toData.filter(function (to) {
+            return to.fileId == ts._id;
+          }).length;
+        });
+        res.locals.testSets = tsData;
+      });
     }
     next();
   });

@@ -52,5 +52,6 @@
 	"Generator": "Generator",
 	"OOV Replacement": "OOV Replacement",
 	"Optimization": "Optimization",
-	"Training Specific": "Training Specific"
+	"Training Specific": "Training Specific",
+	"Constrainted system": "Constrainted system"
 }
