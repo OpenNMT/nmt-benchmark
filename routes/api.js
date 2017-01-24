@@ -182,7 +182,7 @@ router.get('/testOutput/delete/:testOutputId', function (req, res, next) {
   }
 });
 
-router.get('/download/:fileId', function (req, res, next) {
+router.get('/download/test/:fileId', function (req, res, next) {
   var fileId = req.params.fileId;
   testSet.getTestSet({_id: fileId}, function (err, data) {
     if (err) {
@@ -193,6 +193,22 @@ router.get('/download/:fileId', function (req, res, next) {
       res.send(data.source.content);
     }
   });
+});
+
+// TODO
+router.get('/download/training/:fileId', function (req, res, next) {
+  var fileId = req.params.fileId;
+  ///
+  testSet.getTestSet({_id: fileId}, function (err, data) {
+    if (err) {
+      res.sendStatus(500);
+    } else {
+      res.setHeader('Content-disposition', 'attachment; filename=' + data.source.fileName);
+      res.setHeader('Content-type', 'text/plain');
+      res.send(data.source.content);
+    }
+  });
+  ////
 });
 
 module.exports = router;

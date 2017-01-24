@@ -8,6 +8,7 @@ var winston = require('winston');
 var tSystem = require('../lib/translationSystem');
 var testOutput = require('../lib/testOutput');
 var User = require('../lib/user.js');
+var fieldSet = require('../config/systemSubmitForm').systemDescription;
 
 router.get('/', function (req, res, next) {
   res.render('index', {
@@ -19,9 +20,8 @@ router.get('/', function (req, res, next) {
   });
 });
 
-// TODO
-router.get('/help', function (req, res, next) {
-  res.render('index', {
+router.get('/info', function (req, res, next) {
+  res.render('info', {
     messages: {
       info: req.flash('info')[0],
       warning: req.flash('warning')[0],
@@ -50,6 +50,7 @@ router.get('/translationSystem/view/:systemId', function (req, res, next) {
         res.redirect('/');
       } else {
         data.mode = 'view';
+        data.fieldSet = fieldSet;
         data.allSrc = uniq(res.locals.languagePairs, 'sourceLanguage');
         data.allTgt = uniq(res.locals.languagePairs, 'targetLanguage');
         res.render('translationSystem', data);
@@ -76,6 +77,7 @@ router.get('/translationSystem/edit/:systemId', function (req, res, next) {
           res.redirect('/');
         } else {
           data.mode = 'edit';
+          data.fieldSet = fieldSet;
           data.allSrc = uniq(res.locals.languagePairs, 'sourceLanguage');
           data.allTgt = uniq(res.locals.languagePairs, 'targetLanguage');
           res.render('translationSystem', data);
@@ -97,6 +99,7 @@ router.post('/translationSystem/add', function (req, res, next) {
   } else {
     var lp = req.body.languagePair || nconf.get('OpenNMTBenchmark:default:LP');
     res.render('translationSystem', {
+      fieldSet: fieldSet,
       src: lp.substring(0,2),
       tgt: lp.substring(2),
       allSrc: uniq(res.locals.languagePairs, 'sourceLanguage'),
@@ -115,6 +118,8 @@ router.get('/testSets', function (req, res, next) {
 
 // TODO
 router.get('/trainingSets', function (req, res, next) {
+  // trainingSets
+  // languagePairs
   res.render('trainingSets');
 });
 

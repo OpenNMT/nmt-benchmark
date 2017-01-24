@@ -1,4 +1,8 @@
 $(document).ready(function () {
+
+  console.log('form', fieldSet)
+
+
   if (mode === 'view') {
     $('.ui.form .input').addClass('transparent');
     setDescription(translationSystem);
