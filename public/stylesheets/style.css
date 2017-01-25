@@ -173,6 +173,11 @@ a:hover {
   margin: 10px auto !important;
 }
 
+.testSetContainer td,
+.trainingSetContainer td {
+  white-space: nowrap;
+}
+
 .alert {
   display: none;
 }
