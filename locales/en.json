@@ -56,5 +56,6 @@
 	"Constrainted system": "Constrainted system",
 	"#{f.label}": "#{f.label}",
 	"Framework": "Framework",
-	"Framework version": "Framework version"
+	"Framework version": "Framework version",
+	"Training data set": "Training data set"
 }

@@ -18,6 +18,17 @@ var systemDescription = [
     "layer": 1
   },
   {
+    "name": "trainSet",
+    "default": "",
+    "placeholder": "Training set",
+    "type": "text/hidden",
+    "hidden": true,
+    "className": "trainSet",
+    "label": "Training data set",
+    "required": true,
+    "layer": 1
+  },
+  {
     "name": "framework",
     "default": "",
     "placeholder": "OpenNMT",
