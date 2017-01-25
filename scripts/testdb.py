@@ -23,8 +23,10 @@ def upload_func(testfiles, opt):
     content_src=myfile.read()
   with codecs.open(opt.tgt_file, 'r', 'utf-8') as myfile:
     content_tgt=myfile.read()
-  assert testfiles.find_one({'source.fileName': os.path.basename(opt.src_file)}) == None or \
-     testfiles.find_one({'target.fileName': os.path.basename(opt.tgt_file)}) == None, "file already in DB"
+  assert testfiles.find_one({'$and': [{'source.fileName': os.path.basename(opt.src_file)},\
+                                    {'source.language': opt.src},{'target.language':opt.tgt}]}) == None or \
+         testfiles.find_one({'$and': [{'target.fileName': os.path.basename(opt.tgt_file)},\
+                                    {'source.language': opt.src},{'target.language':opt.tgt}]}) == None, "file already in DB"
   testid = testfiles.insert(
     {
       'source':{
