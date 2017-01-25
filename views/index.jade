@@ -7,17 +7,14 @@ block content
     p NMT&#8209;benchmark is an initiative from <a href="http://www.opennmt.net">OpenNMT project</a>, but any other system is welcome to join and share results!
 
   .information
-    .tableConfig
-      .dropdown
-        .label= __('Search Systems')
+    .tableConfig.ui.form
+      .inline.field
+        label= __('Search Systems')
         #languagePairs.ui.selection.dropdown
           input(type='hidden' name='lp' value='enru')
-          .text= __('English - Russian')
+          .text
           i.dropdown.icon
           .menu
-            //-
-              for lp in languagePairs
-                .item(data-value='#{lp.sourceLanguage}#{lp.targetLanguage}') #{c2l[lp.sourceLanguage]} - #{c2l[lp.targetLanguage]}
         if visitor
           #addSystemButton.ui.basic.fireBrick.button.indented
             i.icon.plus
