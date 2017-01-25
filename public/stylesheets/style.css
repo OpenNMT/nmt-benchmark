@@ -115,11 +115,6 @@ th:not(.nb) {
 
 /* Form */
 
-.dropdown .label {
-  display: inline-block;
-  margin-right: 5px;
-}
-
 label.large {
   min-width: 140px;
   width: 140px;
@@ -170,6 +165,7 @@ a:hover {
 .testSetContainer,
 .trainingSetContainer {
   text-align: center;
+  /*flex*/
 }
 
 .testSetContainer table,

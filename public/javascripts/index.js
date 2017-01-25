@@ -12,7 +12,11 @@ $(document).ready(function () {
 
   // Language pair selection init
   $('#languagePairs .menu').html(languagePairs.map(function (lp) {
-    var active = (lp.sourceLanguage + lp.targetLanguage == getLanguagePair()) ? ' active' : '';
+    var active = '';
+    if (lp.sourceLanguage + lp.targetLanguage == getLanguagePair()) {
+      active = ' active';
+      $('#languagePairs .text').text(c2l[lp.sourceLanguage] + ' - ' + c2l[lp.targetLanguage]);
+    }
     return [
       '<div class="item',
         active,
