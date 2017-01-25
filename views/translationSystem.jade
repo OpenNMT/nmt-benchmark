@@ -9,11 +9,11 @@ mixin field (f)
       +user(uData)
     else
       if mode === 'view'
-        span(id='#{f.name}') #{tsData[name]}
+        span(id='#{f.name}') #{tsData[f.name]}
       else
         .ui.input
           if mode === 'edit'
-            input(name='#{f.name}' value='#{tsData[name]}' placeholder='#{f.placeholder}' required='#{f.required}')
+            input(name='#{f.name}' value='#{tsData[f.name]}' placeholder='#{f.placeholder}' required='#{f.required}')
           else
             input(name='#{f.name}' placeholder='#{f.placeholder}' required='#{f.required}')
 
@@ -53,13 +53,12 @@ mixin dropdown (label, name, side)
                 .item(data-value='#{lang}') #{c2l[lang]}
 
 mixin textarea (f)
-  .inline.field
+  .inline.field.special
     label.large= __(f.label)
     if mode === 'view'
       span #{tsData[name]}
     else
-      .ui.input
-        textarea(name='#{f.name}' placeholder='#{f.placeholder}' value='#{tsData[name]}' required='#{f.required}') #{tsData[name]}
+      textarea(name='#{f.name}' placeholder='#{f.placeholder}' value='#{tsData[name]}' required='#{f.required}') #{tsData[name]}
 
 mixin testSet (ts)
   - var to
@@ -112,16 +111,18 @@ mixin radio (f)
       .ui.toggle.checkbox
         input.hidden(type='checkbox' name='#{f.name}' checked='checked')
         label On
-  .inline.field.trainSet(style='display: none;')
-    label.large Training data set
+
+mixin hidden (f)
+  .inline.field(style='display: none;' class="#{f.className}")
+    label.large= __(f.label)
     if mode == 'view'
-      span #{tsData.trainSet}
+      span #{tsData[f.name]}
     else
       .ui.input
-        input(name='#{trainSet}' placeholder="trainSet")
+        input(name='#{f.name}' placeholder="#{f.placeholder}")
 
 mixin set (f)
-  .inline.field.trainSet
+  .inline.field
     label.large= __(f.label)
     if mode == 'view'
       span #{tsData[f.name]}
@@ -150,6 +151,8 @@ mixin render (field)
         +dropdown(__(field.label), field.name, 'src')
       else
         +dropdown(__(field.label), field.name, 'tgt')
+    when 'text/hidden'
+      +hidden(field)
     when 'radio'
       +radio(field)
     default
@@ -171,33 +174,31 @@ block content
           | Edit description
     .ui.small.form
       .ui.three.column.grid
-        .column
-          for field in fieldSet
-            if field.layer == 1
-              +render(field)
-
-        .column
-          for field in fieldSet
-            if field.layer == 2
-              +render(field)
-        .column
-          for field in fieldSet
-            if field.layer == 3
-              +render(field)
-      for field in fieldSet
-        if field.layer == 0
-          +render(field)
-
-    .buttonContainer
-      if mode === 'edit'
-        #saveSystem.ui.basic.fireBrick.button
-          i.save.icon
-          span= __('Save')
-      if mode === 'create'
-        .ui.divider
-        #createSystem.ui.basic.fireBrick.button
-          i.plus.icon
-          span= __('Create')
+        .row
+          .column
+            for field in fieldSet
+              if field.layer == 1
+                +render(field)
+          .column
+            for field in fieldSet
+              if field.layer == 2
+                +render(field)
+          .column
+            for field in fieldSet
+              if field.layer == 3
+                +render(field)
+        .row
+          .fifteen.wide.column
+            for field in fieldSet
+              if field.layer == 0
+                +render(field)
+        if mode === 'create'
+          .row
+            .fifteen.wide.column
+              #createSystem.ui.basic.fireBrick.button
+                i.plus.icon
+                span= __('Create')
+              .message All fields are required
 
     if mode === 'view'
       .ui.horizontal.divider= __('Test sets')
