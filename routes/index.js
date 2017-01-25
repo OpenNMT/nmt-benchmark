@@ -32,9 +32,8 @@ router.get('/info', function (req, res, next) {
   });
 });
 
-// TODO
 router.get('/about', function (req, res, next) {
-  res.render('index', {
+  res.render('about', {
     messages: {
       info: req.flash('info')[0],
       warning: req.flash('warning')[0],
@@ -124,6 +123,7 @@ router.get('/testSets', function (req, res, next) {
 router.get('/trainingSets', function (req, res, next) {
   // trainingSets
   // languagePairs
+
   res.render('trainingSets', {trainingSets: trainingSets});
 });
 
