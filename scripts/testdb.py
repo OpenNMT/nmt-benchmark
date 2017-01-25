@@ -82,9 +82,9 @@ client = MongoClient()
 
 client = MongoClient('localhost', 27017)
 
-db = client.testdb
+db = client.opennmtbenchmark
 
-testfiles = db.testfiles
+testfiles = db.testsets
 
 parser = argparse.ArgumentParser(description='train.py')
 subparsers = parser.add_subparsers(help='sub-command help')
