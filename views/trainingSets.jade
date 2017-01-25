@@ -12,8 +12,8 @@ block content
           i.dropdown.icon
           .menu
             .item.active(data-value="" value="")= __('Any language pair')
-            for lp in languagePairs
-              .item(data-value='#{lp.sourceLanguage}#{lp.targetLanguage}') #{c2l[lp.sourceLanguage]} - #{c2l[lp.targetLanguage]}
+            for ts in trainingSets
+              .item(data-value='#{ts.source.language}#{ts.target.language}') #{c2l[ts.source.language]} - #{c2l[ts.target.language]}
       table#trainingSetTable.ui.collapsing.table
         thead
           tr
