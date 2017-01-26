@@ -56,9 +56,9 @@ mixin textarea (f)
   .inline.field.special
     label.large= __(f.label)
     if mode === 'view'
-      span #{tsData[name]}
+      span #{tsData[f.name]}
     else
-      textarea(name='#{f.name}' placeholder='#{f.placeholder}' value='#{tsData[name]}' required='#{f.required}') #{tsData[name]}
+      textarea(name='#{f.name}' placeholder='#{f.placeholder}' value='#{tsData[f.name]}' required='#{f.required}') #{tsData[f.name]}
 
 mixin testSet (ts)
   - var to
@@ -106,7 +106,7 @@ mixin radio (f)
   .inline.field
     label.large= __(f.label)
     if mode == 'view'
-      span #{tsData[name] ? 'On' : 'Off'}
+      span #{tsData[f.name] ? 'On' : 'Off'}
     else
       .ui.toggle.checkbox
         input.hidden(type='checkbox' name='#{f.name}' checked='checked')
