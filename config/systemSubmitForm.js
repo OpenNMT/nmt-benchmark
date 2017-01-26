@@ -25,7 +25,7 @@ var systemDescription = [
     "hidden": true,
     "className": "trainSet",
     "label": "Training data set",
-    "required": true,
+    "required": false,
     "layer": 1
   },
   {
@@ -52,7 +52,7 @@ var systemDescription = [
     "placeholder": "",
     "type": "user",
     "label": "Author",
-    "required": true,
+    "required": false,
     "layer": 1
   },
   {
@@ -89,7 +89,7 @@ var systemDescription = [
     "placeholder": "",
     "type": "textarea",
     "label": "Recipe",
-    "required": true,
+    "required": false,
     "layer": 0
   },
 
@@ -99,7 +99,7 @@ var systemDescription = [
     "placeholder": "seq2seq-attn",
     "type": "text",
     "label": "Global NN architecture",
-    "required": true,
+    "required": false,
     "layer": 2
   },
   {
@@ -108,7 +108,7 @@ var systemDescription = [
     "placeholder": "case",
     "type": "text",
     "label": "Use of side features",
-    "required": true,
+    "required": false,
     "layer": 2
   },
   {
@@ -117,7 +117,7 @@ var systemDescription = [
     "placeholder": "generic+BPE",
     "type": "text",
     "label": "Tokenization type",
-    "required": true,
+    "required": false,
     "layer": 2
   },
   {
@@ -126,7 +126,7 @@ var systemDescription = [
     "placeholder": "50000/50000",
     "type": "text",
     "label": "Vocabulary Size",
-    "required": true,
+    "required": false,
     "layer": 2
   },
   {
@@ -135,7 +135,7 @@ var systemDescription = [
     "placeholder": "2x4",
     "type": "text",
     "label": "Number of layers",
-    "required": true,
+    "required": false,
     "layer": 2
   },
   {
@@ -144,7 +144,7 @@ var systemDescription = [
     "placeholder": "1000 LSTM",
     "type": "text",
     "label": "RNN type",
-    "required": true,
+    "required": false,
     "layer": 2
   },
   {
@@ -153,7 +153,7 @@ var systemDescription = [
     "placeholder": "0.3",
     "type": "text",
     "label": "Dropout",
-    "required": true,
+    "required": false,
     "layer": 2
   },
   {
@@ -162,7 +162,7 @@ var systemDescription = [
     "placeholder": "600",
     "type": "text",
     "label": "Word Embedding",
-    "required": true,
+    "required": false,
     "layer": 2
   },
   {
@@ -171,7 +171,7 @@ var systemDescription = [
     "placeholder": "none",
     "type": "text",
     "label": "Encoder specific",
-    "required": true,
+    "required": false,
     "layer": 3
   },
   {
@@ -180,7 +180,7 @@ var systemDescription = [
     "placeholder": "none",
     "type": "text",
     "label": "Decoder specific",
-    "required": true,
+    "required": false,
     "layer": 3
   },
   {
@@ -189,7 +189,7 @@ var systemDescription = [
     "placeholder": "Global Attention",
     "type": "text",
     "label": "Attention specific",
-    "required": true,
+    "required": false,
     "layer": 3
   },
   {
@@ -198,7 +198,7 @@ var systemDescription = [
     "placeholder": "SoftMax",
     "type": "text",
     "label": "Generator",
-    "required": true,
+    "required": false,
     "layer": 3
   },
   {
@@ -207,7 +207,7 @@ var systemDescription = [
     "placeholder": "none",
     "type": "text",
     "label": "OOV Replacement",
-    "required": true,
+    "required": false,
     "layer": 3
   },
   {
@@ -216,7 +216,7 @@ var systemDescription = [
     "placeholder": "sgd",
     "type": "text",
     "label": "Optimization",
-    "required": true,
+    "required": false,
     "layer": 3
   },
   {
@@ -225,7 +225,7 @@ var systemDescription = [
     "placeholder": "13 epochs",
     "type": "text",
     "label": "Training Specific",
-    "required": true,
+    "required": false,
     "layer": 3
   }
 ];
