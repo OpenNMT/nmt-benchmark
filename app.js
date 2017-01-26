@@ -87,6 +87,7 @@ app.use(require('./routes/globals/getUser'));
 // Paths
 app.use('/', require('./routes/index'));
 app.use('/', require('./routes/api'));
+app.use('/', require('./lib/rest'));
 
 app.use(function (req, res, next) {
   var err = new Error(req.url + ' not found');
