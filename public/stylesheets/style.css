@@ -175,12 +175,6 @@ a:hover {
   margin-right: 20px;
 }
 
-.testSetContainer,
-.trainingSetContainer {
-  text-align: center;
-  /*flex*/
-}
-
 .testSetContainer table,
 .trainingSetContainer table {
   margin: 10px auto !important;
