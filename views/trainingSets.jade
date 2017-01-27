@@ -1,26 +1,17 @@
 extends layout
 
 block content
-  .information
-    h1= __('Training Sets')
-    .trainingSetContainer.ui.form
-      .inline.field
-        label= __('Filter')
-        #languagePairs.ui.selection.dropdown
-          input(type='hidden' name='' value='')
-          .text= __('Any language pair')
-          i.dropdown.icon
-          .menu
-            .item.active(data-value="" value="")= __('Any language pair')
-            for ts in trainingSets
-              .item(data-value='#{ts.source.language}#{ts.target.language}') #{c2l[ts.source.language]} - #{c2l[ts.target.language]}
-      table#trainingSetTable.ui.collapsing.table
-        thead
-          tr
-            th.languagePair= __('Language pair')
-            th.fileName= __('File name')
-            //-th.size= __('Size')
-            th.download
+  .ui.two.column.centered.grid
+    .five.wide.column
+      .row
+        h1= __('Training Sets')
+      .row
+        table#trainingSetTable.ui.table
+          thead
+            tr
+              th.languagePair= __('Language pair')
+              th.fileName= __('File name')
+              th.download
 
 block scripts
   script.
