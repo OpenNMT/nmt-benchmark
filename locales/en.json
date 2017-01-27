@@ -57,5 +57,6 @@
 	"#{f.label}": "#{f.label}",
 	"Framework": "Framework",
 	"Framework version": "Framework version",
-	"Training data set": "Training data set"
+	"Training data set": "Training data set",
+	"API": "API"
 }

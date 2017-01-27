@@ -6,7 +6,8 @@ var systemDescription = [
     "type": "text",
     "label": "System name",
     "required": true,
-    "layer": 1
+    "layer": 1,
+    "description": "A comprehensive system name. We recommend to include the language pair and the date in it."
   },
   {
     "name": "constraint",
@@ -14,8 +15,9 @@ var systemDescription = [
     "placeholder": "",
     "type": "radio",
     "label": "Constrainted system",
-    "required": true,
-    "layer": 1
+    "required": false,
+    "layer": 1,
+    "description": "A constrainted system is trained with an internal training set. Either constraint or trainSet fields should be provided."
   },
   {
     "name": "trainSet",
@@ -26,7 +28,8 @@ var systemDescription = [
     "className": "trainSet",
     "label": "Training data set",
     "required": false,
-    "layer": 1
+    "layer": 1,
+    "description": "Information about training data used for this translation system."
   },
   {
     "name": "framework",
@@ -62,7 +65,8 @@ var systemDescription = [
     "type": "dropdown",
     "label": "Source language",
     "required": true,
-    "layer": 1
+    "layer": 1,
+    "description": "ISO 638-1 language code, e.g. 'en' for English."
   },
   {
     "name": "targetLanguage",
@@ -71,7 +75,8 @@ var systemDescription = [
     "type": "dropdown",
     "label": "Target language",
     "required": true,
-    "layer": 1
+    "layer": 1,
+    "description": "ISO 638-1 language code."
   },
   {
     "name": "type",
@@ -81,7 +86,8 @@ var systemDescription = [
     "type": "set",
     "label": "Type",
     "required": true,
-    "layer": 1
+    "layer": 1,
+    "description": "NMT, SMT, Hybrid or Rulebased."
   },
   {
     "name": "recipe",
@@ -163,7 +169,8 @@ var systemDescription = [
     "type": "text",
     "label": "Word Embedding",
     "required": false,
-    "layer": 2
+    "layer": 2,
+    "description": "Word Embedding."
   },
   {
     "name": "encoder",
@@ -208,7 +215,8 @@ var systemDescription = [
     "type": "text",
     "label": "OOV Replacement",
     "required": false,
-    "layer": 3
+    "layer": 3,
+    "description": "Out-Of-Vocabulary words policy."
   },
   {
     "name": "optimization",
@@ -226,7 +234,8 @@ var systemDescription = [
     "type": "text",
     "label": "Training Specific",
     "required": false,
-    "layer": 3
+    "layer": 3,
+    "description": "Number of epochs."
   }
 ];
 
