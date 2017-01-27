@@ -22,7 +22,7 @@ router.use('/', function (req, res, next) {
     bm: 'Bambara',
     bn: 'Bengali',
     bo: 'Tibetan Standard',
-    br: 'Breton',
+    br: 'Brazilian portuguese',
     bs: 'Bosnian',
     ca: 'Catalan',
     ce: 'Chechen',
