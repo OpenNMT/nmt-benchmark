@@ -1,0 +1,69 @@
+extends layout
+
+mixin url (entry)
+  a(href="") #{entry.endpoint}{apiKey}
+
+mixin example (entry)
+  .ui.compact.message.example curl -X #{entry.method} #{server}#{entry.endpoint}{apiKey}#{entry.getParams} #{entry.example}
+
+mixin params (option)
+  unless option.type === 'user'
+    .ui.three.column.grid
+      .two.wide.column
+        span.param(class="#{option.required ? 'required': ''}") #{option.name}
+      .fourteen.wide.column #{option.description}
+        if option.default
+          .default Default:
+            span.value &nbsp;"#{option.default}"
+
+block content
+  if apiKey
+    .ui.compact.message.apiKey
+      p Your current API key:
+      p #{apiKey}
+  .information
+    p NMT-Benchmark provides a simple API that lets you query existent translation systems, download test files, or upload translation output directly to the server.
+    p All URIs below are relative to  <a href="#{server}">#{server}</a>
+
+    .ui.sixteen.column.grid
+      .row(style="font-weight: bolder")
+        .one.wide.column Method
+        .three.wide.column Endpoint
+        .twelve.wide.column Description
+    for entry in api
+      .ui.sixteen.column.grid(style="margin-bottom: 25px;")
+        .row
+          .one.wide.column.right.aligned
+            .ui.small.horizontal.label(class="#{entry.method == 'GET' ? 'teal' : 'brown'}") #{entry.method}
+          .three.wide.column
+            +url(entry)
+          .twelve.wide.column.params
+            p #{entry.description}
+            if entry.fieldSet
+              for option in entry.fieldSet
+                +params(option)
+            +example(entry)
+    
+    h1 Error codes
+    .ui.sixteen.column.grid(style="margin-bottom: 50px;")
+      .row
+        .two.wide.column
+          .ui.label 401 - Unathorized
+        .ten.wide.column
+          p Provided API key doesn't exist in our database.
+            if (user)
+              | &nbsp;Your current API key is:
+              code &nbsp;#{apiKey}.
+            else
+              | &nbsp;Log in to retrieve your API key.
+          p API key is generated authomatically once you log in to the site with github account.
+          p This error is also triggered when users try to modify translation systems created by other users.
+      .row
+        .two.wide.column
+          .ui.label 500 - Server error
+        .ten.wide.column
+          p Internal server error or database error.
+
+block scripts
+  script.
+    $('.ui.dropdown').dropdown();

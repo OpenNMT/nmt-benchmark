@@ -201,3 +201,40 @@ a:hover {
 .ui.centered.message {
   text-align: center;
 }
+
+/* API */
+
+.param {
+  border-radius: 2px;
+  border: solid thin DarkGrey;
+  background: lightGrey;
+  font-family: monospace;
+  padding: 2px 4px 2px 4px;
+  font-size: smaller;
+}
+
+.param.required {
+  border-color: IndianRed;
+  background: LightSalmon;
+  color: DarkRed;
+}
+
+.default {
+  font-style: italic;
+}
+
+.important {
+  font-weight: bolder;
+}
+
+.example {
+  font-family: monospace;
+  font-size: smaller  !important;
+  text-align: left;
+}
+
+.apiKey {
+  position: fixed !important;
+  top: 150;
+  right: 0;
+}
