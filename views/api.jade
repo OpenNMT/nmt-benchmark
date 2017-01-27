@@ -10,7 +10,7 @@ mixin params (option)
   unless option.type === 'user'
     .ui.three.column.grid
       .two.wide.column
-        span.param(class="#{option.required ? 'required': ''}") #{option.name}
+        .ui.label.param(class="#{option.required ? 'required': ''}") #{option.name}
       .fourteen.wide.column #{option.description}
         if option.default
           .default Default:
@@ -18,8 +18,10 @@ mixin params (option)
 
 block content
   if apiKey
-    .ui.compact.message.apiKey
-      p Your current API key:
+    .ui.compact.info.centered.message.apiKey
+      .header
+        i.key.icon
+        | Your current API key
       p #{apiKey}
   .information
     p NMT-Benchmark provides a simple API that lets you query existent translation systems, download test files, or upload translation output directly to the server.
