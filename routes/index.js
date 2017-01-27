@@ -32,6 +32,7 @@ router.get('/info', function (req, res, next) {
   });
 });
 
+// TODO
 router.get('/about', function (req, res, next) {
   res.render('about', {
     messages: {
@@ -39,6 +40,34 @@ router.get('/about', function (req, res, next) {
       warning: req.flash('warning')[0],
       error: req.flash('error')[0]
     }
+  });
+});
+
+router.get('/api', function (req, res, next) {
+  var api = require('../config/api.js').api;
+  var githubId = req.user ? req.user.id : undefined;
+  User.getUser({githubId: githubId}, function (err, user) {
+    var apiKey = user ? user.apiKey : '';
+    var server = nconf.get('OpenNMTBenchmark:URL');
+    api.map(function (entry) {
+      if (entry.method === 'GET' && entry.params.length) {
+        entry.getParams = '?' + entry.params.map(function (p) { return p + '={' + p + '}'; }).join('&');
+      }
+      if (entry.endpoint === '/system/upload/') {
+        entry.fieldSet = fieldSet;
+      }
+    });
+    res.render('api', {
+      messages: {
+        info: req.flash('info')[0],
+        warning: req.flash('warning')[0],
+        error: req.flash('error')[0]
+      },
+      user: user,
+      api: api,
+      apiKey: apiKey,
+      server: server
+    });
   });
 });
 
