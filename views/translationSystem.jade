@@ -176,6 +176,9 @@ mixin render (field)
     default
       +field(field)
 
+block modal
+  include modal.jade
+
 block content
   .ui.grid.container
     .row
