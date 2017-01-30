@@ -22,7 +22,7 @@ nconf.file({
 var app = express();
 
 app.set('views', path.resolve(__dirname, 'views'));
-app.set('view engine', 'jade');
+app.set('view engine', 'pug');
 
 app.use(favicon(path.resolve(__dirname, 'public', 'favicon.ico')));
 // app.use(bodyParser.json());

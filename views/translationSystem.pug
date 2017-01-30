@@ -1,5 +1,5 @@
-extends layout.jade
-include mixin.user.jade
+extends layout
+include mixin.user.pug
 
 mixin field (f)
   - var required = ''
@@ -177,7 +177,7 @@ mixin render (field)
       +field(field)
 
 block modal
-  include modal.jade
+  include modal
 
 block content
   .ui.grid.container
