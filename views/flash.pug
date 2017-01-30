@@ -10,7 +10,7 @@
     i.close.icon
 
 script.
-  var messages = !{JSON.stringify(messages).replace(/<\//g, '<\\/')}
+  var messages = !{JSON.stringify(messages || '').replace(/<\//g, '<\\/')}
   $(document).ready(function () {
     // Handle close flash message button
     $('.message .close.icon').on('click', function () {

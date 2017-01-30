@@ -10,7 +10,7 @@ mixin params (option)
   unless option.type === 'user'
     .ui.two.column.grid
       .four.wide.column
-        .ui.label.param(class="#{option.required ? 'required': ''}") #{option.name}
+        .ui.label.param(class=option.required ? 'required': '') #{option.name}
       .twelve.wide.column #{option.description}
         if option.default
           .default Default:
@@ -26,7 +26,7 @@ block content
   .ui.grid.container
     .first.row
       p NMT-Benchmark provides a simple API that lets you query existent translation systems, download test files, or upload translation output directly to the server.
-      p All URIs below are relative to  <a href="#{server}">#{server}</a>
+      p All URIs below are relative to  <a href=server>#{server}</a>
     .header.row
       .one.wide.right.aligned.column= __('Method')
       .four.wide.column= __('Endpoint')
@@ -34,7 +34,7 @@ block content
     for entry in api
       .apiEntry.row
         .one.wide.right.aligned.column
-          .ui.small.horizontal.label(class="#{entry.method == 'GET' ? 'teal' : 'brown'}") #{entry.method}
+          .ui.small.horizontal.label(class=entry.method == 'GET' ? 'teal' : 'brown') #{entry.method}
         .four.wide.column
           +url(entry)
         .eleven.wide.column.params
