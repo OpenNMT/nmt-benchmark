@@ -118,7 +118,6 @@ router.get('/translationSystem/delete/:systemId', function (req, res, next) {
         winston.warn('Unable to delete translation system', err);
         res.json({error: err});
       } else {
-        // TODO - delete all related test outputs
         testOutput.deleteTestOutput({systemId: systemId}, function (err) {
           if (err) {
             winston.warn('Unable to delete output', err);

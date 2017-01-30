@@ -45,7 +45,11 @@ $(document).ready(function () {
         console.log('Unable to parse server response', e);
       }
       if (response.error) {
-        console.log(response.error);
+        if (response.error.errors) {
+          for (field in response.error.errors) {
+            console.log(response.error.errors[field].message);
+          }
+        }
       } else {
         window.location = '/translationSystem/view/' + response.data._id;
       }

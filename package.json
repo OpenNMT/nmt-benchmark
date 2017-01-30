@@ -20,6 +20,7 @@
     "js-yaml": "^3.7.0",
     "mongodb": "^2.2.19",
     "mongoose": "^4.7.6",
+    "mongoose-unique-validator": "^1.0.3",
     "multiparty": "^4.1.2",
     "nconf": "^0.8.4",
     "passport": "^0.3.2",
