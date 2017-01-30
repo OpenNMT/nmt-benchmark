@@ -55,17 +55,16 @@ $(document).ready(function () {
     });
   });
   $('#deleteSystem').on('click', function () {
-    //TODO - modal confirmation
-    var url = '/translationSystem/delete/' + translationSystem._id;
-    $.post(url)
-    .done(function (result) {
-      if (!result.error) {
-        window.location = '/'; // redirect to home with confirmation message
-      }
-    })
-    .fail(function (err) {
-      console.log(err.trace);
-    });
+    var config = {
+      url: '/translationSystem/delete/' + translationSystem._id,
+      done: function () {
+        console.log('go home')
+        window.location = '/'; // confirmation flash
+      },
+      header: 'Are you sure you want to delete this system?', // i18n
+      content: 'All associated translations and scores will be lost' // i18n
+    };
+    confirm(config);
   });
   /*
   $('#editSystem').on('click', function () {
@@ -100,24 +99,16 @@ $(document).ready(function () {
 
   // Remove output
   $('.deleteOutput').on('click', function () {
-    // TODO - modal confirmation
-    var url = '/testOutput/delete/' + $(this).attr('data-testOutputId');
-    $.get(url)
-    .success(function (response) {
-      try {
-        response = JSON.parse(response);
-      } catch (e) {
-        console.log('Unable to parse server response', e);
-      }
-      if (response.error) {
-        console.log(response.error);
-      } else {
+    var config = {
+      url: '/testOutput/delete/' + $(this).attr('data-testOutputId'),
+      done: function () {
+        console.log('reload')
         location.reload();
-      }
-    })
-    .fail(function (err) {
-      console.log(err);
-    });
+      },
+      header: 'Are you sure you want to delete this translation?', // i18n
+      content: 'All associated scores will be lost' // i18n
+    };
+    confirm(config);
   });
 
   // Download source
@@ -142,4 +133,30 @@ function setDescription (description) {
     $(input).attr('placeholder', '');
     $(input).attr('disabled', true);
   });
+}
+
+function confirm (config) {
+  $('.ui.modal').find('.header').text(config.header);
+  $('.ui.modal').find('.content').text(config.content);
+  $('.ui.modal').modal({
+    blurring: true,
+    onApprove: function () {
+      $.get(config.url)
+      .success(function (response) {
+        try {
+          response = JSON.parse(response);
+        } catch (e) {
+          console.log('Unable to parse server response, should be a JSON object already');
+        }
+        if (response.error) {
+          console.log(response.error);
+        } else {
+          config.done();
+        }
+      })
+      .fail(function (err) {
+        console.log(err.trace);
+      });
+    }
+  }).modal('show');
 }

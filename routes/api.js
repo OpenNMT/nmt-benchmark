@@ -108,7 +108,7 @@ router.post('/translationSystem/create', function (req, res, next) {
   }
 });
 
-router.post('/translationSystem/delete/:systemId', function (req, res, next) {
+router.get('/translationSystem/delete/:systemId', function (req, res, next) {
   if (!req.user) {
     res.json({error: 'Log in to remove your translation systems', data: null});
   } else {
