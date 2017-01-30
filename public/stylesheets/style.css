@@ -64,6 +64,10 @@ i.fireBrick.icon {
 
 /* Table */
 
+#mainTable {
+  width: 100%;
+}
+
 table.dataTable.no-footer {
   border-bottom: 1px solid rgba(34, 36, 38, .15); /* semantic ui default */
 }
@@ -88,10 +92,6 @@ th:not(.nb) {
 .deleteOutput {
   margin-left: 5px !important;
   cursor: pointer;
-}
-
-#deleteSystem:hover {
-  color: #AC4141 !important;
 }
 
 .fileName,
@@ -209,10 +209,6 @@ a:hover {
   font-style: italic;
 }
 
-.important {
-  font-weight: bolder;
-}
-
 .example {
   font-family: monospace;
   font-size: smaller  !important;
@@ -223,4 +219,20 @@ a:hover {
   position: fixed !important;
   top: 180px;
   right: -5px;
+}
+
+.first.row {
+  margin-top: 25px;
+}
+
+.last.row {
+  margin-bottom: 50px;
+}
+
+.header.row {
+  font-weight: bolder;
+}
+
+.apiEntry {
+  margin-bottom: 25px;
 }

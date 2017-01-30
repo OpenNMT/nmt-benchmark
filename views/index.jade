@@ -1,38 +1,41 @@
 extends layout
 
 block content
-  .information
-    p Welcome to NMT&#8209;benchmark initiative! The NMT&#8209;benchmark is a platform for sharing and comparing Neural Machine Translation system performance. The primary goal is to compare engines and training parameters for systems trained on provided reasonably small datasets (1M sentences to 5M sentences). Any system output can be shared as long as the “training recipe” is also provided and that the result can be reproduced. Considering the huge possible combinations of training parameters, any contribution is good to share. Systems are evaluated using reference testsets used by the research community and on “in&#8209;domain” test sets compared
+  .ui.grid.container
+    .first.row
+      h1 Welcome to NMT&#8209;benchmark initiative!
+    .row
+      p The NMT&#8209;benchmark is a platform for sharing and comparing Neural Machine Translation system performance. The primary goal is to compare engines and training parameters for systems trained on provided reasonably small datasets (1M sentences to 5M sentences). Any system output can be shared as long as the “training recipe” is also provided and that the result can be reproduced. Considering the huge possible combinations of training parameters, any contribution is good to share. Systems are evaluated using reference testsets used by the research community and on “in&#8209;domain” test sets compared
+    .row
+      p NMT&#8209;benchmark is an initiative from <a href="http://www.opennmt.net">OpenNMT project</a>, but any other system is welcome to join and share results!
 
-    p NMT&#8209;benchmark is an initiative from <a href="http://www.opennmt.net">OpenNMT project</a>, but any other system is welcome to join and share results!
-
-  .information
-    .tableConfig.ui.form
-      .inline.field
-        label= __('Search Systems')
-        #languagePairs.ui.selection.dropdown
-          input(type='hidden' name='lp' value='enru')
-          .text
-          i.dropdown.icon
-          .menu
-        if visitor
-          #addSystemButton.ui.basic.fireBrick.button.indented
-            i.icon.plus
-            span= __('Add new translation system')
-
-      //-
-        .dropdown
-          .label= __('Metric')
-          #metrics.ui.selection.disabled.dropdown
-            input(type='hidden' name='metric' value='BLEU')
-            .text BLEU
+    .row
+      .tableConfig.ui.form
+        .inline.field
+          label= __('Search Systems')
+          #languagePairs.ui.selection.dropdown
+            input(type='hidden' name='lp' value='enru')
+            .text
             i.dropdown.icon
             .menu
-              .item.active(data-value='BLEU') BLEU
-              .item(data-value='NIST') NIST
-              .item(data-value='RIBES') RIBES
+          if visitor
+            #addSystemButton.ui.basic.fireBrick.button.indented
+              i.icon.plus
+              span= __('Add new translation system')
 
-    #mainTable
+        //-
+          .dropdown
+            .label= __('Metric')
+            #metrics.ui.selection.disabled.dropdown
+              input(type='hidden' name='metric' value='BLEU')
+              .text BLEU
+              i.dropdown.icon
+              .menu
+                .item.active(data-value='BLEU') BLEU
+                .item(data-value='NIST') NIST
+                .item(data-value='RIBES') RIBES
+    .last.row
+      #mainTable
 
   form#addSystemForm(action='/translationSystem/add' method='POST')
     input(type='hidden' name='languagePair' val='enfr')

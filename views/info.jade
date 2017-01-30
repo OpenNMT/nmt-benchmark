@@ -1,22 +1,28 @@
 extends layout
 
 block content
-  .information
-    h1 NMT&#8209;Benchmark Motivation
-    p With open source initiatives, training an NMT engine has never been so easy. Look at <a href="https://github.com/opennmt/recipes">OpenNMT recipes</a> for instance.
-    p However, training engines is also very GPU consuming, and thousands of possible parameter combinations are also available and also very depending on the language pair making unpractical exhaustive testing of all combinations for any entity.
-    p We believe that sharing results with the complete community will drive more competitive research and open new markets for this fabulous technology.
+  .ui.grid.container
+    .first.row
+      h1 NMT&#8209;Benchmark Motivation
+    .row
+      p With open source initiatives, training an NMT engine has never been so easy. Look at <a href="https://github.com/opennmt/recipes">OpenNMT recipes</a> for instance.
+      p However, training engines is also very GPU consuming, and thousands of possible parameter combinations are also available and also very depending on the language pair making unpractical exhaustive testing of all combinations for any entity.
+      p We believe that sharing results with the complete community will drive more competitive research and open new markets for this fabulous technology.
 
-    h1 1M training corpus
-    p We provide 1M sentences for as many language pairs as possible. This corpus is a balanced mix of freely available corpora. 1M is relatively small and this is on purpose, one NMT training cycle takes less than one day but you can still get decent translation quality. We want to challenge techniques and algorithms more than size of data.
+    .row
+      h1 1M training corpus
+    .row
+      p We provide 1M sentences for as many language pairs as possible. This corpus is a balanced mix of freely available corpora. 1M is relatively small and this is on purpose, one NMT training cycle takes less than one day but you can still get decent translation quality. We want to challenge techniques and algorithms more than size of data.
 
-    h1 How to contribute to the benchmark
-    ul
-      li Create an account
-      li Download <a href="/trainingSets">training data</a> available for multiple languages
-      li Train a system
-      li Download and Translate available <a href="/testSets">test set</a> for the languages
-      li Submit your results!
+    .row
+      h1 How to contribute to the benchmark
+    .last.row
+      ul
+        li Create an account
+        li Download <a href="/trainingSets">training data</a> available for multiple languages
+        li Train a system
+        li Download and Translate available <a href="/testSets">test set</a> for the languages
+        li Submit your results!
 
 block scripts
   script.

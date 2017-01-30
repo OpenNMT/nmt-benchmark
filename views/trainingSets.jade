@@ -1,17 +1,16 @@
 extends layout
 
 block content
-  .ui.two.column.centered.grid
-    .five.wide.column
-      .row
-        h1= __('Training Sets')
-      .row
-        table#trainingSetTable.ui.table
-          thead
-            tr
-              th.languagePair= __('Language pair')
-              th.fileName= __('File name')
-              th.download
+  .ui.grid.container
+    .row
+      h1= __('Training Sets')
+    .row
+      table#trainingSetTable.ui.table
+        thead
+          tr
+            th.languagePair= __('Language pair')
+            th.fileName= __('File name')
+            th.download
 
 block scripts
   script.
