@@ -37,7 +37,7 @@ var systemDescription = [
     "placeholder": "OpenNMT",
     "type": "text",
     "label": "Framework",
-    "required": true,
+    "required": false,
     "layer": 1
   },
   {
@@ -46,7 +46,7 @@ var systemDescription = [
     "placeholder": "",
     "type": "text",
     "label": "Framework version",
-    "required": true,
+    "required": false,
     "layer": 1
   },
   {
