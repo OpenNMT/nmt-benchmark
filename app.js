@@ -55,6 +55,7 @@ github.init(app, passport);
 // Log out
 app.get('/logout', function (req, res){
   req.logout();
+  req.flash('info', "You've been succesfully logged out");
   res.redirect('/');
 });
 

@@ -3,6 +3,8 @@ $(document).ready(function () {
     $('.ui.form .input').addClass('transparent');
     setDescription(translationSystem);
   }
+
+  // Enable dropdown
   $('.ui.dropdown').dropdown();
   $('.ui.toggle.checkbox').checkbox({
     onChange: function () {
@@ -42,38 +44,39 @@ $(document).ready(function () {
       try {
         response = JSON.parse(response);
       } catch (e) {
-        console.log('Unable to parse server response', e);
+        console.log('Unable to parse server response, should be a JSON object already');
       }
       if (response.error) {
+        var level = 'error';
         if (response.error.errors) {
+          var text = '';
           for (field in response.error.errors) {
-            console.log(response.error.errors[field].message);
+            text += response.error.errors[field].message;
           }
+          flash(level, text);
+        } else {
+          flash(level, response.error);
         }
       } else {
         window.location = '/translationSystem/view/' + response.data._id;
       }
     })
     .fail(function (err) {
+      flash('error', err)
       console.log(err, err.stack);
     });
   });
   $('#deleteSystem').on('click', function () {
-    var config = {
+    var deleteSystem = {
       url: '/translationSystem/delete/' + translationSystem._id,
       done: function () {
-        console.log('go home')
         window.location = '/'; // confirmation flash
       },
       header: 'Are you sure you want to delete this system?', // i18n
       content: 'All associated translations and scores will be lost' // i18n
     };
-    confirm(config);
+    confirm(deleteSystem);
   });
-  /*
-  $('#editSystem').on('click', function () {
-    window.location = '/translationSystem/edit/' + translationSystem._id;
-  });*/
 
   // Customize file input
   $(document).on('change', ':file[name=file]', function () {
@@ -103,16 +106,15 @@ $(document).ready(function () {
 
   // Remove output
   $('.deleteOutput').on('click', function () {
-    var config = {
+    var deleteOutput = {
       url: '/testOutput/delete/' + $(this).attr('data-testOutputId'),
       done: function () {
-        console.log('reload')
         location.reload();
       },
       header: 'Are you sure you want to delete this translation?', // i18n
       content: 'All associated scores will be lost' // i18n
     };
-    confirm(config);
+    confirm(deleteOutput);
   });
 
   // Download source
@@ -153,12 +155,23 @@ function confirm (config) {
           console.log('Unable to parse server response, should be a JSON object already');
         }
         if (response.error) {
-          console.log(response.error);
+          var level = 'error';
+          if (response.error.errors) {
+            var text = '';
+            for (field in response.error.errors) {
+              text += response.error.errors[field].message;
+            }
+            flash(level, text);
+          } else {
+            flash(level, response.error);
+          }
         } else {
           config.done();
         }
       })
       .fail(function (err) {
+        var level = 'error';
+        flash(level, err);
         console.log(err.trace);
       });
     }

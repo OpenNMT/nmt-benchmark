@@ -2,7 +2,7 @@ extends layout
 
 block content
   .ui.grid.container
-    .row
+    .first.row
       h1= __('Test Sets')
     .row
       .ui.form(style="text-align: right")
@@ -16,7 +16,7 @@ block content
               .item.active(data-value="" value="")= __('Any language pair')
               for lp in languagePairs
                 .item(data-value='#{lp.sourceLanguage}#{lp.targetLanguage}') #{c2l[lp.sourceLanguage]} - #{c2l[lp.targetLanguage]}
-    .row
+    .last.row
       table#testSetTable.ui.table
         thead
           tr

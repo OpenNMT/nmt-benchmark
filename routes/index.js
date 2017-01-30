@@ -84,6 +84,11 @@ router.get('/translationSystem/view/:systemId', function (req, res, next) {
         data.trainingSets = trainingSets;
         data.allSrc = uniq(res.locals.languagePairs, 'sourceLanguage');
         data.allTgt = uniq(res.locals.languagePairs, 'targetLanguage');
+        data.messages = {
+          info: req.flash('info')[0],
+          warning: req.flash('warning')[0],
+          error: req.flash('error')[0]
+        };
         res.render('translationSystem', data);
       }
     });
@@ -139,13 +144,24 @@ router.post('/translationSystem/add', function (req, res, next) {
       mode: 'create',
       tsData: {dummy: true},
       toData: {dummy: true},
-      uData: req.user || {}
+      uData: req.user || {},
+      messages: {
+        info: req.flash('info')[0],
+        warning: req.flash('warning')[0],
+        error: req.flash('error')[0]
+      }
     });
   }
 });
 
 router.get('/testSets', function (req, res, next) {
-  res.render('testSets');
+  res.render('testSets', {
+    messages: {
+      info: req.flash('info')[0],
+      warning: req.flash('warning')[0],
+      error: req.flash('error')[0]
+    }
+  });
 });
 
 // TODO
@@ -153,7 +169,14 @@ router.get('/trainingSets', function (req, res, next) {
   // trainingSets
   // languagePairs
 
-  res.render('trainingSets', {trainingSets: trainingSets});
+  res.render('trainingSets', {
+    trainingSets: trainingSets,
+    messages: {
+      info: req.flash('info')[0],
+      warning: req.flash('warning')[0],
+      error: req.flash('error')[0]
+    }
+  });
 });
 
 router.get('/userSystems/:userId', function (req, res, next) {
@@ -163,6 +186,11 @@ router.get('/userSystems/:userId', function (req, res, next) {
       req.flash('warning', 'Unable to retrieve user systems.');
       res.redirect('/');
     } else {
+      data.messages = {
+        info: req.flash('info')[0],
+        warning: req.flash('warning')[0],
+        error: req.flash('error')[0]
+      };
       res.render('userSystems', data);
     }
   });
