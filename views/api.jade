@@ -8,10 +8,10 @@ mixin example (entry)
 
 mixin params (option)
   unless option.type === 'user'
-    .ui.three.column.grid
-      .two.wide.column
+    .ui.two.column.grid
+      .four.wide.column
         .ui.label.param(class="#{option.required ? 'required': ''}") #{option.name}
-      .fourteen.wide.column #{option.description}
+      .twelve.wide.column #{option.description}
         if option.default
           .default Default:
             span.value &nbsp;"#{option.default}"
@@ -23,48 +23,44 @@ block content
         i.key.icon
         | Your current API key
       p #{apiKey}
-  .information
-    p NMT-Benchmark provides a simple API that lets you query existent translation systems, download test files, or upload translation output directly to the server.
-    p All URIs below are relative to  <a href="#{server}">#{server}</a>
-
-    .ui.sixteen.column.grid
-      .row(style="font-weight: bolder")
-        .one.wide.column Method
-        .three.wide.column Endpoint
-        .twelve.wide.column Description
+  .ui.grid.container
+    .first.row
+      p NMT-Benchmark provides a simple API that lets you query existent translation systems, download test files, or upload translation output directly to the server.
+      p All URIs below are relative to  <a href="#{server}">#{server}</a>
+    .header.row
+      .one.wide.right.aligned.column= __('Method')
+      .four.wide.column= __('Endpoint')
+      .eleven.wide.column= __('Description')
     for entry in api
-      .ui.sixteen.column.grid(style="margin-bottom: 25px;")
-        .row
-          .one.wide.column.right.aligned
-            .ui.small.horizontal.label(class="#{entry.method == 'GET' ? 'teal' : 'brown'}") #{entry.method}
-          .three.wide.column
-            +url(entry)
-          .twelve.wide.column.params
-            p #{entry.description}
-            if entry.fieldSet
-              for option in entry.fieldSet
-                +params(option)
-            +example(entry)
-    
-    h1 Error codes
-    .ui.sixteen.column.grid(style="margin-bottom: 50px;")
-      .row
-        .two.wide.column
-          .ui.label 401 - Unathorized
-        .ten.wide.column
-          p Provided API key doesn't exist in our database.
-            if (user)
-              | &nbsp;Your current API key is:
-              code &nbsp;#{apiKey}.
-            else
-              | &nbsp;Log in to retrieve your API key.
-          p API key is generated authomatically once you log in to the site with github account.
-          p This error is also triggered when users try to modify translation systems created by other users.
-      .row
-        .two.wide.column
-          .ui.label 500 - Server error
-        .ten.wide.column
-          p Internal server error or database error.
+      .apiEntry.row
+        .one.wide.right.aligned.column
+          .ui.small.horizontal.label(class="#{entry.method == 'GET' ? 'teal' : 'brown'}") #{entry.method}
+        .four.wide.column
+          +url(entry)
+        .eleven.wide.column.params
+          p #{entry.description}
+          if entry.fieldSet
+            for option in entry.fieldSet
+              +params(option)
+          +example(entry)
+    h1= __('Error codes')
+    .row
+      .three.wide.column
+        .ui.label 401 - Unathorized
+      .ten.wide.column
+        p Provided API key doesn't exist in our database.
+          if (user)
+            | &nbsp;Your current API key is:
+            code &nbsp;#{apiKey}.
+          else
+            | &nbsp;Log in to retrieve your API key.
+        p API key is generated authomatically once you log in to the site with github account.
+        p This error is also triggered when users try to modify translation systems created by other users.
+    .last.row
+      .three.wide.column
+        .ui.label 500 - Server error
+      .ten.wide.column
+        p Internal server error or database error.
 
 block scripts
   script.

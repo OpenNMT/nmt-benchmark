@@ -177,53 +177,53 @@ mixin render (field)
       +field(field)
 
 block content
-  .information
-    h1(style='display: flex; align-items: center')
-      if mode === 'create'
-        | Add translation system
-      if mode === 'view'
-        | System description
-        span(style='margin-left: 40px')
-          if visitor && visitor.id == uData.githubId
-            //-i#editSystem.small.grey.write.icon(data-systemId='#{systemId}')
-            i#deleteSystem.small.grey.trash.icon(data-systemId='#{systemId}')
-      //-
-        if mode === 'edit'
-          | Edit description
-    #translationSystem.ui.small.form
-      .ui.three.column.grid
-        .row
-          .column
-            for field in fieldSet
-              if field.layer == 1
-                +render(field)
-          .column
-            for field in fieldSet
-              if field.layer == 2
-                +render(field)
-          .column
-            for field in fieldSet
-              if field.layer == 3
-                +render(field)
-        .row
-          .fifteen.wide.column
-            for field in fieldSet
-              if field.layer == 0
-                +render(field)
+  .ui.grid.container
+    .row
+      h1(style='display: flex; align-items: center')
         if mode === 'create'
+          span= __('Add translation system')
+        if mode === 'view'
+          span= __('System description')
+    .row
+      #translationSystem.ui.small.form
+        .ui.three.column.grid
+          .row
+            .column
+              for field in fieldSet
+                if field.layer == 1
+                  +render(field)
+            .column
+              for field in fieldSet
+                if field.layer == 2
+                  +render(field)
+            .column
+              for field in fieldSet
+                if field.layer == 3
+                  +render(field)
           .row
             .fifteen.wide.column
-              #createSystem.ui.fireBrick.disabled.button
-                i.plus.icon
-                span= __('Create')
-              //-.message All fields are required
-
+              for field in fieldSet
+                if field.layer == 0
+                  +render(field)
+          if mode === 'create'
+            .row
+              .fifteen.wide.column
+                #createSystem.ui.fireBrick.disabled.button
+                  i.plus.icon
+                  span= __('Create')
     if mode === 'view'
-      .ui.horizontal.divider= __('Test sets')
-      .ui.cards
-        for ts in testSets
-          if ts.source.language === tsData.sourceLanguage && ts.target.language === tsData.targetLanguage
-            +testSet(ts)
+      if visitor && visitor.id == uData.githubId
+        .row
+          #deleteSystem.ui.basic.fireBrick.button
+            i.trash.icon
+            span= __('Delete this system')
+      .row
+        h1= __('Test sets')
+      .row
+        .ui.cards
+          for ts in testSets
+            if ts.source.language === tsData.sourceLanguage && ts.target.language === tsData.targetLanguage
+              +testSet(ts)
 
 block scripts
   script.

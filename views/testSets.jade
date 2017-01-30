@@ -1,30 +1,30 @@
 extends layout
 
 block content
-  .ui.two.column.centered.grid
-    .eight.wide.column
-      .row
-        h1= __('Test Sets')
-        .ui.form(style="text-align: right")
-          .inline.field
-            label= __('Filter')
-            #languagePairs.ui.selection.dropdown
-              input(type='hidden' name='' value='')
-              .text= __('Any language pair')
-              i.dropdown.icon
-              .menu
-                .item.active(data-value="" value="")= __('Any language pair')
-                for lp in languagePairs
-                  .item(data-value='#{lp.sourceLanguage}#{lp.targetLanguage}') #{c2l[lp.sourceLanguage]} - #{c2l[lp.targetLanguage]}
-      .row
-        table#testSetTable.ui.table
-          thead
-            tr
-              th.languagePair= __('Language pair')
-              th.domain= __('Domain')
-              th.origin= __('Origin')
-              th.fileName= __('File name')
-              th.download
+  .ui.grid.container
+    .row
+      h1= __('Test Sets')
+    .row
+      .ui.form(style="text-align: right")
+        .inline.field
+          label= __('Filter')
+          #languagePairs.ui.selection.dropdown
+            input(type='hidden' name='' value='')
+            .text= __('Any language pair')
+            i.dropdown.icon
+            .menu
+              .item.active(data-value="" value="")= __('Any language pair')
+              for lp in languagePairs
+                .item(data-value='#{lp.sourceLanguage}#{lp.targetLanguage}') #{c2l[lp.sourceLanguage]} - #{c2l[lp.targetLanguage]}
+    .row
+      table#testSetTable.ui.table
+        thead
+          tr
+            th.languagePair= __('Language pair')
+            th.domain= __('Domain')
+            th.origin= __('Origin')
+            th.fileName= __('File name')
+            th.download
 
 block scripts
   script.

@@ -58,5 +58,12 @@
 	"Framework": "Framework",
 	"Framework version": "Framework version",
 	"Training data set": "Training data set",
-	"API": "API"
+	"API": "API",
+	"Delete this system": "Delete this system",
+	"System description": "System description",
+	"Method": "Method",
+	"Endpoint": "Endpoint",
+	"Description": "Description",
+	"Error codes": "Error codes",
+	"Add translation system": "Add translation system"
 }
