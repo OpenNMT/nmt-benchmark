@@ -61,7 +61,7 @@ function getTable (languagePair) {
 
   // Drop table - for variable width support (different test files number)
   var table = [
-    '<table class="ui celled table"><thead><tr>',
+    '<table class="ui celled striped table"><thead><tr>',
     '<th class="user">User</th>',
     '<th class="systemName">System name</th>'
   ];
@@ -74,10 +74,10 @@ function getTable (languagePair) {
   $.get('/getDataTable', lp)
   .done(function (response) {
     var columns = [
-      {data: 'user', sDefaultContent: '', sWidth: '130', render: function (data, type, full) {
+      {data: 'user', sDefaultContent: '', render: function (data, type, full) {
         return ('<a href="/userSystems/' + data.githubId + '"><img class="ui avatar image" src="' + data.avatarURL + '" />' + data.name + '</a>');
       }},
-      {data: 'systemName', className: 'systemName', sDefaultContent: '', sWidth: '130', render: function (data, type, full) {
+      {data: 'systemName', className: 'systemName', sDefaultContent: '', render: function (data, type, full) {
         return ('<a href="/translationSystem/view/' + full._id + '">' + data + '</a>');
       }}
     ];
