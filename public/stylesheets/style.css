@@ -185,7 +185,7 @@ a:hover {
   white-space: nowrap;
 }
 
-.alert {
+.alert .message {
   display: none;
 }
 

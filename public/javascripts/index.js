@@ -2,14 +2,6 @@ $(document).ready(function () {
   // Enable dropdowns
   $('.ui.dropdown').dropdown();
 
-  // Show flash messages
-  if ($('.alert').length > 0) {
-    $('.alert').transition({
-      animation: 'slide down',
-      duration: '1s'
-    });
-  }
-
   // Language pair selection init
   $('#languagePairs .menu').html(languagePairs.map(function (lp) {
     var active = '';
@@ -111,6 +103,7 @@ function getTable (languagePair) {
     });
   })
   .fail(function (error) {
+    flash('error', error);
     console.log(error.statusText, error);
   });
 }

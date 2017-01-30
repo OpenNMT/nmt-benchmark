@@ -1,8 +1,50 @@
-if messages
-  .alert
-    if messages.error
-      .ui.centered.error.message #{messages.error}
-    if messages.warning
-      .ui.centered.warning.message #{messages.warning}
-    if messages.info
-      .ui.centered.info.message #{messages.info}
+.alert
+  .ui.centered.error.message
+    .content
+    i.close.icon
+  .ui.centered.warning.message
+    .content
+    i.close.icon
+  .ui.centered.info.message
+    .content
+    i.close.icon
+
+script.
+  var messages = !{JSON.stringify(messages).replace(/<\//g, '<\\/')}
+  $(document).ready(function () {
+    // Handle close flash message button
+    $('.message .close.icon').on('click', function () {
+      var $container = $(this).closest('.message')
+      $container.transition({
+        duration: '1s',
+        animation: 'slide down',
+        onComplete: function () {
+          $container.find('.content').empty()
+        }
+      })
+    })
+    // Show flash messages
+    for (level in messages) {
+      console.log(level, messages[level])
+      flash(level, messages[level])
+    }
+  })
+  function flash (level, text) {
+    console.log(level, text)
+    var $container = $('.alert').find('.' + level)
+    if (text) {
+      $container.find('.content').text(text)
+      $container.transition({
+        duration: '1s',
+        animation: 'slide down'
+      })
+    } else {
+      $container.transition({
+        duration: '1s',
+        animation: 'slide down',
+        onComplete: function () {
+          $container.find('.content').empty()
+        }
+      })
+    }
+  }
