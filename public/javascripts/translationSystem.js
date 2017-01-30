@@ -14,6 +14,26 @@ $(document).ready(function () {
       });
     }
   });
+
+  // Enable/disable submit button
+  $('#translationSystem .field.required').on('change', function () {
+    var filled = $('#translationSystem .field.required').map(function () {
+      return !!($(this).find('input').val());
+    }).toArray()
+    .reduce(function (a, b) {
+      return a && b;
+    }, true);
+
+    if (filled) {
+      $('#createSystem').removeClass('disabled');
+      $('#createSystem').addClass('basic');
+    } else {
+      $('#createSystem').addClass('disabled');
+      $('#createSystem').removeClass('basic');
+    }
+  });
+
+  // Controls
   $('#createSystem, #saveSystem').on('click', function () {
     var params = getDescription();
     var url = params.system_id ? '/translationSystem/update' : '/translationSystem/create';
@@ -34,7 +54,6 @@ $(document).ready(function () {
       console.log(err, err.stack);
     });
   });
-
   $('#deleteSystem').on('click', function () {
     //TODO - modal confirmation
     var url = '/translationSystem/delete/' + translationSystem._id;
@@ -48,10 +67,10 @@ $(document).ready(function () {
       console.log(err.trace);
     });
   });
-
+  /*
   $('#editSystem').on('click', function () {
     window.location = '/translationSystem/edit/' + translationSystem._id;
-  });
+  });*/
 
   // Customize file input
   $(document).on('change', ':file[name=file]', function () {
