@@ -1,23 +1,21 @@
-var router = require('express').Router();
-var url = require('url');
-var fs = require('fs.extra');
-var path = require('path');
-var exec = require('child_process').exec;
-var tmp = require('tmp');
-var multiparty = require('multiparty');
-var winston = require('winston');
-var http = require('http');
+const router = require('express').Router();
+const url = require('url');
+const fs = require('fs.extra');
+const path = require('path');
+const exec = require('child_process').exec;
+const tmp = require('tmp');
+const multiparty = require('multiparty');
+const winston = require('winston');
+const http = require('http');
 
-var calculateScores = require('../lib/calculateScores');
-var tSystem = require('../lib/translationSystem');
-var testSet = require('../lib/testSet');
-var testOutput = require('../lib/testOutput');
-var User = require('../lib/user.js');
+const calculateScores = require('../lib/calculateScores');
+const tSystem = require('../lib/translationSystem');
+const testSet = require('../lib/testSet');
+const testOutput = require('../lib/testOutput');
+const User = require('../lib/user.js');
 
-// TODO ?
+/* TODO
 router.post('/translationSystem/update', function (req, res, next) {
-  res.redirect('/translationSystem/view');
-  /*
   if (!req.user) {
     res.json({error: 'Log in to edit translation systems', data: null});
   } else {
@@ -30,8 +28,8 @@ router.post('/translationSystem/update', function (req, res, next) {
       }
     });
   }
-  */
 });
+*/
 
 router.get('/getDataTable', function (req, res, next) {
   var languagePair = url.parse(req.url, true).query || {};
@@ -95,13 +93,22 @@ router.get('/getDataTable', function (req, res, next) {
 
 router.post('/translationSystem/create', function (req, res, next) {
   if (!req.user) {
-    res.json({error: 'Log in to submit translation systems', data: null});
+    winston.warn('Unauthenticated user tried to access ' + req.url);
+    res.json({error: '<a href="/auth/github">Log in</a> to submit translation systems', data: null});
   } else {
     tSystem.createTranslationSystem(req.body, function (err, data) {
       if (err) {
         winston.warn('Unable to create translation system', err);
         res.json(JSON.stringify({error: err, data: null}));
       } else {
+        winston.info(
+          'Translation system',
+          data.systemName,
+          '(' + data.sourceLanguage + data.targetLanguage + ')',
+          'successfully submitted by',
+          req.user.displayName,
+          '(' + req.user.id + ')'
+        );
         res.json(JSON.stringify({error: null, data: data}));
       }
     });
@@ -110,7 +117,8 @@ router.post('/translationSystem/create', function (req, res, next) {
 
 router.get('/translationSystem/delete/:systemId', function (req, res, next) {
   if (!req.user) {
-    res.json({error: 'Log in to remove your translation systems', data: null});
+    winston.warn('Unauthenticated user tried to access ' + req.url);
+    res.json({error: '<a href="/auth/github">Log in</a> to delete your translation systems', data: null});
   } else {
     var systemId = req.params.systemId;
     tSystem.deleteTranslationSystem(systemId, function (err) {
@@ -120,8 +128,16 @@ router.get('/translationSystem/delete/:systemId', function (req, res, next) {
       } else {
         testOutput.deleteTestOutput({systemId: systemId}, function (err) {
           if (err) {
-            winston.warn('Unable to delete output', err);
+            winston.warn('Unable to delete translation file', err);
           }
+          winston.info(
+            'User',
+            req.user.displayName,
+            '(' + req.user.id + ')',
+            'deleted his translation system',
+            systemId
+          );
+          req.flash('info', 'Translation system successfully deleted');
           res.json({error: err});
         });
       }
@@ -131,16 +147,17 @@ router.get('/translationSystem/delete/:systemId', function (req, res, next) {
 
 router.post('/testOutput/upload', function (req, res, next) {
   if (!req.user) {
-    res.json({error: 'Log in to upload test outputs', data: null});
+    winston.warn('Unauthenticated user tried to access ' + req.url);
+    res.json({error: '<a href="/auth/github">Log in</a> to upload test outputs', data: null});
   } else {
     var form = new multiparty.Form();
     var systemId = url.parse(req.url, true).query.systemId;
     var query = {};
 
-    form.on('error', function(err) {
-      winston.warn('Error parsing form: ' + err.stack);
-      // res.send('error');
-      res.redirect('/translationSystem/view/' + systemId); // flash err
+    form.on('error', function (err) {
+      winston.warn('Error parsing test output form: ' + err.stack);
+      req.flash('warn', 'Server was unable to parse submitted data');
+      res.redirect('/translationSystem/view/' + systemId);
     });
 
     form.parse(req, function (err, fields, files) {
@@ -156,11 +173,25 @@ router.post('/testOutput/upload', function (req, res, next) {
             query.fileName = files[f][0].originalFilename;
             query.date = new Date();
             testOutput.saveTestOutputs(query, function (err, data) {
-              var outputId = data[0]._id;
-              var fileId = query.fileId;
-              var hypothesis = files[f][0].path;
-              calculateScores(outputId, fileId, hypothesis);
-              res.redirect('/translationSystem/view/' + query.systemId);
+              if (err) {
+                winston.warn('Unable to save output content to database', err);
+                // Already handled by form.on.error ?
+                // req.flash('warning', 'A database error occured. Unable to save file content.');
+                // res.redirect('/translationSystem/view/' + query.systemId);
+              } else {
+                var outputId = data[0]._id;
+                var fileId = query.fileId;
+                var hypothesis = files[f][0].path;
+                calculateScores(outputId, fileId, hypothesis);
+                req.flash('info', 'Translation output successfully uploaded');
+                winston.info(
+                  'User',
+                  req.user.displayName,
+                  '(' + req.user.id + ')',
+                  'successfully uploaded a translation output'
+                );
+                res.redirect('/translationSystem/view/' + query.systemId);
+              }
             });
           }
         });
@@ -171,12 +202,21 @@ router.post('/testOutput/upload', function (req, res, next) {
 
 router.get('/testOutput/delete/:testOutputId', function (req, res, next) {
   if (!req.user) {
-    res.json({error: 'Log in to remove test outputs', data: null});
+    winston.warn('Unauthenticated user tried to access ' + req.url);
+    res.json({error: '<a href="/auth/github">Log in</a> to remove test outputs', data: null});
   } else {
     var toId = req.params.testOutputId;
     testOutput.deleteTestOutput({_id: toId}, function (err) {
       if (err) {
-        winston.warn('Unable to delete test output', err);
+        winston.warn('Unable to delete translation output', err);
+      } else {
+        req.flash('info', 'Translation output successfully removed');
+        winston.info(
+          'User',
+          req.user.displayName,
+          '(' + req.user.id + ')',
+          'successfully removed a translation output'
+        );
       }
       res.json({error: err});
     });
@@ -187,8 +227,10 @@ router.get('/download/test/:fileId', function (req, res, next) {
   var fileId = req.params.fileId;
   testSet.getTestSet({_id: fileId}, function (err, data) {
     if (err) {
+      winston.warn('Unable to download test file', fileId, err);
       res.sendStatus(500);
     } else {
+      winston.info('Downloading test file', fileId)
       res.setHeader('Content-disposition', 'attachment; filename=' + data.source.fileName);
       res.setHeader('Content-type', 'text/plain');
       res.send(data.source.content);
@@ -200,7 +242,7 @@ router.get('/download/training/:fileId', function (req, res, next) {
   var fileId = req.params.fileId;
   var fileName = fileId + '.tgz'
   var path2file = 'https://s3.amazonaws.com/opennmt-trainingdata/' + fileName;
-
+  winston.info('Downloading training data', fileId);
   var file = fs.createWriteStream(fileName);
   http.get(path2file, function () {
     res.pipe(file);
