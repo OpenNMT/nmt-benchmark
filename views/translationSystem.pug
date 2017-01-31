@@ -15,7 +15,10 @@ mixin field (f)
         span(id=f.name) #{tsData[f.name]}
       else
         .ui.input
-          input(name=f.name placeholder=f.placeholder)
+          if mode === 'edit'
+            input(name=f.name value=tsData[f.name] placeholder=f.placeholder)
+          else
+            input(name=f.name placeholder=f.placeholder)
 
 mixin dropdown (label, name, side)
   - var required = ''
@@ -29,10 +32,16 @@ mixin dropdown (label, name, side)
       .ui.selection.dropdown
         //- mess
         if side === 'src'
-          .text #{c2l[src]}
+          if mode === 'edit'
+            .text #{c2l[tsData[name]]}
+          else
+            .text #{c2l[src]}
           input(type='hidden' name=name value=src)
         else
-          .text #{c2l[tgt]}
+          if mode === 'edit'
+            .text #{c2l[tsData[name]]}
+          else
+            .text #{c2l[tgt]}
           input(type='hidden' name=name value=tgt)
         i.dropdown.icon
         .menu
@@ -172,7 +181,7 @@ block modal
 block content
   .ui.grid.container
     .first.row
-      h1
+      h1(style='display: flex; align-items: center')
         if mode === 'create'
           span= __('Add translation system')
         if mode === 'view'
@@ -212,7 +221,7 @@ block content
             span= __('Delete this system')
       .row
         h1= __('Test sets')
-      .last.row
+      .row
         .ui.cards
           for ts in testSets
             if ts.source.language === tsData.sourceLanguage && ts.target.language === tsData.targetLanguage
@@ -220,7 +229,15 @@ block content
 
 block scripts
   script.
+    var systemId = '#{systemId}'
     var translationSystem = !{JSON.stringify(tsData).replace(/<\//g, '<\\/')}
+    var testOutputs = !{JSON.stringify(toData).replace(/<\//g, '<\\/')}
+    var uData = !{JSON.stringify(uData).replace(/<\//g, '<\\/')}
     var mode = '#{mode}'
+    var allSrc = !{JSON.stringify(allSrc).replace(/<\//g, '<\\/')}
+    var allTgt = !{JSON.stringify(allTgt).replace(/<\//g, '<\\/')}
+    var testSets = !{JSON.stringify(testSets).replace(/<\//g, '<\\/')}
+    var visitor = !{JSON.stringify(visitor).replace(/<\//g, '<\\/')}
+    var fieldSet = !{JSON.stringify(fieldSet).replace(/<\//g, '<\\/')}
   script(src='/javascripts/translationSystem.js')
   // TODO - i18n

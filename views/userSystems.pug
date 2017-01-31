@@ -17,6 +17,18 @@ block content
           i.icon.plus
           span= __('Add new translation system')
 
+      //-
+        .dropdown
+          .label= __('Metric')
+          #metrics.ui.selection.disabled.dropdown
+            input(type='hidden' name='metric' value='BLEU')
+            .text BLEU
+            i.dropdown.icon
+            .menu
+              .item.active(data-value='BLEU') BLEU
+              .item(data-value='NIST') NIST
+              .item(data-value='RIBES') RIBES
+
     table#mainTable.ui.celled.table
       thead
         tr
@@ -30,7 +42,12 @@ block content
 
 block scripts
   script.
+    // var languagePairs = !{JSON.stringify(languagePairs).replace(/<\//g, '<\\/')} // remove
     var testSets = !{JSON.stringify(testSets).replace(/<\//g, '<\\/')}
+    var toData = !{JSON.stringify(toData).replace(/<\//g, '<\\/')}
     var tsData = !{JSON.stringify(tsData).replace(/<\//g, '<\\/')}
     var c2l = !{JSON.stringify(c2l).replace(/<\//g, '<\\/')}
+    var visitor = !{JSON.stringify(visitor).replace(/<\//g, '<\\/')}
+    var uData = !{JSON.stringify(uData).replace(/<\//g, '<\\/')}
+    // var author = #{author}
   script(src='/javascripts/userSystems.js')
