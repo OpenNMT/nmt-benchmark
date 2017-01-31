@@ -1,5 +1,8 @@
 nav.ui.fixed.menu.navbar.fireBrick.grid
-  a.brand.item#logo(href='/')= __('NMT-Benchmark')
+  a.brand.item#logo(href='/')
+    svg(height="64" width="64" style="fill: white")
+      use(xlink:href='/images/logo.svg#logo')
+  a.brand.item#brandName(href='/')= __('NMT-Benchmark')
   a.item(href='/info')= __('Info')
   a.item(href='/trainingSets')= __('Training Sets')
   a.item(href='/testSets')= __('Test Sets')
