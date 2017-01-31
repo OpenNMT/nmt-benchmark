@@ -70,7 +70,7 @@ $(document).ready(function () {
     var deleteSystem = {
       url: '/translationSystem/delete/' + translationSystem._id,
       done: function () {
-        window.location = '/'; // confirmation flash
+        window.location = '/';
       },
       header: 'Are you sure you want to delete this system?', // i18n
       content: 'All associated translations and scores will be lost' // i18n

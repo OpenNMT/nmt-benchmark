@@ -27,12 +27,13 @@ $(document).ready(function () {
     }
   });
 
-  // Metrics selection handler
+  /* Metrics selection handler - TODO
   $('#metrics').dropdown({
     onChange: function  (value, text) {
-      // TODO - Update table scores accordingly
+      // Update table scores accordingly
     }
   });
+  */
 
   // Add new translation system button handler
   $('#addSystemButton').on('click', function () {
