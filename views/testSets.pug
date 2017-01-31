@@ -5,7 +5,7 @@ block content
     .first.row
       h1= __('Test Sets')
     .row
-      .ui.form(style="text-align: right")
+      .ui.form
         .inline.field
           label= __('Filter')
           #languagePairs.ui.selection.dropdown
@@ -15,7 +15,7 @@ block content
             .menu
               .item.active(data-value="" value="")= __('Any language pair')
               for lp in languagePairs
-                .item(data-value='#{lp.sourceLanguage}#{lp.targetLanguage}') #{c2l[lp.sourceLanguage]} - #{c2l[lp.targetLanguage]}
+                .item(data-value=lp.sourceLanguage + lp.targetLanguage) #{c2l[lp.sourceLanguage]} - #{c2l[lp.targetLanguage]}
     .last.row
       table#testSetTable.ui.table
         thead
