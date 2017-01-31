@@ -27,14 +27,6 @@ $(document).ready(function () {
     }
   });
 
-  /* Metrics selection handler - TODO
-  $('#metrics').dropdown({
-    onChange: function  (value, text) {
-      // Update table scores accordingly
-    }
-  });
-  */
-
   // Add new translation system button handler
   $('#addSystemButton').on('click', function () {
     $('#addSystemForm input[name="languagePair"]').val(getLanguagePair());
@@ -81,7 +73,7 @@ function getTable (languagePair) {
           sDefaultContent: '',
           searchable: false,
           render: function (data, type, full) {
-            return full.scores[ts._id] ? full.scores[ts._id][getMetrics()] : '';
+            return full.scores[ts._id] ? full.scores[ts._id].BLEU : '';
           }
         });
       }
@@ -107,11 +99,6 @@ function getTable (languagePair) {
     flash('error', error);
     console.log(error.statusText, error);
   });
-}
-
-function getMetrics () {
-  // Change order if #metrics iplemented
-  return 'BLEU' || $('#metrics').dropdown('get value');
 }
 
 function getLanguagePair () {

@@ -188,7 +188,8 @@ router.post('/testOutput/upload', function (req, res, next) {
                   'User',
                   req.user.displayName,
                   '(' + req.user.id + ')',
-                  'successfully uploaded a translation output'
+                  'successfully uploaded a translation output to system',
+                  systemId
                 );
                 res.redirect('/translationSystem/view/' + query.systemId);
               }
@@ -215,7 +216,8 @@ router.get('/testOutput/delete/:testOutputId', function (req, res, next) {
           'User',
           req.user.displayName,
           '(' + req.user.id + ')',
-          'successfully removed a translation output'
+          'successfully removed a translation output',
+          toId
         );
       }
       res.json({error: err});
