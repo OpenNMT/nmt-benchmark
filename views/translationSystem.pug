@@ -5,26 +5,26 @@ mixin field (f)
   - var required = ''
   if mode === 'create' && f.required
     - required = 'required'
-  .inline.field(class="#{required}")
+  .inline.field(class=required)
     label.large= __(f.label)
     if f.type === 'user'
-      input(type='hidden' name='user' value='#{uData.githubId || uData.id}')
+      input(type='hidden' name='user' value=uData.githubId || uData.id)
       +user(uData)
     else
       if mode === 'view'
-        span(id='#{f.name}') #{tsData[f.name]}
+        span(id=f.name) #{tsData[f.name]}
       else
         .ui.input
           if mode === 'edit'
-            input(name='#{f.name}' value='#{tsData[f.name]}' placeholder='#{f.placeholder}')
+            input(name=f.name value=tsData[f.name] placeholder=f.placeholder)
           else
-            input(name='#{f.name}' placeholder='#{f.placeholder}')
+            input(name=f.name placeholder=f.placeholder)
 
 mixin dropdown (label, name, side)
   - var required = ''
   if mode === 'create'
     - required = 'required'
-  .inline.field(class="#{required}")
+  .inline.field(class=required)
     label.large #{label}
     if mode === 'view'
       span #{tsData[name]} - #{c2l[tsData[name]]}
@@ -36,38 +36,38 @@ mixin dropdown (label, name, side)
             .text #{c2l[tsData[name]]}
           else
             .text #{c2l[src]}
-          input(type='hidden' name='#{name}' value='#{src}')
+          input(type='hidden' name=name value=src)
         else
           if mode === 'edit'
             .text #{c2l[tsData[name]]}
           else
             .text #{c2l[tgt]}
-          input(type='hidden' name='#{name}' value='#{tgt}')
+          input(type='hidden' name=name value=tgt)
         i.dropdown.icon
         .menu
           if side === 'src'
             for lang in allSrc
               if lang === src
-                .item.active(data-value='#{lang}') #{c2l[lang]}
+                .item.active(data-value=lang) #{c2l[lang]}
               else
-                .item(data-value='#{lang}') #{c2l[lang]}
+                .item(data-value=lang) #{c2l[lang]}
           else
             for lang in allTgt
               if lang === tgt
-                .item.active(data-value='#{lang}') #{c2l[lang]}
+                .item.active(data-value=lang) #{c2l[lang]}
               else
-                .item(data-value='#{lang}') #{c2l[lang]}
+                .item(data-value=lang) #{c2l[lang]}
 
 mixin textarea (f)
   - var required = ''
   if mode === 'create' && f.required
     - required = 'required'
-  .inline.field.special(class="#{required}")
+  .inline.field.special(class=required)
     label.large= __(f.label)
     if mode === 'view'
       span #{tsData[f.name]}
     else
-      textarea(name='#{f.name}' placeholder='#{f.placeholder}' value='#{tsData[f.name]}') #{tsData[f.name]}
+      textarea(name=f.name placeholder=f.placeholder value=tsData[f.name]) #{tsData[f.name]}
 
 mixin testSet (ts)
   - var to
@@ -83,17 +83,16 @@ mixin testSet (ts)
         | #{ts.source.fileName}
       .description
         ul
-          //- Size...
           li Domain: #{ts.domain}
           li Origin: #{ts.origin}
           if to
             li File: #{to.fileName}
               if to && visitor && visitor.id == uData.githubId
-                i.trash.icon.fireBrick.deleteOutput(data-testOutputId='#{to._id}')
+                i.trash.icon.fireBrick.deleteOutput(data-testOutputId=to._id)
             li Date: #{to.date.toLocaleDateString()}
             if to.scores
               li Score: #{to.scores.BLEU}
-      #getSource.ui.basic.fireBrick.button(data-fileId='#{ts._id}')
+      #getSource.ui.basic.fireBrick.button(data-fileId=ts._id)
         i.download.icon
         | Get source
     if !to && visitor && visitor.id == uData.githubId
@@ -101,60 +100,60 @@ mixin testSet (ts)
         .header(style='margin-bottom: 10px; margin-top: 5px;')
           | Translation
         form(action='/testOutput/upload' enctype='multipart/form-data' method='post')
-          .selectOutput.ui.icon.input(data-fileId='#{ts._id}')
+          .selectOutput.ui.icon.input(data-fileId=ts._id)
             input.fileName
             i.folder.open.icon
-          .uploadOutput.ui.icon.basic.fireBrick.disabled.button(data-fileId='#{ts._id}')
+          .uploadOutput.ui.icon.basic.fireBrick.disabled.button(data-fileId=ts._id)
             i.upload.icon
             | Upload
-          input(type='file' name='file' style='display: none' data-fileId='#{ts._id}')
-          input(type='hidden' name='fileId' value='#{ts._id}')
-          input(type='hidden' name='systemId' value='#{systemId}')
+          input(type='file' name='file' style='display: none' data-fileId=ts._id)
+          input(type='hidden' name='fileId' value=ts._id)
+          input(type='hidden' name='systemId' value=systemId)
 
 mixin radio (f)
   - var required = ''
   if mode === 'create' && f.required
     - required = 'required'
-  .inline.field(class="#{required}")
+  .inline.field(class=required)
     label.large= __(f.label)
     if mode == 'view'
       span #{tsData[f.name] ? 'On' : 'Off'}
     else
       .ui.toggle.checkbox
-        input.hidden(type='checkbox' name='#{f.name}' checked='checked')
+        input.hidden(type='checkbox' name=f.name checked='checked')
         label On
 
 mixin hidden (f)
   - var required = f.className
   if mode === 'create' && f.required
     - required = 'required ' + f.className
-  .inline.field(style='display: none;' class="#{required}")
+  .inline.field(style='display: none;' class=required)
     label.large= __(f.label)
     if mode == 'view'
       span #{tsData[f.name]}
     else
       .ui.input
-        input(name='#{f.name}' placeholder="#{f.placeholder}")
+        input(name=f.name placeholder=f.placeholder)
 
 mixin set (f)
   - var required = ''
   if mode === 'create' && f.required
     - required = 'required'
-  .inline.field(class="#{required}")
+  .inline.field(class=required)
     label.large= __(f.label)
     if mode == 'view'
       span #{tsData[f.name]}
     else
       .ui.selection.dropdown
         .text #{f.values[0]}
-        input(name='#{f.name}' type='hidden' value='#{f.values[0]}')
+        input(name=f.name type='hidden' value=f.values[0])
         i.dropdown.icon
         .menu
           each element, i in f.values
             if i == 0
-              .item.active(data-value='#{element}') #{element}
+              .item.active(data-value=element) #{element}
             else
-              .item(data-value='#{element}') #{element}
+              .item(data-value=element) #{element}
 
 mixin render (field)
   case field.type
