@@ -85,6 +85,7 @@ router.get('/translationSystem/view/:systemId', function (req, res, next) {
       } else {
         data.mode = 'view';
         data.fieldSet = fieldSet;
+        data.trainingSets = trainingSets;
         data.allSrc = utils.uniq(res.locals.languagePairs, 'sourceLanguage');
         data.allTgt = utils.uniq(res.locals.languagePairs, 'targetLanguage');
         data.messages = {
@@ -141,14 +142,15 @@ router.post('/translationSystem/add', function (req, res, next) {
   } else {
     var lp = req.body.languagePair || nconf.get('OpenNMTBenchmark:default:LP');
     res.render('translationSystem', {
+      trainingSets: trainingSets,
       fieldSet: fieldSet,
       src: lp.substring(0,2),
       tgt: lp.substring(2),
       allSrc: utils.uniq(res.locals.languagePairs, 'sourceLanguage'),
       allTgt: utils.uniq(res.locals.languagePairs, 'targetLanguage'),
       mode: 'create',
-      tsData: {},
-      toData: {},
+      tsData: {dummy: true},
+      toData: {dummy: true},
       uData: req.user || {},
       messages: {
         info: req.flash('info')[0],
