@@ -1,16 +1,16 @@
-var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var winston = require('winston');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-var i18n = require('i18n');
-var session = require('express-session');
-var yaml = require('js-yaml');
-var mongoose = require('mongoose');
-var passport = require('passport');
-var flash = require('connect-flash');
-var nconf = require('nconf');
+const express = require('express');
+const path = require('path');
+const favicon = require('serve-favicon');
+const winston = require('winston');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+const i18n = require('i18n');
+const session = require('express-session');
+const yaml = require('js-yaml');
+const mongoose = require('mongoose');
+const passport = require('passport');
+const flash = require('connect-flash');
+const nconf = require('nconf');
 nconf.file({
   file: './config/default.yaml',
   format: {
@@ -19,7 +19,7 @@ nconf.file({
   }
 });
 
-var app = express();
+const app = express();
 
 app.set('views', path.resolve(__dirname, 'views'));
 app.set('view engine', 'pug');
@@ -46,14 +46,17 @@ passport.deserializeUser(function (obj, done) {
   done(null, obj);
 });
 
-var github = require('./lib/githubPassport');
+const github = require('./lib/githubPassport');
 
 app.use(passport.initialize());
 app.use(passport.session());
 github.init(app, passport);
 
 // Log out
-app.get('/logout', function (req, res){
+app.get('/logout', function (req, res) {
+  if (req.user) {
+    winston.info(req.user.displayName + ' (' +  req.user.id + ') logged out');
+  }
   req.logout();
   req.flash('info', "You've been succesfully logged out");
   res.redirect('/');

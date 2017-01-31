@@ -33,7 +33,7 @@ script.
     console.log(level, text)
     var $container = $('.alert').find('.' + level)
     if (text) {
-      $container.find('.content').text(text)
+      $container.find('.content').html(text)
       $container.transition({
         duration: '1s',
         animation: 'slide down'
