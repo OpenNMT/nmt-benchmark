@@ -46,8 +46,11 @@ block content
 block scripts
   script.
     var testSets = !{JSON.stringify(testSets).replace(/<\//g, '<\\/')}
+    var visitor = !{JSON.stringify(visitor).replace(/<\//g, '<\\/')}
     var languagePairs = !{JSON.stringify(languagePairs).replace(/<\//g, '<\\/')}
     var c2l = !{JSON.stringify(c2l).replace(/<\//g, '<\\/')}
     var defaultLP = "#{defaultLP}"
   script(src='/javascripts/index.js')
-  //- TODO - i18n
+  //- TODO - i18n for table header
+  //- TODO - flash messages
+

@@ -120,7 +120,7 @@ $(document).ready(function () {
   // Download source
   $('#getSource').on('click', function () {
     var fileId = $(this).attr('data-fileId');
-    var downloadPage = window.open('/download/test/' + fileId);
+    var downloadPage = window.open('/download/' + fileId);
   });
 });
 
