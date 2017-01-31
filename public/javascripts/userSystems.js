@@ -2,6 +2,14 @@ $(document).ready(function () {
   // Enable dropdown
   $('.ui.dropdown').dropdown();
 
+  /* Metrics selection handler - TODO
+  $('#metrics').dropdown({
+    onChange: function  (value, text) {
+      // Update table scores accordingly
+    }
+  });
+  */
+
   // Add new translation system button handler
   $('#addSystemButton').on('click', function () {
     $('#addSystemForm').submit();
@@ -49,4 +57,8 @@ function getTable () {
       $('.pagination.menu').addClass('floated right');
     }
   });
+}
+
+function getMetrics () {
+  return $('#metrics').val() || 'BLEU';
 }
