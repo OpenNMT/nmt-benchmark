@@ -66,5 +66,8 @@
 	"Description": "Description",
 	"Error codes": "Error codes",
 	"Add translation system": "Add translation system",
-	"Cancel": "Cancel"
+	"Cancel": "Cancel",
+	"Default": "Default",
+	"Default:": "Default:",
+	"Join discussion on": "Join discussion on"
 }
