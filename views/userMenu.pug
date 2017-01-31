@@ -1,5 +1,5 @@
 if visitor
-  .ui.dropdown.item
+  #userMenu.ui.dropdown.item
     img.ui.avatar.image(src=visitor._json.avatar_url)
     span #{visitor.displayName}
     i.dropdown.icon
@@ -14,6 +14,8 @@ if visitor
       a.item(href='/logout')
         i.sign.out.fireBrick.icon
         span= __('Log out')
+  script.
+    $('#userMenu').dropdown();
 else
   .ui.item
     i.github.icon
