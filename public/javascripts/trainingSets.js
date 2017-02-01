@@ -18,7 +18,7 @@ $(document).ready(function () {
         return '<div class="downloadSrc circular ui basic icon fireBrick button" data-fileName="' + full.fileName + '.tgz" role="button" aria-label="download" tabindex="1"><i class="download icon"></i></div>';
       }}
     ]
-  }
+  };
 
   // Draw table
   getTable(filterByLp(trainingSets, null), dtConfig);
