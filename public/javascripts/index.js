@@ -5,7 +5,7 @@ $(document).ready(function () {
   // Language pair selection init
   $('#languagePairs .menu').html(languagePairs.map(function (lp) {
     var active = '';
-    if (lp.sourceLanguage + lp.targetLanguage == getLanguagePair()) {
+    if (lp.sourceLanguage + lp.targetLanguage === getLanguagePair()) {
       active = ' active';
       $('#languagePairs .text').text(c2l[lp.sourceLanguage] + ' - ' + c2l[lp.targetLanguage]);
     }

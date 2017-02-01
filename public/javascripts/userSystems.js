@@ -25,7 +25,7 @@ function getTable () {
     {data: 'scores', sDefaultContent: '', orderable: false, sWidth: '130', render: function (data, type, full) {
       var buf = [];
       testSets.filter(function (test) {
-        return test.source.language == full.sourceLanguage && test.target.language == full.targetLanguage;
+        return test.source.language === full.sourceLanguage && test.target.language === full.targetLanguage;
       }).forEach(function (test) {
         if (full.scores[test._id]) {
           buf.push('<div>' + test.source.fileName + ': ' + full.scores[test._id].BLEU + '</div>');

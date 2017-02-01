@@ -1,0 +1,29 @@
+{
+  "bitwise": true,
+  "curly": true,
+  "eqeqeq": true,
+  "forin": true,
+  "freeze": true,
+  "funcscope": true,
+  "loopfunc": true,
+  "futurehostile": true,
+  "nonbsp": true,
+  "shadow": false,
+  "jquery": true,
+  "browser": true,
+  "undef": true,
+  "devel": true,
+  "globals": {
+    "languagePairs": true,
+    "c2l": true,
+    "testSets": true,
+    "flash": true,
+    "defaultLP": true,
+    "trainingSets": true,
+    "mode": true,
+    "translationSystem": true,
+    "tsData": true,
+    "getTable": true,
+    "filterByLp": true
+  }
+}
