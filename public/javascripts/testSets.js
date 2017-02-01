@@ -15,10 +15,10 @@ $(document).ready(function () {
       {data: 'origin'},
       {data: 'source.fileName'},
       {data: 'download', sortable: false, sDefaultContent: '', render: function (data, type, full) {
-        return '<div class="downloadSrc circular ui basic icon fireBrick button" data-fileId="' + full._id + '"><i class="download icon"></i></div>'
+        return '<div class="downloadSrc circular ui basic icon fireBrick button" data-fileId="' + full._id + '"><i class="download icon"></i></div>';
       }}
     ]
-  }
+  };
 
   // Language pair selection handler
   $('#languagePairs').dropdown({

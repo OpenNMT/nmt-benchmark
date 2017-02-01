@@ -9,7 +9,7 @@ $(document).ready(function () {
   $('.ui.toggle.checkbox').checkbox({
     onChange: function () {
       var state = $(this).prop('checked') ? 'On' : 'Off'; // i18n
-      $(this).next('label').text(state)
+      $(this).next('label').text(state);
       $('.trainSet').transition({
         animation: 'slide down',
         duration: '0.5s'
@@ -50,8 +50,10 @@ $(document).ready(function () {
         var level = 'error';
         if (response.error.errors) {
           var text = '';
-          for (field in response.error.errors) {
-            text += response.error.errors[field].message;
+          for (var field in response.error.errors) {
+            if (response.error.errors.hasOwnProperty(field)) {
+              text += response.error.errors[field].message;
+            }
           }
           flash(level, text);
         } else {
@@ -62,7 +64,7 @@ $(document).ready(function () {
       }
     })
     .fail(function (err) {
-      flash('error', err)
+      flash('error', err);
       console.log(err, err.stack);
     });
   });
@@ -96,7 +98,11 @@ $(document).ready(function () {
     var $selectOutput = $form.find('.selectOutput');
     var $uploadOutput = $form.find('.uploadOutput');
     $selectOutput.find('input').val(fileName);
-    fileName ? $uploadOutput.removeClass('disabled') : $uploadOutput.addClass('disabled');
+    if (fileName) {
+      $uploadOutput.removeClass('disabled');
+    } else {
+      $uploadOutput.addClass('disabled');
+    }
   });
   $('.selectOutput').on('click', function () {
     var fileId = $(this).attr('data-fileId');
@@ -134,7 +140,6 @@ $(document).ready(function () {
   $('.cancel.button, .ok.button').on('keypress', function (e) {
     if (e.which === 13 || e.which === 32) {
       e.preventDefault();
-      console.log(e.target)
       $(e.target).trigger('click');
     }
   });
@@ -172,8 +177,10 @@ function confirm (config) {
           var level = 'error';
           if (response.error.errors) {
             var text = '';
-            for (field in response.error.errors) {
-              text += response.error.errors[field].message;
+            for (var field in response.error.errors) {
+              if (response.error.errors.hasOwnProperty(field)) {
+                text += response.error.errors[field].message;
+              }
             }
             flash(level, text);
           } else {
