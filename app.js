@@ -55,7 +55,13 @@ github.init(app, passport);
 // Log out
 app.get('/logout', function (req, res) {
   if (req.user) {
-    winston.info(req.user.displayName + ' (' +  req.user.id + ') logged out');
+    winston.info(
+      // Date/time
+      'User',
+      req.user.displayName,
+      '(' +  req.user.id + ')',
+      'logged out'
+    );
   }
   req.logout();
   req.flash('info', "You've been succesfully logged out");
