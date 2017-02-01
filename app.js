@@ -2,6 +2,14 @@ const express = require('express');
 const path = require('path');
 const favicon = require('serve-favicon');
 const winston = require('winston');
+const logger = new (winston.Logger)({
+  transports: [
+    new (winston.transports.Console)({
+      'timestamp': true,
+      'colorize': true
+    })
+  ]
+});
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const i18n = require('i18n');
@@ -55,7 +63,7 @@ github.init(app, passport);
 // Log out
 app.get('/logout', function (req, res) {
   if (req.user) {
-    winston.info(
+    logger.info(
       // Date/time
       'User',
       req.user.displayName,
