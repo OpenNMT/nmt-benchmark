@@ -25,26 +25,47 @@ script.
     })
     // Show flash messages
     for (level in messages) {
-      console.log(level, messages[level])
       flash(level, messages[level])
     }
   })
+  var trans = {
+    animation: {
+      show: 'slide down',
+      hide: 'slide up'
+    },
+    duration: {
+      show: 750,
+      hide: 250
+    }
+  }
   function flash (level, text) {
-    console.log(level, text)
-    var $container = $('.alert').find('.' + level)
-    if (text) {
-      $container.find('.content').html(text)
-      $container.transition({
-        duration: '1s',
-        animation: 'slide down'
+    var $visibleMessages = $('.alert .message:visible')
+    var hidden = 0
+    if ($visibleMessages.length) {
+      // Hide all shown messages
+      $.each($visibleMessages, function () {
+        $(this).transition({
+          duration: trans.duration.hide,
+          animation: trans.animation.hide,
+          onComplete: function () {
+            hidden++
+            if (hidden === $visibleMessages.length) {
+              showMessage(level, text)
+            }
+          }
+        })
       })
     } else {
-      $container.transition({
-        duration: '1s',
-        animation: 'slide down',
-        onComplete: function () {
-          $container.find('.content').empty()
-        }
-      })
+      showMessage(level, text)
+    }
+    function showMessage (level, text) {
+      if (text) {
+        var $container = $('.alert').find('.' + level)
+        $container.find('.content').html(text)
+        $container.transition({
+          duration: trans.duration.show,
+          animation: trans.animation.show
+        })
+      }
     }
   }

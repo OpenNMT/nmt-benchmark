@@ -15,10 +15,7 @@ mixin field (f)
         span(id=f.name) #{tsData[f.name]}
       else
         .ui.input
-          if mode === 'edit'
-            input(name=f.name value=tsData[f.name] placeholder=f.placeholder)
-          else
-            input(name=f.name placeholder=f.placeholder)
+          input(name=f.name placeholder=f.placeholder)
 
 mixin dropdown (label, name, side)
   - var required = ''
@@ -32,16 +29,10 @@ mixin dropdown (label, name, side)
       .ui.selection.dropdown
         //- mess
         if side === 'src'
-          if mode === 'edit'
-            .text #{c2l[tsData[name]]}
-          else
-            .text #{c2l[src]}
+          .text #{c2l[src]}
           input(type='hidden' name=name value=src)
         else
-          if mode === 'edit'
-            .text #{c2l[tsData[name]]}
-          else
-            .text #{c2l[tgt]}
+          .text #{c2l[tgt]}
           input(type='hidden' name=name value=tgt)
         i.dropdown.icon
         .menu
@@ -181,14 +172,14 @@ block modal
 block content
   .ui.grid.container
     .first.row
-      h1(style='display: flex; align-items: center')
+      h1
         if mode === 'create'
           span= __('Add translation system')
         if mode === 'view'
           span= __('System description')
     .row
       #translationSystem.ui.small.form
-        .ui.three.column.grid
+        .ui.three.column.stackable.grid
           .row
             .column
               for field in fieldSet
@@ -208,7 +199,7 @@ block content
                 if field.layer == 0
                   +render(field)
           if mode === 'create'
-            .row
+            .last.row
               .fifteen.wide.column
                 #createSystem.ui.fireBrick.disabled.button
                   i.plus.icon
@@ -221,7 +212,7 @@ block content
             span= __('Delete this system')
       .row
         h1= __('Test sets')
-      .row
+      .last.row
         .ui.cards
           for ts in testSets
             if ts.source.language === tsData.sourceLanguage && ts.target.language === tsData.targetLanguage
@@ -229,15 +220,7 @@ block content
 
 block scripts
   script.
-    var systemId = '#{systemId}'
     var translationSystem = !{JSON.stringify(tsData).replace(/<\//g, '<\\/')}
-    var testOutputs = !{JSON.stringify(toData).replace(/<\//g, '<\\/')}
-    var uData = !{JSON.stringify(uData).replace(/<\//g, '<\\/')}
     var mode = '#{mode}'
-    var allSrc = !{JSON.stringify(allSrc).replace(/<\//g, '<\\/')}
-    var allTgt = !{JSON.stringify(allTgt).replace(/<\//g, '<\\/')}
-    var testSets = !{JSON.stringify(testSets).replace(/<\//g, '<\\/')}
-    var visitor = !{JSON.stringify(visitor).replace(/<\//g, '<\\/')}
-    var fieldSet = !{JSON.stringify(fieldSet).replace(/<\//g, '<\\/')}
   script(src='/javascripts/translationSystem.js')
   // TODO - i18n
