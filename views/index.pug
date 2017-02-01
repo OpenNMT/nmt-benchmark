@@ -19,7 +19,7 @@ block content
             i.dropdown.icon
             .menu
           if visitor
-            #addSystemButton.ui.basic.fireBrick.button.indented
+            #addSystemButton.ui.basic.fireBrick.button.indented(role='button' aria-label='Add new translation system' tabindex='0')
               i.icon.plus
               span= __('Add new translation system')
 
@@ -38,10 +38,10 @@ block content
       #mainTable
 
   form#addSystemForm(action='/translationSystem/add' method='POST')
-    input(type='hidden' name='languagePair' val='enfr')
+    input(type='hidden' name='languagePair' value='enfr')
 
   form#viewTranslationSystem(action='/translationSystem/view' method='post')
-    input(type='hidden' name='systemId' val='')
+    input(type='hidden' name='systemId' value='')
 
 block scripts
   script.

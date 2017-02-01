@@ -32,6 +32,12 @@ $(document).ready(function () {
     $('#addSystemForm input[name="languagePair"]').val(getLanguagePair());
     $('#addSystemForm').submit();
   });
+  $('#addSystemButton').on('keypress', function (e) {
+    if (e.which === 13 || e.which === 32) {
+      e.preventDefault();
+      $(e.target).trigger('click');
+    }
+  });
 
   // Initial dataTable draw
   getTable(getLanguagePair());

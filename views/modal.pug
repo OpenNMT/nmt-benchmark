@@ -1,11 +1,11 @@
-.ui.small.modal
+.ui.small.modal(role='alertdialog' aria-labelledby='#dialogHeader' aria-describedby='#dialogDescription')
   i.close.icon
-  .header
-  .content
+  #dialogHeader.header
+  #dialogDescription.content
   .actions
-    .ui.cancel.button
+    .ui.cancel.button(role='button' tabindex='0')
       i.close.icon
       span= __('Cancel')
-    .ui.ok.fireBrick.basic.button
+    .ui.ok.fireBrick.basic.button(role='button' tabindex='0')
       i.trash.icon
       span= __('Delete')
