@@ -72,7 +72,7 @@ app.get('/logout', function (req, res) {
     );
   }
   req.logout();
-  req.flash('info', "You've been succesfully logged out");
+  req.flash('info', "You've been successfully logged out");
   res.redirect('/');
 });
 
@@ -101,6 +101,8 @@ app.use(require('./routes/globals/getDefaultLP'));
 app.use(require('./routes/globals/langList'));
 // User, if authenicated
 app.use(require('./routes/globals/getUser'));
+// Current locale
+app.use(require('./routes/globals/getLocale'));
 
 // Paths
 app.use('/', require('./routes/index'));

@@ -36,7 +36,7 @@ $(document).ready(function () {
   });
 
   // Controls
-  $('#createSystem, #saveSystem').on('click', function () {
+  $('#createSystem').on('click', function () {
     var params = getDescription();
     var url = params.system_id ? '/translationSystem/update' : '/translationSystem/create';
     $.post(url, params)
@@ -73,9 +73,16 @@ $(document).ready(function () {
         window.location = '/';
       },
       header: 'Are you sure you want to delete this system?', // i18n
-      content: 'All associated translations and scores will be lost' // i18n
+      content: 'All associated translations and scores will be lost', // i18n
+      target: $(this)
     };
     confirm(deleteSystem);
+  });
+  $('#createSystem, #deleteSystem, .deleteOutput, .getSource, .selectOutput, .uploadOutput').on('keypress', function (e) {
+    if (e.which === 13 || e.which === 32) {
+      e.preventDefault();
+      $(e.target).trigger('click');
+    }
   });
 
   // Customize file input
@@ -112,15 +119,24 @@ $(document).ready(function () {
         location.reload();
       },
       header: 'Are you sure you want to delete this translation?', // i18n
-      content: 'All associated scores will be lost' // i18n
+      content: 'All associated scores will be lost', // i18n
+      target: $(this)
     };
     confirm(deleteOutput);
   });
 
   // Download source
-  $('#getSource').on('click', function () {
+  $('.getSource').on('click', function () {
     var fileId = $(this).attr('data-fileId');
     var downloadPage = window.open('/download/test/' + fileId);
+  });
+
+  $('.cancel.button, .ok.button').on('keypress', function (e) {
+    if (e.which === 13 || e.which === 32) {
+      e.preventDefault();
+      console.log(e.target)
+      $(e.target).trigger('click');
+    }
   });
 });
 
@@ -142,8 +158,6 @@ function setDescription (description) {
 }
 
 function confirm (config) {
-  $('.ui.modal').find('.header').text(config.header);
-  $('.ui.modal').find('.content').text(config.content);
   $('.ui.modal').modal({
     blurring: true,
     onApprove: function () {
@@ -174,6 +188,16 @@ function confirm (config) {
         flash(level, err);
         console.log(err.trace);
       });
+    },
+    onShow: function () {
+      $('#dialogHeader').text(config.header);
+      $('#dialogDescription').text(config.content);
+    },
+    onVisible: function () {
+      $('.ui.modal').find('.cancel.button').focus();
+    },
+    onHidden: function () {
+      $(config.target).focus();
     }
   }).modal('show');
 }
