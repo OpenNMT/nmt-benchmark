@@ -1,6 +1,9 @@
 extends layout
 
 block content
-  h1= message
-  h2= error.status
-  pre #{error.stack}
+  .ui.grid.container
+    .first.row
+      h1.ui.center.aligned.icon.header
+        i.search.fireBrick.icon
+        .content #{error.status}
+          .sub.header #{message}

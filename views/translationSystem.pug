@@ -17,7 +17,7 @@ mixin field (f)
         .ui.input
           input(name=f.name placeholder=f.placeholder)
 
-mixin dropdown (label, name, side)
+mixin language (label, name, side)
   - var required = ''
   if mode === 'create'
     - required = 'required'
@@ -79,11 +79,11 @@ mixin testSet (ts)
           if to
             li File: #{to.fileName}
               if to && visitor && visitor.id == uData.githubId
-                i.trash.icon.fireBrick.deleteOutput(data-testOutputId=to._id)
+                i.trash.icon.fireBrick.deleteOutput(data-testOutputId=to._id role='button' tabindex='0' aria-label='Delete translation output')
             li Date: #{to.date.toLocaleDateString()}
             if to.scores
               li Score: #{to.scores.BLEU}
-      #getSource.ui.basic.fireBrick.button(data-fileId=ts._id)
+      .getSource.ui.basic.fireBrick.button(data-fileId=ts._id role='button' tabindex='0' aria-label='Download source file')
         i.download.icon
         | Get source
     if !to && visitor && visitor.id == uData.githubId
@@ -94,7 +94,7 @@ mixin testSet (ts)
           .selectOutput.ui.icon.input(data-fileId=ts._id)
             input.fileName
             i.folder.open.icon
-          .uploadOutput.ui.icon.basic.fireBrick.disabled.button(data-fileId=ts._id)
+          .uploadOutput.ui.icon.basic.fireBrick.disabled.button(data-fileId=ts._id role='button' tabindex='0' aria-label='Upload translation output')
             i.upload.icon
             | Upload
           input(type='file' name='file' style='display: none' data-fileId=ts._id)
@@ -126,7 +126,7 @@ mixin hidden (f)
       .ui.input
         input(name=f.name placeholder=f.placeholder)
 
-mixin set (f)
+mixin dropdown (f)
   - var required = ''
   if mode === 'create' && f.required
     - required = 'required'
@@ -152,13 +152,13 @@ mixin render (field)
       +field(field)
     when 'textarea'
       +textarea(field)
-    when 'set'
-      +set(field)
     when 'dropdown'
+      +dropdown(field)
+    when 'language'
       if field.name == 'sourceLanguage'
-        +dropdown(__(field.label), field.name, 'src')
+        +language(__(field.label), field.name, 'src')
       else
-        +dropdown(__(field.label), field.name, 'tgt')
+        +language(__(field.label), field.name, 'tgt')
     when 'text/hidden'
       +hidden(field)
     when 'radio'
@@ -201,13 +201,13 @@ block content
           if mode === 'create'
             .last.row
               .fifteen.wide.column
-                #createSystem.ui.fireBrick.disabled.button
+                #createSystem.ui.fireBrick.disabled.button(role='button' tabindex='0' aria-label='Create translation system')
                   i.plus.icon
                   span= __('Create')
     if mode === 'view'
       if visitor && visitor.id == uData.githubId
         .row
-          #deleteSystem.ui.basic.fireBrick.button
+          #deleteSystem.ui.basic.fireBrick.button(role='button' tabindex='0' aria-label='Delete translation system')
             i.trash.icon
             span= __('Delete this system')
       .row

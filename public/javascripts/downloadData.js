@@ -20,6 +20,12 @@ function getTable (list, config) {
           var downloadPage = window.open(config.url + ($(target).attr('data-fileId') || $(target).attr('data-fileName')));
         }
       });
+      $('table').on('keypress', function (e) {
+        if (e.which === 13 || e.which === 32) {
+          e.preventDefault();
+          $(e.target).trigger('click');
+        }
+      });
     }
   });
 }

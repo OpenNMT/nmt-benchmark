@@ -1,13 +1,13 @@
-.alert
+.alert(role='alert')
   .ui.centered.error.message
     .content
-    i.close.icon
+    i.close.icon(role='button' tabindex='0' aria-label='Close')
   .ui.centered.warning.message
     .content
-    i.close.icon
+    i.close.icon(role='button' tabindex='0' aria-label='Close')
   .ui.centered.info.message
     .content
-    i.close.icon
+    i.close.icon(role='button' tabindex='0' aria-label='Close')
 
 script.
   var messages = !{JSON.stringify(messages || '').replace(/<\//g, '<\\/')}
@@ -22,6 +22,12 @@ script.
           $container.find('.content').empty()
         }
       })
+    })
+    $('.message .close.icon').on('keypress', function (e) {
+      if (e.which === 13 || e.which === 32) {
+        e.preventDefault();
+        $(e.target).trigger('click')
+      }
     })
     // Show flash messages
     for (level in messages) {
@@ -59,13 +65,15 @@ script.
       showMessage(level, text)
     }
     function showMessage (level, text) {
+      var $container = $('.alert').find('.' + level)
       if (text) {
-        var $container = $('.alert').find('.' + level)
         $container.find('.content').html(text)
         $container.transition({
           duration: trans.duration.show,
           animation: trans.animation.show
         })
+      } else {
+        $container.find('.content').empty()
       }
     }
   }
