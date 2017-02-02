@@ -46,7 +46,7 @@ $(document).ready(function () {
 function getTable (languagePair) {
   // TODO - i18n for table header
   var lp = {
-    sourceLanguage: languagePair.substring(0,2),
+    sourceLanguage: languagePair.substring(0, 2),
     targetLanguage: languagePair.substring(2)
   };
 

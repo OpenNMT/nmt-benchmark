@@ -23,7 +23,7 @@ nconf.file({
   file: './config/default.yaml',
   format: {
     parse: yaml.safeLoad,
-    stringify: yaml.safeDump,
+    stringify: yaml.safeDump
   }
 });
 
@@ -67,7 +67,7 @@ app.get('/logout', function (req, res) {
       // Date/time
       'User',
       req.user.displayName,
-      '(' +  req.user.id + ')',
+      '(' + req.user.id + ')',
       'logged out'
     );
   }

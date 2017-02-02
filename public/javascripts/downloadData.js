@@ -10,14 +10,14 @@ function getTable (list, config) {
     columns: config.columns,
     drawCallback: function (settings) {
       $('table').on('click', function (e) {
-        var target;
+        var $target;
         if (e.target.nodeName === 'I') {
-          target = $(e.target).closest('div');
+          $target = $(e.target).closest('div');
         } else if (e.target.nodeName === 'DIV') {
-          target = $(e.target);
+          $target = $(e.target);
         }
-        if (target && ($(target).attr('data-fileId') || $(target).attr('data-fileName'))) {
-          var downloadPage = window.open(config.url + ($(target).attr('data-fileId') || $(target).attr('data-fileName')));
+        if ($target && ($target.attr('data-fileId') || $target.attr('data-fileName'))) {
+          var downloadPage = window.open(config.url + ($target.attr('data-fileId') || $target.attr('data-fileName')));
         }
       });
       $('table').on('keypress', function (e) {
@@ -32,14 +32,13 @@ function getTable (list, config) {
 
 function filterByLp (list, languagePair) {
   if (languagePair) {
-    var src = languagePair.substring(0,2);
+    var src = languagePair.substring(0, 2);
     var tgt = languagePair.substring(2);
     return list.filter(function (item) {
       if (item.source && item.target) {
         return item.source.language === src && item.target.language === tgt;
       }
     });
-  } else {
-    return list;
   }
+  return list;
 }
