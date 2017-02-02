@@ -76,7 +76,7 @@ $(document).ready(function () {
       },
       header: 'Are you sure you want to delete this system?', // i18n
       content: 'All associated translations and scores will be lost', // i18n
-      target: $(this)
+      $target: $(this)
     };
     confirm(deleteSystem);
   });
@@ -89,10 +89,10 @@ $(document).ready(function () {
 
   // Customize file input
   $(document).on('change', ':file[name=file]', function () {
-    var input = $(this);
-    var fileName = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+    var $input = $(this);
+    var fileName = $input.val().replace(/\\/g, '/').replace(/.*\//, '');
     var $form = $(this).closest('form');
-    input.trigger('fileselect', [fileName, $form]);
+    $input.trigger('fileselect', [fileName, $form]);
   });
   $(':file[name=file]').on('fileselect', function (e, fileName, $form) {
     var $selectOutput = $form.find('.selectOutput');
@@ -126,7 +126,7 @@ $(document).ready(function () {
       },
       header: 'Are you sure you want to delete this translation?', // i18n
       content: 'All associated scores will be lost', // i18n
-      target: $(this)
+      $target: $(this)
     };
     confirm(deleteOutput);
   });
@@ -204,7 +204,7 @@ function confirm (config) {
       $('.ui.modal').find('.cancel.button').focus();
     },
     onHidden: function () {
-      $(config.target).focus();
+      $(config.$target).focus();
     }
   }).modal('show');
 }
