@@ -1,0 +1,59 @@
+{
+  "disallowMixedSpacesAndTabs": true,
+  "disallowTabs": true,
+  "disallowTrailingWhitespace": true,
+  "requireLineFeedAtFileEnd": true,
+  "validateLineBreaks": "LF",
+  "disallowMultipleSpaces": true, 
+
+  "requireSemicolons": true,
+  "disallowSpaceBeforeSemicolon": true,
+
+  "disallowSpaceBeforePostfixUnaryOperators": true,
+
+  "requireSpaceAfterBinaryOperators": true,
+  "requireSpaceBeforeBinaryOperators": true,
+
+  "requireSpacesInConditionalExpression": true,
+
+  "requireSpacesInForStatement": true,
+
+  "disallowNewlineBeforeBlockStatements": true,
+  "disallowKeywordsOnNewLine": ["else"],
+  "requireCurlyBraces": [
+    "if",
+    "else",
+    "for",
+    "while",
+    "do",
+    "try",
+    "catch"
+  ],
+  "requireSpaceAfterKeywords": true,
+
+  "requireFunctionDeclarations": true,
+  "requireEarlyReturn": false,
+  "requireSpaceBetweenArguments": true,
+  "requireSpacesInFunctionDeclaration": { "beforeOpeningRoundBrace": true, "beforeOpeningCurlyBrace": true },
+  "validateParameterSeparator": ", ",
+
+  "disallowSpacesInCallExpression": true,
+
+  "disallowSpaceAfterObjectKeys": true,
+  "requireSpaceBeforeObjectValues": true,
+  "requireDotNotation": true,
+
+  "disallowSpaceBeforeComma": true,
+  "disallowTrailingComma": true,
+  "requireSpaceAfterComma": true,
+  "requireCommaBeforeLineBreak": true,
+
+  "requireSpaceAfterLineComment": true,
+
+  "validateQuoteMarks": { "mark": "'", "escape": true, "ignoreJSX": true },
+
+  "disallowMultipleVarDecl": true,
+  "requireLineBreakAfterVariableAssignment": true,
+  "requireDollarBeforejQueryAssignment": true,
+  "disallowIdenticalDestructuringNames": true
+}
