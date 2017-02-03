@@ -3,13 +3,13 @@ include mixin.user.pug
 
 block content
   .information
-    if visitor && visitor.id == uData.githubId
+    if visitor && visitor.id === uData.githubId
       h1 These are your systems
     else
       h1 These are systems provided by
         +user(uData, 'external')
 
-    if visitor && visitor.id == uData.githubId
+    if visitor && visitor.id === uData.githubId
       form#addSystemForm(action='/translationSystem/add' method='post')
         input(type='hidden' name='languagePair' val='enfr')
       .tableConfig
