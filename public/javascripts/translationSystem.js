@@ -18,9 +18,9 @@ $(document).ready(function () {
   });
 
   // Enable/disable submit button
-  $('#translationSystem .field.required').on('change', function () {
+  $('#translationSystem .field.required').on('input', function (e) {
     var filled = $('#translationSystem .field.required').map(function () {
-      return !!($(this).find('input').val());
+      return !!($(this).find('input').val().trim());
     }).toArray()
     .reduce(function (a, b) {
       return a && b;
@@ -28,10 +28,10 @@ $(document).ready(function () {
 
     if (filled) {
       $('#createSystem').removeClass('disabled');
-      $('#createSystem').addClass('basic');
+      $('#createSystem').addClass('basic fireBrick');
     } else {
       $('#createSystem').addClass('disabled');
-      $('#createSystem').removeClass('basic');
+      $('#createSystem').removeClass('basic fireBrick');
     }
   });
 
@@ -100,7 +100,9 @@ $(document).ready(function () {
     $selectOutput.find('input').val(fileName);
     if (fileName) {
       $uploadOutput.removeClass('disabled');
+      $uploadOutput.addClass('basic fireBrick');
     } else {
+      $uploadOutput.removeClass('basic fireBrick');
       $uploadOutput.addClass('disabled');
     }
   });
