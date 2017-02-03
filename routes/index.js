@@ -150,7 +150,7 @@ router.post('/translationSystem/add', function (req, res, next) {
     var lp = req.body.languagePair || nconf.get('OpenNMTBenchmark:default:LP');
     res.render('translationSystem', {
       fieldSet: fieldSet,
-      src: lp.substring(0,2),
+      src: lp.substring(0, 2),
       tgt: lp.substring(2),
       allSrc: utils.uniq(res.locals.languagePairs, 'sourceLanguage'),
       allTgt: utils.uniq(res.locals.languagePairs, 'targetLanguage'),

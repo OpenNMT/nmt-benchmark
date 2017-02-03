@@ -30,8 +30,8 @@ function getUniqueLPs (array) {
     }
   }).map(function (lp) {
     return {
-      sourceLanguage: lp.substring(0,2),
+      sourceLanguage: lp.substring(0, 2),
       targetLanguage: lp.substring(2)
-    }
+    };
   });
 }

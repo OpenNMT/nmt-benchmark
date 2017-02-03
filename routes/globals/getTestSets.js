@@ -18,7 +18,7 @@ router.use('/', function (req, res, next) {
         }
         tsData.forEach(function (ts) {
           ts.nbOutputs = toData.filter(function (to) {
-            return to.fileId == ts._id;
+            return to.fileId === ts._id.toString();
           }).length;
         });
         res.locals.testSets = tsData;

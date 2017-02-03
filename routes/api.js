@@ -62,7 +62,7 @@ router.get('/getDataTable', function (req, res, next) {
           tsData.map(function (ts) {
             // Replace user id by user rich object
             ts.user = uData.filter(function (user) {
-              return user.githubId == ts.user;
+              return user.githubId === ts.user;
             })[0];
           });
           resolve(tsData);
@@ -80,7 +80,7 @@ router.get('/getDataTable', function (req, res, next) {
             // Add scores from output collection
             var scores = scores || {};
             toData.filter(function (to) {
-              return to.systemId == ts._id;
+              return to.systemId === ts._id.toString();
             }).forEach(function (to) {
               scores[to.fileId] = to.scores;
             });
@@ -169,41 +169,45 @@ router.post('/testOutput/upload', function (req, res, next) {
     });
 
     form.parse(req, function (err, fields, files) {
-      for (f in fields) {
-        query[f] = fields[f][0];
+      for (var field in fields) {
+        if (fields.hasOwnProperty(field)) {
+          query[field] = fields[field][0];
+        }
       }
-      for (f in files) {
-        fs.readFile(files[f][0].path, function (err, content) {
-          if (err) {
-            logger.warn('Cannot read file:', err);
-          } else {
-            query.content = content;
-            query.fileName = files[f][0].originalFilename;
-            query.date = new Date();
-            testOutput.saveTestOutputs(query, function (err, data) {
-              if (err) {
-                logger.warn('Unable to save output content to database', err);
-                // Already handled by form.on.error ?
-                // req.flash('warning', 'A database error occured. Unable to save file content.');
-                // res.redirect('/translationSystem/view/' + query.systemId);
-              } else {
-                var outputId = data[0]._id;
-                var fileId = query.fileId;
-                var hypothesis = files[f][0].path;
-                calculateScores(outputId, fileId, hypothesis);
-                req.flash('info', 'Translation output successfully uploaded');
-                logger.info(
-                  'User',
-                  req.user.displayName,
-                  '(' + req.user.id + ')',
-                  'successfully uploaded a translation output to system',
-                  systemId
-                );
-                res.redirect('/translationSystem/view/' + query.systemId);
-              }
-            });
-          }
-        });
+      for (var file in files) {
+        if (files.hasOwnProperty(file)) {
+          fs.readFile(files[file][0].path, function (err, content) {
+            if (err) {
+              logger.warn('Cannot read file:', err);
+            } else {
+              query.content = content;
+              query.fileName = files[file][0].originalFilename;
+              query.date = new Date();
+              testOutput.saveTestOutputs(query, function (err, data) {
+                if (err) {
+                  logger.warn('Unable to save output content to database', err);
+                  // Already handled by form.on.error ?
+                  // req.flash('warning', 'A database error occured. Unable to save file content.');
+                  // res.redirect('/translationSystem/view/' + query.systemId);
+                } else {
+                  var outputId = data[0]._id;
+                  var fileId = query.fileId;
+                  var hypothesis = files[file][0].path;
+                  calculateScores(outputId, fileId, hypothesis);
+                  req.flash('info', 'Translation output successfully uploaded');
+                  logger.info(
+                    'User',
+                    req.user.displayName,
+                    '(' + req.user.id + ')',
+                    'successfully uploaded a translation output to system',
+                    systemId
+                  );
+                  res.redirect('/translationSystem/view/' + query.systemId);
+                }
+              });
+            }
+          });
+        }
       }
     });
   }
@@ -240,7 +244,7 @@ router.get('/download/test/:fileId', function (req, res, next) {
       logger.warn('Unable to download test file', fileId, err);
       res.sendStatus(500);
     } else {
-      logger.info('Downloading test file', fileId)
+      logger.info('Downloading test file', fileId);
       res.setHeader('Content-disposition', 'attachment; filename=' + data.source.fileName);
       res.setHeader('Content-type', 'text/plain');
       res.send(data.source.content);
@@ -250,7 +254,7 @@ router.get('/download/test/:fileId', function (req, res, next) {
 
 router.get('/download/training/:fileId', function (req, res, next) {
   var fileId = req.params.fileId;
-  var fileName = fileId + '.tgz'
+  var fileName = fileId + '.tgz';
   var path2file = 'https://s3.amazonaws.com/opennmt-trainingdata/' + fileName;
   logger.info('Downloading training data', fileId);
   var file = fs.createWriteStream(fileName);
