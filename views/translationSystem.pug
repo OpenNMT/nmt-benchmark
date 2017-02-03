@@ -94,7 +94,7 @@ mixin testSet (ts)
           .selectOutput.ui.icon.input(data-fileId=ts._id)
             input.fileName
             i.folder.open.icon
-          .uploadOutput.ui.icon.basic.fireBrick.disabled.button(data-fileId=ts._id role='button' tabindex='0' aria-label='Upload translation output')
+          .uploadOutput.ui.icon.disabled.button(data-fileId=ts._id role='button' tabindex='0' aria-label='Upload translation output')
             i.upload.icon
             | Upload
           input(type='file' name='file' style='display: none' data-fileId=ts._id)
@@ -201,7 +201,7 @@ block content
           if mode === 'create'
             .last.row
               .fifteen.wide.column
-                #createSystem.ui.fireBrick.disabled.button(role='button' tabindex='0' aria-label='Create translation system')
+                #createSystem.ui.disabled.button(role='button' tabindex='0' aria-label='Create translation system')
                   i.plus.icon
                   span= __('Create')
     if mode === 'view'
