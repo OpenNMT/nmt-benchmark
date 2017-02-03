@@ -1,7 +1,7 @@
 extends layout
 
 mixin url (entry)
-  a(href="") #{entry.endpoint}{apiKey}
+  a(href='') #{entry.endpoint}{apiKey}
 
 mixin example (entry)
   .ui.compact.message.example curl -X #{entry.method} #{server}#{entry.endpoint}{apiKey}#{entry.getParams} #{entry.example}
