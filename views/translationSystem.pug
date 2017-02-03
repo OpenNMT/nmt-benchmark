@@ -63,7 +63,7 @@ mixin textarea (f)
 mixin testSet (ts)
   - var to
   for output in toData
-    if output.fileId == ts._id
+    if output.fileId === ts._id
       - to = output
   .ui.raised.centered.fluid.card(style='width: 450px;')
     .content
@@ -78,7 +78,7 @@ mixin testSet (ts)
           li Origin: #{ts.origin}
           if to
             li File: #{to.fileName}
-              if to && visitor && visitor.id == uData.githubId
+              if to && visitor && visitor.id === uData.githubId
                 i.trash.icon.fireBrick.deleteOutput(data-testOutputId=to._id role='button' tabindex='0' aria-label='Delete translation output')
             li Date: #{to.date.toLocaleDateString()}
             if to.scores
@@ -86,7 +86,7 @@ mixin testSet (ts)
       .getSource.ui.basic.fireBrick.button(data-fileId=ts._id role='button' tabindex='0' aria-label='Download source file')
         i.download.icon
         | Get source
-    if !to && visitor && visitor.id == uData.githubId
+    if !to && visitor && visitor.id === uData.githubId
       .extra.content
         .header(style='margin-bottom: 10px; margin-top: 5px;')
           | Translation
@@ -107,7 +107,7 @@ mixin radio (f)
     - required = 'required'
   .inline.field(class=required)
     label.large= __(f.label)
-    if mode == 'view'
+    if mode === 'view'
       span #{tsData[f.name] ? 'On' : 'Off'}
     else
       .ui.toggle.checkbox
@@ -120,7 +120,7 @@ mixin hidden (f)
     - required = 'required ' + f.className
   .inline.field(style='display: none;' class=required)
     label.large= __(f.label)
-    if mode == 'view'
+    if mode === 'view'
       span #{tsData[f.name]}
     else
       .ui.input
@@ -132,7 +132,7 @@ mixin dropdown (f)
     - required = 'required'
   .inline.field(class=required)
     label.large= __(f.label)
-    if mode == 'view'
+    if mode === 'view'
       span #{tsData[f.name]}
     else
       .ui.selection.dropdown
@@ -141,7 +141,7 @@ mixin dropdown (f)
         i.dropdown.icon
         .menu
           each element, i in f.values
-            if i == 0
+            if i === 0
               .item.active(data-value=element) #{element}
             else
               .item(data-value=element) #{element}
@@ -155,7 +155,7 @@ mixin render (field)
     when 'dropdown'
       +dropdown(field)
     when 'language'
-      if field.name == 'sourceLanguage'
+      if field.name === 'sourceLanguage'
         +language(__(field.label), field.name, 'src')
       else
         +language(__(field.label), field.name, 'tgt')
@@ -183,20 +183,20 @@ block content
           .row
             .column
               for field in fieldSet
-                if field.layer == 1
+                if field.layer === 1
                   +render(field)
             .column
               for field in fieldSet
-                if field.layer == 2
+                if field.layer === 2
                   +render(field)
             .column
               for field in fieldSet
-                if field.layer == 3
+                if field.layer === 3
                   +render(field)
           .row
             .fifteen.wide.column
               for field in fieldSet
-                if field.layer == 0
+                if field.layer === 0
                   +render(field)
           if mode === 'create'
             .last.row
@@ -205,7 +205,7 @@ block content
                   i.plus.icon
                   span= __('Create')
     if mode === 'view'
-      if visitor && visitor.id == uData.githubId
+      if visitor && visitor.id === uData.githubId
         .row
           #deleteSystem.ui.basic.fireBrick.button(role='button' tabindex='0' aria-label='Delete translation system')
             i.trash.icon
