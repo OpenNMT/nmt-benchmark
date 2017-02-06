@@ -63,7 +63,7 @@ mixin textarea (f)
 mixin testSet (ts)
   - var to
   for output in toData
-    if output.fileId === ts._id
+    if output.fileId.toString() === ts._id.toString()
       - to = output
   .ui.raised.centered.fluid.card(style='width: 450px;')
     .content
