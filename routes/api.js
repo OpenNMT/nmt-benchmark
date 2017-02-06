@@ -193,7 +193,11 @@ router.post('/testOutput/upload', function (req, res, next) {
                   var outputId = data[0]._id;
                   var fileId = query.fileId;
                   var hypothesis = files[file][0].path;
-                  calculateScores(outputId, fileId, hypothesis);
+                  calculateScores({
+                    outputId: outputId,
+                    referenceId: fileId,
+                    hypothesis: hypothesis
+                  });
                   req.flash('info', 'Translation output successfully uploaded');
                   logger.info(
                     'User',
