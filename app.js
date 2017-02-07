@@ -18,6 +18,7 @@ const yaml = require('js-yaml');
 const mongoose = require('mongoose');
 const passport = require('passport');
 const flash = require('connect-flash');
+const compression = require('compression');
 const nconf = require('nconf');
 nconf.file({
   file: './config/default.yaml',
@@ -28,6 +29,8 @@ nconf.file({
 });
 
 const app = express();
+
+app.use(compression());
 
 app.set('views', path.resolve(__dirname, 'views'));
 app.set('view engine', 'pug');
