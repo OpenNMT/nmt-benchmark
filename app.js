@@ -91,18 +91,8 @@ app.use(function (req, res, next) {
 });
 app.use(i18n.init);
 
-// Get available test files
-app.use(require('./routes/globals/getTestSets'));
-// Get language pairs
-app.use(require('./routes/globals/getLanguagePairs'));
-// Get default language pair
-app.use(require('./routes/globals/getDefaultLP'));
-// Languages in human-readable format
-app.use(require('./routes/globals/langList'));
-// User, if authenicated
-app.use(require('./routes/globals/getUser'));
-// Current locale
-app.use(require('./routes/globals/getLocale'));
+// Set globals
+app.use(require('./routes/globals'));
 
 // Paths
 app.use('/', require('./routes/index'));
