@@ -21,6 +21,7 @@ const tSystem = require('../lib/translationSystem');
 const testSet = require('../lib/testSet');
 const testOutput = require('../lib/testOutput');
 const User = require('../lib/user.js');
+const checkFormat = require('../lib/utils.js').checkFormat;
 
 /* TODO
 router.post('/translationSystem/update', function (req, res, next) {
@@ -180,33 +181,40 @@ router.post('/testOutput/upload', function (req, res, next) {
             if (err) {
               logger.warn('Cannot read file:', err);
             } else {
-              query.content = content;
-              query.fileName = files[file][0].originalFilename;
-              query.date = new Date();
-              testOutput.saveTestOutputs(query, function (err, data) {
+              checkFormat(query.fileId, content, function (err) {
                 if (err) {
-                  logger.warn('Unable to save output content to database', err);
-                  // Already handled by form.on.error ?
-                  // req.flash('warning', 'A database error occured. Unable to save file content.');
-                  // res.redirect('/translationSystem/view/' + query.systemId);
-                } else {
-                  var outputId = data[0]._id;
-                  var fileId = query.fileId;
-                  var hypothesis = files[file][0].path;
-                  calculateScores({
-                    outputId: outputId,
-                    referenceId: fileId,
-                    hypothesis: hypothesis
-                  });
-                  req.flash('info', 'Translation output successfully uploaded');
-                  logger.info(
-                    'User',
-                    req.user.displayName,
-                    '(' + req.user.id + ')',
-                    'successfully uploaded a translation output to system',
-                    systemId
-                  );
+                  req.flash('warning', err);
                   res.redirect('/translationSystem/view/' + query.systemId);
+                } else {
+                  query.content = content;
+                  query.fileName = files[file][0].originalFilename;
+                  query.date = new Date();
+                  testOutput.saveTestOutputs(query, function (err, data) {
+                    if (err) {
+                      logger.warn('Unable to save output content to database', err);
+                      // Already handled by form.on.error ?
+                      // req.flash('warning', 'A database error occured. Unable to save file content.');
+                      // res.redirect('/translationSystem/view/' + query.systemId);
+                    } else {
+                      var outputId = data[0]._id;
+                      var fileId = query.fileId;
+                      var hypothesis = files[file][0].path;
+                      calculateScores({
+                        outputId: outputId,
+                        referenceId: fileId,
+                        hypothesis: hypothesis
+                      });
+                      req.flash('info', 'Translation output successfully uploaded');
+                      logger.info(
+                        'User',
+                        req.user.displayName,
+                        '(' + req.user.id + ')',
+                        'successfully uploaded a translation output to system',
+                        systemId
+                      );
+                      res.redirect('/translationSystem/view/' + query.systemId);
+                    }
+                  });
                 }
               });
             }
