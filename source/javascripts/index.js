@@ -66,10 +66,18 @@ function getTable (languagePair) {
   .done(function (response) {
     var columns = [
       {data: 'user', sDefaultContent: '', render: function (data, type, full) {
-        return ('<a href="/userSystems/' + data.githubId + '"><img class="ui avatar image" src="' + data.avatarURL + '" />' + data.name + '</a>');
+        if (data) {
+          return ('<a href="/userSystems/' + data.githubId + '"><img class="ui avatar image" src="' + data.avatarURL + '" />' + data.name + '</a>');
+        } else {
+          return '';
+        }
       }},
       {data: 'systemName', className: 'systemName', sDefaultContent: '', render: function (data, type, full) {
-        return ('<a href="/translationSystem/view/' + full._id + '">' + data + '</a>');
+        if (data) {
+          return ('<a href="/translationSystem/view/' + full._id + '">' + data + '</a>');
+        } else {
+          return '';
+        }
       }}
     ];
     $.each(getBest(testSets, languagePair), function (i, ts) {
