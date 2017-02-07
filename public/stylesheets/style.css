@@ -221,6 +221,11 @@ a:hover {
   right: -5px;
 }
 
+#copyApiKey {
+  box-shadow: 0 0 0 1px #276F86 inset !important;
+  color: #276F86 !important;
+}
+
 .first.row {
   margin-top: 25px;
 }

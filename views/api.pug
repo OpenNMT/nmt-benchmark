@@ -20,9 +20,10 @@ block content
   if apiKey
     .ui.compact.info.centered.message.apiKey
       .header
-        i.key.icon
-        | Your current API key
-      p #{apiKey}
+        span= __('Your API key')
+      p#apiKey #{apiKey}
+      #copyApiKey.circular.ui.icon.basic.button(role='button' aria-label='Click to copy')
+        i.copy.icon
   .ui.grid.container
     .first.row
       p NMT-Benchmark provides a simple API that lets you query existent translation systems, download test files, or upload translation output directly to the server.
@@ -62,3 +63,6 @@ block content
         .ui.label 500 - Server error
       .ten.wide.column
         p Internal server error or database error.
+
+block scripts
+  script(src='/javascripts/api.min.js')
