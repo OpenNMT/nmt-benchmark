@@ -8,6 +8,28 @@ body {
 
 /* Header */
 
+@media all and (min-width: 0px) and (max-width: 950px) {
+  #brandName {
+    display: none;
+  }
+}
+
+@media all and (min-width: 0px) and (max-width: 700px) {
+  .userName, .loginPromt {
+    display: none;
+  }
+}
+
+@media all and (min-width: 0px) and (max-width: 600px) {
+  .navbar.fireBrick {
+    font-size: smaller;
+  }
+}
+
+.loginPromt:hover {
+  text-decoration: underline;
+}
+
 #brandName {
   font-size: 24pt;
 }
