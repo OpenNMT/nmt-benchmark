@@ -1,7 +1,7 @@
 if visitor
   #userMenu.ui.dropdown.item
     img.ui.avatar.image(src=visitor._json.avatar_url)
-    span #{visitor.displayName}
+    span.userName #{visitor.displayName}
     i.dropdown.icon
     .menu
       a.item(href='/userSystems/' + visitor.id)
@@ -17,6 +17,6 @@ if visitor
   script.
     $('#userMenu').dropdown();
 else
-  .ui.item
+  a.ui.item(href='/auth/github')
     i.github.icon
-    a(href='/auth/github') Log in
+    span.loginPromt Log in
