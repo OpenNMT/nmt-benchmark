@@ -40,7 +40,7 @@ $(document).ready(function () {
     var params = getDescription();
     var url = params.system_id ? '/translationSystem/update' : '/translationSystem/create';
     $.post(url, params)
-    .success(function (response) {
+    .done(function (response) {
       try {
         response = JSON.parse(response);
       } catch (e) {
@@ -169,7 +169,7 @@ function confirm (config) {
     blurring: true,
     onApprove: function () {
       $.get(config.url)
-      .success(function (response) {
+      .done(function (response) {
         try {
           response = JSON.parse(response);
         } catch (e) {
