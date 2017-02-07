@@ -5,5 +5,5 @@ mixin user (userData, external)
   else
     - url = '/userSystems/' + (userData.githubId || userData.id)
   a(href=url)
-    img.ui.avatar.image(src=userData.avatarURL || userData._json.avatar_url)
+    img.ui.avatar.image(src=userData.avatarURL || userData._json.avatar_url alt=userData.name || userData.displayName)
     | #{userData.name || userData.displayName}
