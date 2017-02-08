@@ -3,6 +3,7 @@ $(document).ready(function () {
   $('.ui.dropdown').dropdown();
 
   // Language pair selection init
+  $('#languagePairs .menu').text(defaultLP);
   $('#languagePairs .menu').html(languagePairs.map(function (lp) {
     var active = '';
     if (lp.sourceLanguage + lp.targetLanguage === getLanguagePair()) {
