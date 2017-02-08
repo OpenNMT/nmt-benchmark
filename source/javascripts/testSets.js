@@ -2,6 +2,23 @@ $(document).ready(function () {
   // Enable dropdowns
   $('.ui.dropdown').dropdown();
 
+  // Initialize dropdown
+  $('#languagePairs .menu').html(
+    '<div class="item" data-value="">Any language pair</div>'
+    .concat(testSets
+      .map(function (ts) {
+        return [
+          '<div class="item" data-value="',
+            ts.source.language + ts.target.language,
+          '">',
+            c2l[ts.source.language], ' - ', c2l[ts.target.language],
+          '</div>'
+        ].join('');
+      })
+      .join('')
+    )
+  );
+
   // DataTable configuration
   var dtConfig = {
     url: '/download/test/',

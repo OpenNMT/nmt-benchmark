@@ -29,15 +29,7 @@ function getTable () {
       return c2l[full.targetLanguage];
     }},
     {data: 'scores', sDefaultContent: '', orderable: false, render: function (data, type, full) {
-      var buf = [];
-      testSets.filter(function (test) {
-        return test.source.language === full.sourceLanguage && test.target.language === full.targetLanguage;
-      }).forEach(function (test) {
-        if (full.scores[test._id]) {
-          buf.push('<div>' + test.source.fileName + ': ' + full.scores[test._id].BLEU + '</div>');
-        }
-      });
-      return buf.join('');
+      // TODO
     }}
   ];
 
