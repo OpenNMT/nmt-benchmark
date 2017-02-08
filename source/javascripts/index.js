@@ -4,22 +4,9 @@ $(document).ready(function () {
 
   // Language pair selection init
   $('#languagePairs .menu').text(defaultLP);
-  $('#languagePairs .menu').html(languagePairs.map(function (lp) {
-    var active = '';
-    if (lp.sourceLanguage + lp.targetLanguage === getLanguagePair()) {
-      active = ' active';
-      $('#languagePairs .text').text(c2l[lp.sourceLanguage] + ' - ' + c2l[lp.targetLanguage]);
-    }
-    return [
-      '<div class="item',
-        active,
-        '" data-value="',
-        lp.sourceLanguage, lp.targetLanguage,
-      '">',
-        c2l[lp.sourceLanguage], ' - ', c2l[lp.targetLanguage],
-      '</div>'
-    ].join('');
-  }).join(''));
+
+  // Get dropdown content
+  getDropdownContent();
 
   // Language pair selection handler
   $('#languagePairs').dropdown({
@@ -102,4 +89,33 @@ function getTable (languagePair) {
 
 function getLanguagePair () {
   return $('#languagePairs').dropdown('get value') || defaultLP;
+}
+
+function getDropdownContent () {
+  $.get('/getLanguagePairs')
+  .done(function (response) {
+    $('#languagePairs .menu').html(response.data
+      .map(function (lp) {
+        var active = '';
+        if (lp.src + lp.tgt === getLanguagePair()) {
+          active = ' active';
+          $('#languagePairs .text').text(c2l[lp.src] + ' - ' + c2l[lp.tgt]);
+        }
+        return [
+          '<div class="item',
+            active,
+            '" data-value="',
+            lp.src, lp.tgt,
+          '">',
+            c2l[lp.src], ' - ', c2l[lp.tgt],
+          '</div>'
+        ].join('');
+      })
+      .join('')
+    );
+  })
+  .fail(function (error) {
+    flash('error', error);
+    console.log(error.statusText, error);
+  });
 }

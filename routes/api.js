@@ -100,6 +100,22 @@ router.get('/getDataTable', function (req, res, next) {
   });
 });
 
+router.get('/getLanguagePairs', function (req, res, next) {
+  testSet.getTestSetHeaders({}, function (err, data) {
+    if (err) {
+      res.json(JSON.stringify({error: err, data: null}));
+    } else {
+      data = data.map(function (ts) {
+        return {
+          src: ts.source.language,
+          tgt: ts.target.language
+        };
+      });
+      res.json({data: data});
+    }
+  });
+});
+
 router.post('/translationSystem/create', function (req, res, next) {
   if (!req.user) {
     logger.warn('Unauthenticated user tried to access ' + req.url);

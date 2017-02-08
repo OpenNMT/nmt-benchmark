@@ -168,12 +168,16 @@ router.post('/translationSystem/add', function (req, res, next) {
 });
 
 router.get('/testSets', function (req, res, next) {
-  res.render('testSets', {
-    messages: {
-      info: req.flash('info')[0],
-      warning: req.flash('warning')[0],
-      error: req.flash('error')[0]
-    }
+  utils.getTestsSets()
+  .then(function (testSets) {
+    res.render('testSets', {
+      testSets: testSets,
+      messages: {
+        info: req.flash('info')[0],
+        warning: req.flash('warning')[0],
+        error: req.flash('error')[0]
+      }
+    });
   });
 });
 
