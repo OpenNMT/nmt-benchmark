@@ -31,7 +31,6 @@ block content
 
 block scripts
   script.
-    var testSets = !{JSON.stringify(testSets).replace(/<\//g, '<\\/')}
     var tsData = !{JSON.stringify(tsData).replace(/<\//g, '<\\/')}
     var c2l = !{JSON.stringify(c2l).replace(/<\//g, '<\\/')}
   script(src='/javascripts/userSystems.min.js')

@@ -23,14 +23,7 @@ router.use('/', function (req, res, next) {
   res.locals.locale = nconf.get('OpenNMTBenchmark:default:locale');
   res.locals.c2l = c2l;
   res.locals.visitor = req.user || '';
-  Promise.all([
-    getLanguagePairs(res),
-    getTestsSets(res)
-  ]).then(function () {
-    next();
-  }).catch(function (error) {
-    logger.error(error);
-  });
+  next();
 });
 
 module.exports = router;
@@ -48,39 +41,6 @@ function getLanguagePairs (res) {
         res.locals.languagePairs = getUniqueLPs(data);
         resolve();
       }
-    });
-  });
-}
-
-/**
- * Retrieve test set list - should be asynchronous
- */
-function getTestsSets (res) {
-  return new Promise(function (resolve, reject) {
-    testSet.getTestSetHeaders({}, function (err, tsData) {
-      if (err) {
-        res.locals.testSets = [];
-        reject('Unable to retrieve test sets: ' + err);
-      } else {
-        resolve(tsData);
-      }
-    });
-  }).then(function (tsData) {
-    return new Promise(function (resolve, reject) {
-      Output.getTestOutputHeaders({}, function (err, toData) {
-        if (err) {
-          res.locals.testSets = tsData;
-          reject('Unable to retrieve output data: ' + err);
-        } else {
-          tsData.forEach(function (ts) {
-            ts.nbOutputs = toData.filter(function (to) {
-              return to.fileId === ts._id.toString();
-            }).length;
-          });
-          res.locals.testSets = tsData;
-          resolve();
-        }
-      });
     });
   });
 }
