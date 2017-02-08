@@ -44,3 +44,40 @@ function filterByLp (list, languagePair) {
   }
   return list;
 }
+
+function setDropdownContent (withAny) {
+  $.get('/getLanguagePairs')
+  .done(function (response) {
+    var prepend = withAny ? '<div class="item active" data-value="">Any language pair</div>' : '';
+    $('#languagePairs .menu').html(
+      prepend.concat(
+        response.data
+        .map(function (lp) {
+          var active = '';
+          if (lp.src + lp.tgt === '') {
+            active = ' active';
+            $('#languagePairs .text').text(c2l[lp.src] + ' - ' + c2l[lp.tgt]);
+          }
+          return [
+            '<div class="item',
+              active,
+              '" data-value="',
+              lp.src, lp.tgt,
+            '">',
+              c2l[lp.src], ' - ', c2l[lp.tgt],
+            '</div>'
+          ].join('');
+        })
+        .join('')
+      )
+    );
+  })
+  .fail(function (error) {
+    flash('error', error);
+    console.log(error.statusText, error);
+  });
+}
+
+function getLanguagePair () {
+  return $('#languagePairs').dropdown('get value') || defaultLP;
+}

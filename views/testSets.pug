@@ -25,7 +25,7 @@ block content
 
 block scripts
   script.
-    var testSets = !{JSON.stringify(testSets).replace(/<\//g, '<\\/')}
+    var defaultLP = "#{defaultLP}"
     var c2l = !{JSON.stringify(c2l).replace(/<\//g, '<\\/')}
   script(src='/javascripts/downloadData.min.js')
   script(src='/javascripts/testSets.min.js')

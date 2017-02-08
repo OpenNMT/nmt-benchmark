@@ -2,22 +2,8 @@ $(document).ready(function () {
   // Enable dropdowns
   $('.ui.dropdown').dropdown();
 
-  // Initialize dropdown
-  $('#languagePairs .menu').html(
-    '<div class="item" data-value="">Any language pair</div>'
-    .concat(testSets
-      .map(function (ts) {
-        return [
-          '<div class="item" data-value="',
-            ts.source.language + ts.target.language,
-          '">',
-            c2l[ts.source.language], ' - ', c2l[ts.target.language],
-          '</div>'
-        ].join('');
-      })
-      .join('')
-    )
-  );
+  // Initialize LP selection dropdown
+  setDropdownContent('prepend list with Any language pair');
 
   // DataTable configuration
   var dtConfig = {
@@ -43,10 +29,24 @@ $(document).ready(function () {
       if (!value) {
         $('#languagePairs').dropdown('restore defaults');
       }
-      getTable(filterByLp(testSets, value), dtConfig);
+      wrapGetTable(value, dtConfig);
     }
   });
 
   // Draw table
-  getTable(filterByLp(testSets, null), dtConfig);
+  wrapGetTable(null, dtConfig);
 });
+
+function wrapGetTable (lp, dtConfig) {
+  var url = '/getTestSets';
+  if (lp) {
+    url += '?src=' + lp.substring(0, 2) + '&tgt=' + lp.substring(2);
+  }
+  $.get(url)
+  .done(function (response) {
+    getTable(response.data, dtConfig);
+  })
+  .fail(function (errro) {
+    flash('error, error');
+  });
+}

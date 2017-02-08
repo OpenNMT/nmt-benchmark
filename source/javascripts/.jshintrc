@@ -24,6 +24,8 @@
     "translationSystem": true,
     "tsData": true,
     "getTable": true,
-    "filterByLp": true
+    "filterByLp": true,
+    "setDropdownContent": true,
+    "getLanguagePair": true
   }
 }

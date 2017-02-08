@@ -1,12 +1,11 @@
 $(document).ready(function () {
   // Enable dropdowns
   $('.ui.dropdown').dropdown();
-
   // Language pair selection init
   $('#languagePairs .menu').text(defaultLP);
 
-  // Get dropdown content
-  getDropdownContent();
+  // Initialize LP selection dropdown
+  setDropdownContent();
 
   // Language pair selection handler
   $('#languagePairs').dropdown({
@@ -80,39 +79,6 @@ function getTable (languagePair) {
         $('.pagination.menu').addClass('floated right');
       }
     });
-  })
-  .fail(function (error) {
-    flash('error', error);
-    console.log(error.statusText, error);
-  });
-}
-
-function getLanguagePair () {
-  return $('#languagePairs').dropdown('get value') || defaultLP;
-}
-
-function getDropdownContent () {
-  $.get('/getLanguagePairs')
-  .done(function (response) {
-    $('#languagePairs .menu').html(response.data
-      .map(function (lp) {
-        var active = '';
-        if (lp.src + lp.tgt === getLanguagePair()) {
-          active = ' active';
-          $('#languagePairs .text').text(c2l[lp.src] + ' - ' + c2l[lp.tgt]);
-        }
-        return [
-          '<div class="item',
-            active,
-            '" data-value="',
-            lp.src, lp.tgt,
-          '">',
-            c2l[lp.src], ' - ', c2l[lp.tgt],
-          '</div>'
-        ].join('');
-      })
-      .join('')
-    );
   })
   .fail(function (error) {
     flash('error', error);
