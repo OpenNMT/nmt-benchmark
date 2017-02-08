@@ -1,4 +1,5 @@
 $(document).ready(function () {
+  $('#copyApiKey').popup();
   $('#copyApiKey').on('click', function () {
     var range;
     if (document.selection) {
