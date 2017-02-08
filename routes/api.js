@@ -22,6 +22,7 @@ const testSet = require('../lib/testSet');
 const testOutput = require('../lib/testOutput');
 const User = require('../lib/user.js');
 const checkFormat = require('../lib/utils.js').checkFormat;
+const uniq = require('../lib/utils.js').getUniqueLPs;
 
 /* TODO
 router.post('/translationSystem/update', function (req, res, next) {
@@ -105,12 +106,25 @@ router.get('/getLanguagePairs', function (req, res, next) {
     if (err) {
       res.json(JSON.stringify({error: err, data: null}));
     } else {
-      data = data.map(function (ts) {
-        return {
-          src: ts.source.language,
-          tgt: ts.target.language
-        };
-      });
+      res.json({data: uniq(data)});
+    }
+  });
+});
+
+router.get('/getTestSets', function (req, res, next) {
+  var src = url.parse(req.url, true).query.src;
+  var tgt = url.parse(req.url, true).query.tgt;
+  var query = {};
+  if (src) {
+    query['source.language'] = src;
+  }
+  if (tgt) {
+    query['target.language'] = tgt;
+  }
+  testSet.getTestSetHeaders(query, function (err, data) {
+    if (err) {
+      res.json(JSON.stringify({error: err, data: null}));
+    } else {
       res.json({data: data});
     }
   });
