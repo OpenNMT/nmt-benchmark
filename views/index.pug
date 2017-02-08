@@ -36,6 +36,13 @@ block content
                 .item(data-value='RIBES') RIBES
     .last.row
       #mainTable
+        table.ui.celled.striped.table
+          thead
+            tr
+              th.user= __('User')
+              th.systemName= __('System name')
+              th.date= __('Added')
+              th.scores= __('Best score')
 
   form#addSystemForm(action='/translationSystem/add' method='POST')
     input(type='hidden' name='languagePair' value='enfr')
