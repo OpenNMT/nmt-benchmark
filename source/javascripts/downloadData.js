@@ -54,7 +54,7 @@ function setDropdownContent (withAny) {
         response.data
         .map(function (lp) {
           var active = '';
-          if (lp.src + lp.tgt === '') {
+          if (!withAny && lp.src + lp.tgt === defaultLP) {
             active = ' active';
             $('#languagePairs .text').text(c2l[lp.src] + ' - ' + c2l[lp.tgt]);
           }
