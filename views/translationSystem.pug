@@ -6,7 +6,10 @@ mixin field (f)
   if mode === 'create' && f.required
     - required = 'required'
   .inline.field(class=required)
-    label.large= __(f.label)
+    if f.description
+      label.large(data-content=f.description data-variant='inverted' data-position='top right')= __(f.label)
+    else
+      label.large= __(f.label)
     if f.type === 'user'
       input(type='hidden' name='user' value=uData.githubId || uData.id)
       +user(uData)
@@ -17,23 +20,26 @@ mixin field (f)
         .ui.input
           input(name=f.name placeholder=f.placeholder)
 
-mixin language (label, name, side)
+mixin language (f, side)
   - var required = ''
   if mode === 'create'
     - required = 'required'
   .inline.field(class=required)
-    label.large #{label}
+    if side
+      label.large(data-content=f.description data-variant='inverted' data-position='top right')= __(f.label)
+    else
+      label.large= __(f.label)
     if mode === 'view'
-      span #{tsData[name]} - #{c2l[tsData[name]]}
+      span #{tsData[f.name]} - #{c2l[tsData[f.name]]}
     else
       .ui.selection.dropdown
         //- mess
         if side === 'src'
           .text #{c2l[src]}
-          input(type='hidden' name=name value=src)
+          input(type='hidden' name=f.name value=src)
         else
           .text #{c2l[tgt]}
-          input(type='hidden' name=name value=tgt)
+          input(type='hidden' name=f.name value=tgt)
         i.dropdown.icon
         .menu
           if side === 'src'
@@ -54,7 +60,10 @@ mixin textarea (f)
   if mode === 'create' && f.required
     - required = 'required'
   .inline.field.special(class=required)
-    label.large= __(f.label)
+    if f.description
+      label.large(data-content=f.description data-variant='inverted' data-position='top right')= __(f.label)
+    else
+      label.large= __(f.label)
     if mode === 'view'
       span #{tsData[f.name]}
     else
@@ -106,7 +115,10 @@ mixin radio (f)
   if mode === 'create' && f.required
     - required = 'required'
   .inline.field(class=required)
-    label.large= __(f.label)
+    if f.description
+      label.large(data-content=f.description data-variant='inverted' data-position='top right')= __(f.label)
+    else
+      label.large= __(f.label)
     if mode === 'view'
       span #{tsData[f.name] ? 'On' : 'Off'}
     else
@@ -119,7 +131,10 @@ mixin hidden (f)
   if mode === 'create' && f.required
     - required = 'required ' + f.className
   .inline.field(style='display: none;' class=required)
-    label.large= __(f.label)
+    if f.description
+      label.large(data-content=f.description data-variant='inverted' data-position='top right')= __(f.label)
+    else
+      label.large= __(f.label)
     if mode === 'view'
       span #{tsData[f.name]}
     else
@@ -131,7 +146,10 @@ mixin dropdown (f)
   if mode === 'create' && f.required
     - required = 'required'
   .inline.field(class=required)
-    label.large= __(f.label)
+    if f.description
+      label.large(data-content=f.description data-variant='inverted' data-position='top right')= __(f.label)
+    else
+      label.large= __(f.label)
     if mode === 'view'
       span #{tsData[f.name]}
     else
@@ -156,9 +174,9 @@ mixin render (field)
       +dropdown(field)
     when 'language'
       if field.name === 'sourceLanguage'
-        +language(__(field.label), field.name, 'src')
+        +language(field, 'src')
       else
-        +language(__(field.label), field.name, 'tgt')
+        +language(field, 'tgt')
     when 'text/hidden'
       +hidden(field)
     when 'radio'
