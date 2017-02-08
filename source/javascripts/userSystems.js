@@ -13,16 +13,22 @@ $(document).ready(function () {
 
 function getTable () {
   var columns = [
-    {data: 'systemName', className: 'systemName', sDefaultContent: '', sWidth: '30', render: function (data, type, full) {
+    {data: 'systemName', className: 'systemName', sDefaultContent: '', render: function (data, type, full) {
       return ('<a href="/translationSystem/view/' + full._id + '">' + data + '</a>');
     }},
-    {data: 'src', sDefaultContent: '', sWidth: '30', render: function (data, type, full) {
+    {data: 'date', sDefaultContent: '', render: function (data, type, full) {
+      if (data) {
+        var d = new Date(data);
+        return d.toLocaleDateString();
+      }
+    }},
+    {data: 'src', sDefaultContent: '', render: function (data, type, full) {
       return c2l[full.sourceLanguage];
     }},
-    {data: 'tgt', sDefaultContent: '', sWidth: '30', render: function (data, type, full) {
+    {data: 'tgt', sDefaultContent: '', render: function (data, type, full) {
       return c2l[full.targetLanguage];
     }},
-    {data: 'scores', sDefaultContent: '', orderable: false, sWidth: '130', render: function (data, type, full) {
+    {data: 'scores', sDefaultContent: '', orderable: false, render: function (data, type, full) {
       var buf = [];
       testSets.filter(function (test) {
         return test.source.language === full.sourceLanguage && test.target.language === full.targetLanguage;
