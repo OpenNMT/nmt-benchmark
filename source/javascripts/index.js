@@ -51,48 +51,32 @@ function getTable (languagePair) {
     targetLanguage: languagePair.substring(2)
   };
 
-  // Drop table - for variable width support (different test files number)
-  var table = [
-    '<table class="ui celled striped table"><thead><tr>',
-    '<th class="user">User</th>',
-    '<th class="systemName">System name</th>'
-  ];
-  getBest(testSets, languagePair).forEach(function (file) {
-    table.push('<th data-id="' + file.source.fileName + '">' + file.source.fileName + '</th>');
-  });
-  table.push('</tr></thead></table>');
-  $('#mainTable').html(table.join(''));
-
   $.get('/getDataTable', lp)
   .done(function (response) {
     var columns = [
       {data: 'user', sDefaultContent: '', render: function (data, type, full) {
         if (data) {
           return ('<a href="/userSystems/' + data.githubId + '"><img class="ui avatar image" src="' + data.avatarURL + '" alt="' + data.name + '"/><span class="userName">' + data.name + '</span></a>');
-        } else {
-          return '';
         }
       }},
       {data: 'systemName', className: 'systemName', sDefaultContent: '', render: function (data, type, full) {
         if (data) {
           return ('<a href="/translationSystem/view/' + full._id + '">' + data + '</a>');
-        } else {
-          return '';
+        }
+      }},
+      {data: 'date', sDefaultContent: '', render: function (data, type, full) {
+        if (data) {
+          var d = new Date(data);
+          return d.toLocaleDateString();
+        }
+      }},
+      {data: 'scores', sDefaultContent: '', render: function (data, type, full) {
+        if (Object.keys(data).length > 0) {
+          return data.BLEU;
+          // TODO
         }
       }}
     ];
-    $.each(getBest(testSets, languagePair), function (i, ts) {
-      if (ts.source.language + ts.target.language === languagePair) {
-        columns.push({
-          data: ts.source.fileName,
-          sDefaultContent: '',
-          searchable: false,
-          render: function (data, type, full) {
-            return full.scores[ts._id] ? full.scores[ts._id].BLEU : '';
-          }
-        });
-      }
-    });
 
     $('#mainTable table').DataTable({
       destroy: true,
@@ -100,9 +84,9 @@ function getTable (languagePair) {
       info: false,
       stateSave: true,
       pagingType: 'full_numbers',
-      dom: 'tp',
+      dom: 'ftp',
       'sAjaxDataProp': '',
-      order: [2, 'desc'],
+      order: [[2, 'desc']],
       data: response.data,
       columns: columns,
       drawCallback: function (settings) {
@@ -118,12 +102,4 @@ function getTable (languagePair) {
 
 function getLanguagePair () {
   return $('#languagePairs').dropdown('get value') || defaultLP;
-}
-
-function getBest (testSets, languagePair) {
-  return testSets.filter(function (file) {
-    return (file.source.language + file.target.language === languagePair);
-  }).sort(function (a, b) {
-    return b.nbOutputs - a.nbOutputs;
-  }).slice(0, 1);
 }
