@@ -2,12 +2,12 @@ var systemDescription = [
   {
     'name': 'systemName',
     'default': '',
-    'placeholder': 'ORG-xxyy-dd/mm/yyyy',
+    'placeholder': 'ORG:xxyy-dd/mm/yyyy',
     'type': 'text',
     'label': 'System name',
     'required': true,
     'layer': 1,
-    'description': 'A comprehensive system name. We recommend to include the language pair and the date in it.'
+    'description': 'A comprehensive system name. We recommend to include the language pair and the date in it. Also, system names should start with a company name followed by a colon'
   },
   {
     'name': 'constraint',

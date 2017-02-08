@@ -4,6 +4,8 @@ $(document).ready(function () {
     setDescription(translationSystem);
   }
 
+  $('label').popup();
+
   // Enable dropdown
   $('.ui.dropdown').dropdown();
   $('.ui.toggle.checkbox').checkbox({
