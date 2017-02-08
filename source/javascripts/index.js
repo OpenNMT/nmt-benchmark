@@ -68,7 +68,7 @@ function getTable (languagePair) {
     var columns = [
       {data: 'user', sDefaultContent: '', render: function (data, type, full) {
         if (data) {
-          return ('<a href="/userSystems/' + data.githubId + '"><img class="ui avatar image" src="' + data.avatarURL + '" />' + data.name + '</a>');
+          return ('<a href="/userSystems/' + data.githubId + '"><img class="ui avatar image" src="' + data.avatarURL + '" alt="' + data.name + '"/><span class="userName">' + data.name + '</span></a>');
         } else {
           return '';
         }

@@ -26,6 +26,7 @@ function getTable (list, config) {
           $(e.target).trigger('click');
         }
       });
+      $('.downloadSrc').popup();
     }
   });
 }

@@ -13,7 +13,7 @@ var api = [
     'params': [],
     'response': 'json',
     'description': 'Upload a new translation system. Expects .json file with the following fields:',
-    'example': '--data \'src=en\''
+    'example': '-F system=@<path to file>'
   },
   {
     'method': 'GET',
