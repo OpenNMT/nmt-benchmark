@@ -4,10 +4,7 @@ mixin url (entry)
   a(href='') #{entry.endpoint}{apiKey}
 
 mixin example (entry)
-  if entry.fieldSet
-    .ui.compact.message.example curl #{entry.example} #{server}#{entry.endpoint}{apiKey}#{entry.getParams}
-  else
-    .ui.compact.message.example curl -X #{entry.method} #{server}#{entry.endpoint}{apiKey}#{entry.getParams} #{entry.example}
+  .ui.compact.message.example curl -X #{entry.method} #{server}#{entry.endpoint}{apiKey}#{entry.getParams} #{entry.example}
 
 mixin params (option)
   unless option.type === 'user'
