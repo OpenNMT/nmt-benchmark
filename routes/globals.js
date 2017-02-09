@@ -30,6 +30,11 @@ module.exports = router;
 
 /**
  * Retrieve language pair list from available test files
+ *
+ * @params response object
+ *
+ * @return Promise
+ *
  */
 function getLanguagePairs (res) {
   return new Promise(function (resolve, reject) {
