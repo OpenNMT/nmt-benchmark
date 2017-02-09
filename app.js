@@ -97,9 +97,9 @@ app.use(i18n.init);
 // Set globals
 app.use(require('./routes/globals'));
 
-// Paths
-app.use('/', require('./routes/index'));
-app.use('/', require('./routes/api'));
+// Routers
+app.use('/', require('./routes/router'));
+app.use('/', require('./routes/async'));
 app.use('/', require('./lib/rest'));
 
 app.use(function (req, res, next) {
