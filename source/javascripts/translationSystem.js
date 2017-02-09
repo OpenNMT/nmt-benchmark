@@ -1,4 +1,5 @@
 $(document).ready(function () {
+  // TODO - delegate events
   if (mode === 'view') {
     $('.ui.form .input').addClass('transparent');
     setDescription(translationSystem);
@@ -90,22 +91,33 @@ $(document).ready(function () {
       confirm(deleteSystem);
     });
   }
-  $('#createSystem, #deleteSystem, .deleteOutput, .getSource, .selectOutput, .uploadOutput').on('keypress', function (e) {
+  $('#createSystem, #deleteSystem').on('keypress', function (e) {
     if (e.which === 13 || e.which === 32) {
       e.preventDefault();
       $(e.target).trigger('click');
     }
   });
 
+  // Confirmation modal
+  $('.cancel.button, .ok.button').on('keypress', function (e) {
+    if (e.which === 13 || e.which === 32) {
+      e.preventDefault();
+      $(e.target).trigger('click');
+    }
+  });
+});
 
-  // Upload output
-  $('.uploadOutput').on('click', function () {
-    console.log('click');
-    $(this).closest('form').submit();
+function setEventListeners () {
+  // Download source
+  $('.getSource').on('click', function () {
+    console.log('get source');
+    var fileId = $(this).attr('data-fileId');
+    var downloadPage = window.open('/download/test/' + fileId);
   });
 
   // Remove output
   $('.deleteOutput').on('click', function () {
+    console.log('delete');
     var deleteOutput = {
       url: '/testOutput/delete/' + $(this).attr('data-testOutputId'),
       done: function () {
@@ -118,20 +130,20 @@ $(document).ready(function () {
     confirm(deleteOutput);
   });
 
-  // Download source
-  $('.getSource').on('click', function () {
-    var fileId = $(this).attr('data-fileId');
-    var downloadPage = window.open('/download/test/' + fileId);
+  // Upload output
+  $('.uploadOutput').on('click', function () {
+    console.log('upload');
+    $(this).closest('form').submit();
   });
 
-  // Confirmation modal
-  $('.cancel.button, .ok.button').on('keypress', function (e) {
+  // Add key event
+  $('.deleteOutput, .getSource, .selectOutput, .uploadOutput').on('keypress', function (e) {
     if (e.which === 13 || e.which === 32) {
       e.preventDefault();
       $(e.target).trigger('click');
     }
   });
-});
+}
 
 function getDescription () {
   var description = {};
@@ -228,7 +240,6 @@ function getTestSets () {
   return new Promise(function (resolve, reject) {
     $.get('/getTestSets?src=' + src + '&tgt=' + tgt)
     .done(function (response) {
-      console.log('ts', response.data);
       resolve(response.data);
     })
     .fail(function (error) {
@@ -241,7 +252,6 @@ function getTranslationOutputs (systemId) {
   return new Promise(function (resolve, reject) {
     $.get('/getTranslationOutputs?systemId=' + systemId)
     .done(function (response) {
-      console.log('to', response.data);
       resolve(response.data);
     })
     .fail(function (error) {
@@ -266,6 +276,7 @@ function showTestSetCards () {
     }).join('');
     $('.last.row .ui.cards').html(html);
     customizeFileOutput();
+    setEventListeners();
   })
   .catch(function (error) {
     console.log(error);
@@ -295,7 +306,7 @@ function testSetTemplate (testSet, testOutput) {
               buf.push('<i class="trash icon fireBrick deleteOutput" data-testOutputId="' + testOutput._id + '" role="button" tabindex="0" aria-label="Delete translation output"></i>');
             }
             buf.push('</li>');
-            buf.push('<li>Date: ' + testOutput.date.toLocaleDateString() + '</li>');
+            buf.push('<li>Date: ' + new Date(testOutput.date).toLocaleDateString() + '</li>');
             if (testOutput.scores) {
               buf.push('<li>Score: ' + testOutput.scores.BLEU + '</li>');
             }
