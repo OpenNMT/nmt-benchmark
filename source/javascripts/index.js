@@ -57,10 +57,13 @@ function getTable (languagePair) {
         }
       }},
       {data: 'scores', sDefaultContent: '', render: function (data, type, full) {
-        if (Object.keys(data).length > 0) {
-          return data.BLEU;
-          // TODO
+        var scores = [];
+        for (var testId in data) {
+          if (data.hasOwnProperty(testId)) {
+            scores.push(data[testId].BLEU);
+          }
         }
+        return Math.max(scores);
       }}
     ];
 
