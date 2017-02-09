@@ -74,7 +74,7 @@ router.get('/getDataTable', function (req, res, next) {
   })
   .then(function getTO (tsData) {
     return new Promise(function (resolve, reject) {
-      testOutput.getTestOutputs(function (err, toData) {
+      testOutput.getTestOutputs({}, {}, function (err, toData) {
         if (err) {
           reject(err);
         } else {
@@ -102,7 +102,14 @@ router.get('/getDataTable', function (req, res, next) {
 });
 
 router.get('/getLanguagePairs', function (req, res, next) {
-  testSet.getTestSetHeaders({}, function (err, data) {
+  var query = {};
+  var projection = {
+    'source.content': 0,
+    'target.content': 0,
+    'comment': 0,
+    'evalTool': 0
+  };
+  testSet.getTestSets(query, projection, function (err, data) {
     if (err) {
       res.json(JSON.stringify({error: err, data: null}));
     } else {
@@ -121,7 +128,13 @@ router.get('/getTestSets', function (req, res, next) {
   if (tgt) {
     query['target.language'] = tgt;
   }
-  testSet.getTestSetHeaders(query, function (err, data) {
+  var projection = {
+    'source.content': 0,
+    'target.content': 0,
+    'comment': 0,
+    'evalTool': 0
+  };
+  testSet.getTestSets(query, projection, function (err, data) {
     if (err) {
       res.json(JSON.stringify({error: err, data: null}));
     } else {
@@ -133,7 +146,8 @@ router.get('/getTestSets', function (req, res, next) {
 router.get('/getTranslationOutputs', function (req, res, next) {
   var systemId = url.parse(req.url, true).query.systemId;
   var query = {systemId: systemId};
-  testOutput.getTestOutputHeaders(query, function (err, data) {
+  var projection = {content: 0};
+  testOutput.getTestOutputs(query, projection, function (err, data) {
     if (err) {
       res.json(JSON.stringify({error: err, data: null}));
     } else {
@@ -252,7 +266,7 @@ router.post('/testOutput/upload', function (req, res, next) {
                         req.user.displayName,
                         '(' + req.user.id + ')',
                         'successfully uploaded a translation output to system',
-                        systemId
+                        query.systemId
                       );
                       res.redirect('/translationSystem/view/' + query.systemId);
                     }
