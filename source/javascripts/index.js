@@ -63,7 +63,7 @@ function getTable (languagePair) {
             scores.push(data[testId].BLEU);
           }
         }
-        return Math.max(scores);
+        return Math.max(scores) || '';
       }}
     ];
 
