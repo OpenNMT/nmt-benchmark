@@ -28,14 +28,14 @@ function getTable () {
     {data: 'tgt', sDefaultContent: '', render: function (data, type, full) {
       return c2l[full.targetLanguage];
     }},
-    {data: 'scores', sDefaultContent: '', orderable: false, render: function (data, type, full) {
+    {data: 'scores', sDefaultContent: '', render: function (data, type, full) {
       var scores = [];
       for (var testId in data) {
         if (data.hasOwnProperty(testId)) {
           scores.push(data[testId].BLEU);
         }
       }
-      return Math.max(scores);
+      return Math.max(scores) || '';
     }}
   ];
 
