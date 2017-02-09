@@ -25,15 +25,11 @@ mixin language (f, side)
   if mode === 'create'
     - required = 'required'
   .inline.field(class=required)
-    if side
-      label.large(data-content=f.description data-variant='inverted' data-position='top right')= __(f.label)
-    else
-      label.large= __(f.label)
+    label.large(data-content=f.description data-variant='inverted' data-position='top right')= __(f.label)
     if mode === 'view'
       span #{tsData[f.name]} - #{c2l[tsData[f.name]]}
     else
       .ui.selection.dropdown
-        //- mess
         if side === 'src'
           .text #{c2l[src]}
           input(type='hidden' name=f.name value=src)
@@ -42,18 +38,6 @@ mixin language (f, side)
           input(type='hidden' name=f.name value=tgt)
         i.dropdown.icon
         .menu
-          if side === 'src'
-            for lang in allSrc
-              if lang === src
-                .item.active(data-value=lang) #{c2l[lang]}
-              else
-                .item(data-value=lang) #{c2l[lang]}
-          else
-            for lang in allTgt
-              if lang === tgt
-                .item.active(data-value=lang) #{c2l[lang]}
-              else
-                .item(data-value=lang) #{c2l[lang]}
 
 mixin textarea (f)
   - var required = ''
@@ -67,48 +51,7 @@ mixin textarea (f)
     if mode === 'view'
       span #{tsData[f.name]}
     else
-      textarea(name=f.name placeholder=f.placeholder value=tsData[f.name]) #{tsData[f.name]}
-
-mixin testSet (ts)
-  - var to
-  for output in toData
-    if output.fileId.toString() === ts._id.toString()
-      - to = output
-  .ui.raised.centered.fluid.card(style='width: 450px;')
-    .content
-      if ts.primary
-        .ui.right.blue.corner.label(style='border-color: #00B7FF !important')
-          i.star.icon
-      .header(style='display: flex; justify-content: space-between; align-items: center')
-        | #{ts.source.fileName}
-      .description
-        ul
-          li Domain: #{ts.domain}
-          li Origin: #{ts.origin}
-          if to
-            li File: #{to.fileName}
-              if to && visitor && visitor.id === uData.githubId
-                i.trash.icon.fireBrick.deleteOutput(data-testOutputId=to._id role='button' tabindex='0' aria-label='Delete translation output')
-            li Date: #{to.date.toLocaleDateString()}
-            if to.scores
-              li Score: #{to.scores.BLEU}
-      .getSource.ui.basic.fireBrick.button(data-fileId=ts._id role='button' tabindex='0' aria-label='Download source file')
-        i.download.icon
-        | Get source
-    if !to && visitor && visitor.id === uData.githubId
-      .extra.content
-        .header(style='margin-bottom: 10px; margin-top: 5px;')
-          | Translation
-        form(action='/testOutput/upload' enctype='multipart/form-data' method='post')
-          .selectOutput.ui.icon.input(data-fileId=ts._id)
-            input.fileName
-            i.folder.open.icon
-          .uploadOutput.ui.icon.disabled.button(data-fileId=ts._id role='button' tabindex='0' aria-label='Upload translation output')
-            i.upload.icon
-            | Upload
-          input(type='file' name='file' style='display: none' data-fileId=ts._id)
-          input(type='hidden' name='fileId' value=ts._id)
-          input(type='hidden' name='systemId' value=systemId)
+      textarea(name=f.name placeholder=f.placeholder)
 
 mixin radio (f)
   - var required = ''
@@ -232,13 +175,17 @@ block content
         h1= __('Test sets')
       .last.row
         .ui.cards
-          for ts in testSets
-            if ts.source.language === tsData.sourceLanguage && ts.target.language === tsData.targetLanguage
-              +testSet(ts)
 
 block scripts
+  if mode === 'view'
+    script.
+      var translationSystem = !{JSON.stringify(tsData).replace(/<\//g, '<\\/')} // view
+      var src = '#{tsData.sourceLanguage}'
+      var tgt = '#{tsData.targetLanguage}'
   script.
-    var translationSystem = !{JSON.stringify(tsData).replace(/<\//g, '<\\/')}
     var mode = '#{mode}'
+    var systemId = '#{systemId}'
+    var c2l = !{JSON.stringify(c2l).replace(/<\//g, '<\\/')}
+    var isAuthor = #{visitor ? visitor.id === uData.githubId : false}
   script(src='/javascripts/translationSystem.min.js')
   // TODO - i18n
