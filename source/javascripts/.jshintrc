@@ -14,7 +14,9 @@
   "undef": true,
   "devel": true,
   "globals": {
+    "Promise": true,
     "languagePairs": true,
+    "isAuthor": true,
     "c2l": true,
     "testSets": true,
     "flash": true,
@@ -26,6 +28,9 @@
     "getTable": true,
     "filterByLp": true,
     "setDropdownContent": true,
-    "getLanguagePair": true
+    "getLanguagePair": true,
+    "systemId": true,
+    "src": true,
+    "tgt": true
   }
 }
