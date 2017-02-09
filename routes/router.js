@@ -87,14 +87,12 @@ router.get('/translationSystem/view/:systemId', function (req, res, next) {
   if (systemId) {
     utils.gatherTS(systemId, function (err, data) {
       if (err) {
-        logger.warn(systemId, ' - Translation system systemId not found');
+        logger.warn(systemId, ' - Translation system not found');
         req.flash('warning', 'Required translation system not found');
         res.redirect('/');
       } else {
         data.mode = 'view';
         data.fieldSet = fieldSet;
-        data.allSrc = utils.uniq(res.locals.languagePairs, 'sourceLanguage');
-        data.allTgt = utils.uniq(res.locals.languagePairs, 'targetLanguage');
         data.messages = {
           info: req.flash('info')[0],
           warning: req.flash('warning')[0],
@@ -104,7 +102,7 @@ router.get('/translationSystem/view/:systemId', function (req, res, next) {
       }
     });
   } else {
-    logger.warn(systemId, ' - Translation system systemId not found');
+    logger.warn(systemId, ' - Translation system not found');
     req.flash('warning', 'Required translation system not found');
     res.redirect('/');
   }
@@ -152,11 +150,7 @@ router.post('/translationSystem/add', function (req, res, next) {
       fieldSet: fieldSet,
       src: lp.substring(0, 2),
       tgt: lp.substring(2),
-      allSrc: utils.uniq(res.locals.languagePairs, 'sourceLanguage'),
-      allTgt: utils.uniq(res.locals.languagePairs, 'targetLanguage'),
       mode: 'create',
-      tsData: {},
-      toData: {},
       uData: req.user || {},
       messages: {
         info: req.flash('info')[0],

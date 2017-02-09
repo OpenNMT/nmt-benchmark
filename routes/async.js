@@ -130,6 +130,18 @@ router.get('/getTestSets', function (req, res, next) {
   });
 });
 
+router.get('/getTranslationOutputs', function (req, res, next) {
+  var systemId = url.parse(req.url, true).query.systemId;
+  var query = {systemId: systemId};
+  testOutput.getTestOutputHeaders(query, function (err, data) {
+    if (err) {
+      res.json(JSON.stringify({error: err, data: null}));
+    } else {
+      res.json({data: data});
+    }
+  });
+});
+
 router.post('/translationSystem/create', function (req, res, next) {
   if (!req.user) {
     logger.warn('Unauthenticated user tried to access ' + req.url);
