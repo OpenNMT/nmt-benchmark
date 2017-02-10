@@ -1,15 +1,14 @@
 extends layout
 include mixin.user.pug
+include mixin.popup.pug
 
 mixin field (f)
   - var required = ''
   if mode === 'create' && f.required
     - required = 'required'
   .inline.field(class=required)
-    if f.description
-      label.large(data-content=f.description data-variant='inverted' data-position='top right')= __(f.label)
-    else
-      label.large= __(f.label)
+    label.large= __(f.label)
+    +popup(f.description)
     if f.type === 'user'
       input(type='hidden' name='user' value=uData.githubId || uData.id)
       +user(uData)
@@ -25,7 +24,8 @@ mixin language (f, side)
   if mode === 'create'
     - required = 'required'
   .inline.field(class=required)
-    label.large(data-content=f.description data-variant='inverted' data-position='top right')= __(f.label)
+    label.large= __(f.label)
+    +popup(f.description)
     if mode === 'view'
       span #{tsData[f.name]} - #{c2l[tsData[f.name]]}
     else
@@ -44,10 +44,8 @@ mixin textarea (f)
   if mode === 'create' && f.required
     - required = 'required'
   .inline.field.special(class=required)
-    if f.description
-      label.large(data-content=f.description data-variant='inverted' data-position='top right')= __(f.label)
-    else
-      label.large= __(f.label)
+    label.large= __(f.label)
+    +popup(f.description)
     if mode === 'view'
       span #{tsData[f.name]}
     else
@@ -58,10 +56,8 @@ mixin radio (f)
   if mode === 'create' && f.required
     - required = 'required'
   .inline.field(class=required)
-    if f.description
-      label.large(data-content=f.description data-variant='inverted' data-position='top right')= __(f.label)
-    else
-      label.large= __(f.label)
+    label.large= __(f.label)
+    +popup(f.description)
     if mode === 'view'
       span #{tsData[f.name] ? 'On' : 'Off'}
     else
@@ -74,10 +70,8 @@ mixin hidden (f)
   if mode === 'create' && f.required
     - required = 'required ' + f.className
   .inline.field(style='display: none;' class=required)
-    if f.description
-      label.large(data-content=f.description data-variant='inverted' data-position='top right')= __(f.label)
-    else
-      label.large= __(f.label)
+    label.large= __(f.label)
+    +popup(f.description)
     if mode === 'view'
       span #{tsData[f.name]}
     else
@@ -89,10 +83,8 @@ mixin dropdown (f)
   if mode === 'create' && f.required
     - required = 'required'
   .inline.field(class=required)
-    if f.description
-      label.large(data-content=f.description data-variant='inverted' data-position='top right')= __(f.label)
-    else
-      label.large= __(f.label)
+    label.large= __(f.label)
+    +popup(f.description)
     if mode === 'view'
       span #{tsData[f.name]}
     else
