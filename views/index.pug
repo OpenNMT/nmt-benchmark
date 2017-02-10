@@ -11,17 +11,25 @@ block content
 
     .row
       .tableConfig.ui.form
-        .inline.field
-          label= __('Search Systems')
-          #languagePairs.ui.selection.dropdown
-            input(type='hidden' name='lp')
-            .text
-            i.dropdown.icon
-            .menu
-          if visitor
-            #addSystemButton.ui.basic.fireBrick.button.indented(role='button' aria-label='Add new translation system' tabindex='0')
-              i.icon.plus
-              span= __('Add new translation system')
+        .fields
+          .eight.wide.field
+            label= __('Language pair')
+            #languagePairs.ui.selection.dropdown
+              input(type='hidden' name='lp')
+              .text
+              i.dropdown.icon
+              .menu
+          .eight.wide.field
+            label= __('Test file')
+            #testFile.ui.selection.dropdown
+              input(type='hidden' name='testSet')
+              .text
+              i.dropdown.icon
+              .menu
+        if visitor
+          #addSystemButton.ui.basic.fireBrick.button.indented(role='button' aria-label='Add new translation system' tabindex='0' style='align-self: center')
+            i.icon.plus
+            span= __('Add new translation system')
 
         //-
           .dropdown
@@ -42,7 +50,7 @@ block content
               th.user= __('User')
               th.systemName= __('System name')
               th.date= __('Added')
-              th.scores= __('Best score')
+              th.scores= __('Score')
 
   form#addSystemForm(action='/translationSystem/add' method='POST')
     input(type='hidden' name='languagePair' value='enfr')
