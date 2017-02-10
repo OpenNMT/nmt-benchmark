@@ -12,7 +12,7 @@ block content
             th.fileName= __('File name')
             th.download
 
-block scripts
+block append scripts
   script.
     var trainingSets = !{JSON.stringify(trainingSets).replace(/<\//g, '<\\/')}
     var c2l = !{JSON.stringify(c2l).replace(/<\//g, '<\\/')}
