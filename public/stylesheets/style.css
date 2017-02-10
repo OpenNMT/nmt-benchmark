@@ -26,6 +26,14 @@ body {
   }
 }
 
+#logo {
+  padding: 0.5em 0.5em;
+}
+
+#logo img {
+  width: inherit;
+}
+
 .loginPromt:hover {
   text-decoration: underline;
 }
