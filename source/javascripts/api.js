@@ -8,6 +8,7 @@ $(document).ready(function () {
       range.select().createTextRange();
       document.execCommand('Copy');
     } else if (window.getSelection) {
+      window.getSelection().removeAllRanges();
       range = document.createRange();
       range.selectNode(document.getElementById('apiKey'));
       window.getSelection().addRange(range);
