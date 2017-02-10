@@ -3,7 +3,7 @@ $(document).ready(function () {
   $('.ui.dropdown').dropdown();
 
   // Initialize LP selection dropdown
-  setDropdownContent('prepend list with Any language pair');
+  setDropdownContent();
 
   // DataTable configuration
   var dtConfig = {
