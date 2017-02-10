@@ -30,6 +30,7 @@
     "filterByLp": true,
     "setDropdownContent": true,
     "getLanguagePair": true,
+    "setTestFileDropdownContent": true,
     "systemId": true,
     "src": true,
     "tgt": true

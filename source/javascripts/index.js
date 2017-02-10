@@ -6,11 +6,20 @@ $(document).ready(function () {
 
   // Initialize LP selection dropdown
   setDropdownContent();
+  setTestFileDropdownContent(getLanguagePair());
 
   // Language pair selection handler
   $('#languagePairs').dropdown({
     onChange: function (value, text) {
       getTable(getLanguagePair());
+    }
+  });
+
+  // Test file selection handler
+  $('#testFile').dropdown({
+    onChange: function (value, text) {
+      console.log(value, text);
+      swapScores(value);
     }
   });
 
@@ -87,4 +96,8 @@ function getTable (languagePair) {
     flash('error', error);
     console.log(error.statusText, error);
   });
+}
+
+function swapScores (fileId) {
+  // TODO
 }
