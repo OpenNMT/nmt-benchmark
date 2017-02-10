@@ -255,20 +255,27 @@ router.post('/testOutput/upload', function (req, res, next) {
                       var outputId = data[0]._id;
                       var fileId = query.fileId;
                       var hypothesis = files[file][0].path;
-                      calculateScores({
+                      var params = {
                         outputId: outputId,
                         referenceId: fileId,
                         hypothesis: hypothesis
+                      };
+                      calculateScores(params, function (err, scores) {
+                        if (err) {
+                          req.flash('error', err);
+                          res.redirect('/translationSystem/view/' + query.systemId);
+                        } else {
+                          req.flash('info', 'Translation output successfully uploaded');
+                          logger.info(
+                            'User',
+                            req.user.displayName,
+                            '(' + req.user.id + ')',
+                            'successfully uploaded a translation output to system',
+                            query.systemId
+                          );
+                          res.redirect('/translationSystem/view/' + query.systemId);
+                        }
                       });
-                      req.flash('info', 'Translation output successfully uploaded');
-                      logger.info(
-                        'User',
-                        req.user.displayName,
-                        '(' + req.user.id + ')',
-                        'successfully uploaded a translation output to system',
-                        query.systemId
-                      );
-                      res.redirect('/translationSystem/view/' + query.systemId);
                     }
                   });
                 }
