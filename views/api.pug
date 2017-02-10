@@ -11,7 +11,7 @@ mixin params (option)
     .ui.two.column.grid
       .four.wide.column
         .ui.label.param(class=option.required ? 'required': '') #{option.name}
-      .twelve.wide.column #{option.description}
+      .twelve.wide.column !{option.description}
         if option.default
           .default= __('Default:')
             span.value &nbsp;"#{option.default}"
@@ -64,5 +64,5 @@ block content
       .ten.wide.column
         p Internal server error or database error.
 
-block scripts
+block append scripts
   script(src='/javascripts/api.min.js')

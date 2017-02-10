@@ -7,7 +7,7 @@ var systemDescription = [
     'label': 'System name',
     'required': true,
     'layer': 1,
-    'description': 'A comprehensive system name. We recommend to include the language pair and the date in it. Also, system names should start with a company name followed by a colon'
+    'description': 'A comprehensive system name. We recommend to include the <i>language pair</i> and the <i>date</i> in it.<br /><strong>Note:</strong> System names should start with a <i>company name</i> followed by a colon!'
   },
   {
     'name': 'constraint',
@@ -17,7 +17,7 @@ var systemDescription = [
     'label': 'Constrainted system',
     'required': false,
     'layer': 1,
-    'description': 'A constrainted system is trained with an internal training set. Either constraint or trainSet fields should be provided.'
+    'description': 'A constrainted system is trained with an internal training set.<br /><strong>Note:</strong> Either constraint or trainSet fields should be provided!'
   },
   {
     'name': 'trainSet',
@@ -66,7 +66,7 @@ var systemDescription = [
     'label': 'Source language',
     'required': true,
     'layer': 1,
-    'description': 'ISO 638-1 language code, e.g. "en" for English.'
+    'description': '<a href="http://www.loc.gov/standards/iso639-2/php/English_list.php">ISO 638-1 language code</a>, e.g. "en" for English.'
   },
   {
     'name': 'targetLanguage',
@@ -76,7 +76,7 @@ var systemDescription = [
     'label': 'Target language',
     'required': true,
     'layer': 1,
-    'description': 'ISO 638-1 language code.'
+    'description': '<a href="http://www.loc.gov/standards/iso639-2/php/English_list.php">ISO 638-1 language code</a>.'
   },
   {
     'name': 'type',
