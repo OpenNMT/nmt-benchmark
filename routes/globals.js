@@ -38,7 +38,7 @@ module.exports = router;
  */
 function getLanguagePairs (res) {
   return new Promise(function (resolve, reject) {
-    testSet.getTestSets(function (err, data) {
+    testSet.getTestSets({}, {}, function (err, data) {
       if (err) {
         res.locals.languagePairs = [];
         reject('Unable to retrieve test sets: ' + err);
