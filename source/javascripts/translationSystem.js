@@ -108,16 +108,15 @@ $(document).ready(function () {
 });
 
 function setEventListeners () {
+  // TODO - delegate
   // Download source
   $('.getSource').on('click', function () {
-    console.log('get source');
     var fileId = $(this).attr('data-fileId');
     var downloadPage = window.open('/download/test/' + fileId);
   });
 
   // Remove output
   $('.deleteOutput').on('click', function () {
-    console.log('delete');
     var deleteOutput = {
       url: '/testOutput/delete/' + $(this).attr('data-testOutputId'),
       done: function () {
@@ -132,7 +131,8 @@ function setEventListeners () {
 
   // Upload output
   $('.uploadOutput').on('click', function () {
-    console.log('upload');
+    $(this).removeClass('icon');
+    $(this).addClass('loading');
     $(this).closest('form').submit();
   });
 
