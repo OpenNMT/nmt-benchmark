@@ -7,9 +7,9 @@ $(document).ready(function () {
   } else {
     // Set language dropdowns content
     wrapSetDropdownContent();
+    $('label').popup();
   }
 
-  $('label').popup();
 
   // Enable dropdown
   $('.ui.dropdown').dropdown();
