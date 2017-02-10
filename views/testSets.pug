@@ -23,7 +23,7 @@ block content
             th.fileName= __('File name')
             th.download
 
-block scripts
+block append scripts
   script.
     var defaultLP = "#{defaultLP}"
     var c2l = !{JSON.stringify(c2l).replace(/<\//g, '<\\/')}

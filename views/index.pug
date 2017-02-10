@@ -50,7 +50,7 @@ block content
   form#viewTranslationSystem(action='/translationSystem/view' method='post')
     input(type='hidden' name='systemId' value='')
 
-block scripts
+block append scripts
   script.
     var c2l = !{JSON.stringify(c2l).replace(/<\//g, '<\\/')}
     var defaultLP = "#{defaultLP}"

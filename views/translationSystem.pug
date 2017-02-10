@@ -176,7 +176,7 @@ block content
       .last.row
         .ui.cards
 
-block scripts
+block append scripts
   if mode === 'view'
     script.
       var translationSystem = !{JSON.stringify(tsData).replace(/<\//g, '<\\/')} // view
