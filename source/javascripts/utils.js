@@ -81,3 +81,33 @@ function setDropdownContent (withAny) {
 function getLanguagePair () {
   return $('#languagePairs').dropdown('get value') || defaultLP;
 }
+
+function setTestFileDropdownContent (lp) {
+  var src = lp.substring(0, 2);
+  var tgt = lp.substring(2);
+  $.get('/getTestSets?src=' + src + '&tgt=' + tgt)
+  .done(function (response) {
+    $('#testFile .menu').html(
+      response.data.map(function (f, i) {
+        var active = '';
+        if (i === 0) {
+          active = ' active';
+          $('#testFile .text').text(f.source.fileName);
+        }
+        return [
+          '<div class="item',
+          active,
+          '" data-value="',
+          f._id,
+          '">',
+          f.source.fileName,
+          '</div>'
+        ].join('');
+      }).join('')
+    );
+  })
+  .fail(function (error) {
+    flash('error', error);
+    console.log(error.statusText, error);
+  });
+}
