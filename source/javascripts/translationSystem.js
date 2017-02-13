@@ -8,7 +8,9 @@ $(document).ready(function () {
   } else {
     // Set language dropdowns content
     wrapSetDropdownContent();
-    $('label').popup();
+    $('label').popup({
+      hoverable: true
+    });
   }
 
   // Click to copy
@@ -28,7 +30,7 @@ $(document).ready(function () {
   });
 
   // Enable/disable submit button
-  $('#translationSystem .field.required').on('input', function (e) {
+  $('#translationSystem .field.required, input[name=trainSet], input[name=constraint]').on('input change', function (e) {
     var filled = $('#translationSystem .field.required').map(function () {
       return !!($(this).find('input').val().trim());
     }).toArray()
@@ -36,9 +38,11 @@ $(document).ready(function () {
       return a && b;
     }, true);
 
+    var either = $('input[name=constraint]').prop('checked') || $('input[name=trainSet]').val().trim();
+
     var prefix = $('input[name=systemName]').val().trim().match(/^[^:]+:[^:]/);
 
-    if (filled && prefix) {
+    if (filled && prefix && either) {
       $('#createSystem').removeClass('disabled');
       $('#createSystem').addClass('basic fireBrick');
     } else {
