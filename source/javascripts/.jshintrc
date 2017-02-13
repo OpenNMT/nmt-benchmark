@@ -16,6 +16,7 @@
   "globals": {
     "Promise": true,
     "messages": true,
+    "click2copy": true,
     "languagePairs": true,
     "isAuthor": true,
     "c2l": true,

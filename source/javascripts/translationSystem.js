@@ -4,12 +4,15 @@ $(document).ready(function () {
     $('.ui.form .input').addClass('transparent');
     setDescription(translationSystem);
     showTestSetCards();
+    $('#systemId').popup();
   } else {
     // Set language dropdowns content
     wrapSetDropdownContent();
     $('label').popup();
   }
 
+  // Click to copy
+  click2copy('systemId');
 
   // Enable dropdown
   $('.ui.dropdown').dropdown();
