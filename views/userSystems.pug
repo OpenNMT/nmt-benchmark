@@ -4,9 +4,9 @@ include mixin.user.pug
 block content
   .information
     if visitor && visitor.id === uData.githubId
-      h1 These are your systems
+      h1= __('These are your systems')
     else
-      h1 These are systems provided by
+      h1= __('Systems provided by')
         +user(uData, 'external')
 
     if visitor && visitor.id === uData.githubId
