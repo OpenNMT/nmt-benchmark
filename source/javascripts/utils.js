@@ -112,3 +112,22 @@ function setTestFileDropdownContent (lp) {
     console.log(error.statusText, error);
   });
 }
+
+function click2copy (trigger, id) {
+  id = id || trigger;
+  $('#' + trigger).on('click', function () {
+    var range;
+    if (document.selection) {
+      range = document.body.createTextRange();
+      range.moveToElementText(document.getElementById(id));
+      range.select().createTextRange();
+      document.execCommand('Copy');
+    } else if (window.getSelection) {
+      window.getSelection().removeAllRanges();
+      range = document.createRange();
+      range.selectNode(document.getElementById(id));
+      window.getSelection().addRange(range);
+      document.execCommand('Copy');
+    }
+  });
+}
