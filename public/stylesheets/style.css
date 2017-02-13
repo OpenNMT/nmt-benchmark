@@ -145,6 +145,10 @@ th:not(.nb) {
 
 /* Form */
 
+.dropdown .text {
+  white-space: nowrap;
+}
+
 .special.field {
   display: flex;
   align-items: center;

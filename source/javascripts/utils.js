@@ -93,6 +93,7 @@ function setTestFileDropdownContent (lp) {
         if (i === 0) {
           active = ' active';
           $('#testFile .text').text(f.source.fileName);
+          $('#testFile input[name="testSet"]').val(f._id);
         }
         return [
           '<div class="item',

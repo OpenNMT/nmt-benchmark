@@ -18,7 +18,6 @@ $(document).ready(function () {
   // Test file selection handler
   $('#testFile').dropdown({
     onChange: function (value, text) {
-      console.log(value, text);
       swapScores(value);
     }
   });
@@ -65,14 +64,14 @@ function getTable (languagePair) {
           return d.toLocaleDateString();
         }
       }},
-      {data: 'scores', sDefaultContent: '', render: function (data, type, full) {
+      {data: 'scores', className: 'scores', sDefaultContent: '', render: function (data, type, full) {
         var scores = [];
         for (var testId in data) {
           if (data.hasOwnProperty(testId)) {
-            scores.push(data[testId].BLEU);
+            scores.push('<div class="testFile id_' + testId + '">' + data[testId].BLEU + '</div>');
           }
         }
-        return Math.max(scores) || '';
+        return scores.join('');
       }}
     ];
 
@@ -98,6 +97,49 @@ function getTable (languagePair) {
   });
 }
 
+
 function swapScores (fileId) {
-  // TODO
+  var trans = {
+    animation: {
+      show: 'fade left',
+      hide: 'fade right'
+    },
+    duration: {
+      show: 750,
+      hide: 250
+    }
+  };
+  var testId = getTestFileId();
+  var $visibleScores = $('.scores .testFile:visible');
+  var hidden = 0;
+
+  if ($visibleScores.length) {
+    // Hide all shown scores
+    $.each($visibleScores, function () {
+      $(this).transition({
+        duration: trans.duration.hide,
+        animation: trans.animation.hide,
+        onComplete: function () {
+          hidden++;
+          if (hidden === $visibleScores.length) {
+            showScores(testId);
+          }
+        }
+      });
+    });
+  } else {
+    showScores(testId);
+  }
+  function showScores (testId) {
+    var $container = $('.scores .id_' + testId);
+    $container.transition({
+      duration: trans.duration.show,
+      animation: trans.animation.show
+    });
+  }
+}
+
+
+function getTestFileId () {
+  return $('input[name="testSet"]').val() || '';
 }
