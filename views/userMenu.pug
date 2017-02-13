@@ -7,14 +7,10 @@ if visitor
       a.item(href='/userSystems/' + visitor.id)
         i.file.text.fireBrick.icon
         span= __('My Systems')
-      //-
-        a.item(href='/bugReport')
-          i.bug.icon
-          span= __('Report a bug')
       a.item(href='/logout')
         i.sign.out.fireBrick.icon
         span= __('Log out')
 else
   a.ui.item(href='/auth/github')
     i.github.icon
-    span.loginPromt Log in
+    span.loginPromt= __('Log in')

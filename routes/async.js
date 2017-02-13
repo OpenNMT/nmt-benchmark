@@ -27,7 +27,7 @@ const uniq = require('../lib/utils.js').getUniqueLPs;
 /* TODO
 router.post('/translationSystem/update', function (req, res, next) {
   if (!req.user) {
-    res.json({error: 'Log in to edit translation systems', data: null});
+    res.json({error: res.__('Log in to edit translation systems'), data: null});
   } else {
     tSystem.getTranslationSystem({_id: req.body.system_id}, function (err, data) {
       if (err) {
@@ -159,7 +159,7 @@ router.get('/getTranslationOutputs', function (req, res, next) {
 router.post('/translationSystem/create', function (req, res, next) {
   if (!req.user) {
     logger.warn('Unauthenticated user tried to access ' + req.url);
-    res.json({error: '<a href="/auth/github">Log in</a> to submit translation systems', data: null});
+    res.json({error: res.__('<a href="/auth/github">Log in</a> to submit translation systems'), data: null});
   } else {
     tSystem.createTranslationSystem(req.body, function (err, data) {
       if (err) {
@@ -183,7 +183,7 @@ router.post('/translationSystem/create', function (req, res, next) {
 router.get('/translationSystem/delete/:systemId', function (req, res, next) {
   if (!req.user) {
     logger.warn('Unauthenticated user tried to access ' + req.url);
-    res.json({error: '<a href="/auth/github">Log in</a> to delete your translation systems', data: null});
+    res.json({error: res.__('<a href="/auth/github">Log in</a> to delete your translation systems'), data: null});
   } else {
     var systemId = req.params.systemId;
     tSystem.deleteTranslationSystem(systemId, function (err) {
@@ -202,7 +202,7 @@ router.get('/translationSystem/delete/:systemId', function (req, res, next) {
             'deleted his translation system',
             systemId
           );
-          req.flash('info', 'Translation system successfully deleted');
+          req.flash('info', res.__('Translation system successfully deleted'));
           res.json({error: err});
         });
       }
@@ -213,7 +213,7 @@ router.get('/translationSystem/delete/:systemId', function (req, res, next) {
 router.post('/testOutput/upload', function (req, res, next) {
   if (!req.user) {
     logger.warn('Unauthenticated user tried to access ' + req.url);
-    res.json({error: '<a href="/auth/github">Log in</a> to upload test outputs', data: null});
+    res.json({error: res.__('<a href="/auth/github">Log in</a> to upload test outputs'), data: null});
   } else {
     var form = new multiparty.Form();
     var systemId = url.parse(req.url, true).query.systemId;
@@ -221,7 +221,7 @@ router.post('/testOutput/upload', function (req, res, next) {
 
     form.on('error', function (err) {
       logger.warn('Error parsing test output form: ' + err.stack);
-      req.flash('warn', 'Server was unable to parse submitted data');
+      req.flash('warn', res.__('Server was unable to parse submitted data'));
       res.redirect('/translationSystem/view/' + systemId);
     });
 
@@ -249,7 +249,7 @@ router.post('/testOutput/upload', function (req, res, next) {
                     if (err) {
                       logger.warn('Unable to save output content to database', err);
                       // Already handled by form.on.error ?
-                      // req.flash('warning', 'A database error occured. Unable to save file content.');
+                      // req.flash('warning', res.__('A database error occured. Unable to save file content.'));
                       // res.redirect('/translationSystem/view/' + query.systemId);
                     } else {
                       var outputId = data[0]._id;
@@ -265,7 +265,7 @@ router.post('/testOutput/upload', function (req, res, next) {
                           req.flash('error', err);
                           res.redirect('/translationSystem/view/' + query.systemId);
                         } else {
-                          req.flash('info', 'Translation output successfully uploaded');
+                          req.flash('info', res.__('Translation output successfully uploaded'));
                           logger.info(
                             'User',
                             req.user.displayName,
@@ -291,14 +291,14 @@ router.post('/testOutput/upload', function (req, res, next) {
 router.get('/testOutput/delete/:testOutputId', function (req, res, next) {
   if (!req.user) {
     logger.warn('Unauthenticated user tried to access ' + req.url);
-    res.json({error: '<a href="/auth/github">Log in</a> to remove test outputs', data: null});
+    res.json({error: res.__('<a href="/auth/github">Log in</a> to remove test outputs'), data: null});
   } else {
     var toId = req.params.testOutputId;
     testOutput.deleteTestOutput({_id: toId}, function (err) {
       if (err) {
         logger.warn('Unable to delete translation output', err);
       } else {
-        req.flash('info', 'Translation output successfully removed');
+        req.flash('info', res.__('Translation output successfully removed'));
         logger.info(
           'User',
           req.user.displayName,
@@ -324,17 +324,6 @@ router.get('/download/test/:fileId', function (req, res, next) {
       res.setHeader('Content-type', 'text/plain');
       res.send(data.source.content);
     }
-  });
-});
-
-router.get('/download/training/:fileId', function (req, res, next) {
-  var fileId = req.params.fileId;
-  var fileName = fileId + '.tgz';
-  var path2file = 'https://s3.amazonaws.com/opennmt-trainingdata/' + fileName;
-  logger.info('Downloading training data', fileId);
-  var file = fs.createWriteStream(fileName);
-  http.get(path2file, function () {
-    res.pipe(file);
   });
 });
 

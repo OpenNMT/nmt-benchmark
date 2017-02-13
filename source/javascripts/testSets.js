@@ -18,7 +18,7 @@ $(document).ready(function () {
       {data: 'origin'},
       {data: 'source.fileName'},
       {data: 'download', sortable: false, sDefaultContent: '', render: function (data, type, full) {
-        return '<div class="downloadSrc circular ui basic icon fireBrick button" data-fileId="' + full._id + '" role="button" aria-label="download" tabindex="1" data-tooltip="Download" data-inverted="" data-variation="mini" data-position="right center"><i class="download icon"></i></div>';
+        return '<div class="downloadSrc circular ui basic icon fireBrick button" data-fileId="' + full._id + '" role="button" aria-label="download" tabindex="1" data-tooltip="Download" data-variation="mini" data-position="right center"><i class="download icon"></i></div>';
       }}
     ]
   };

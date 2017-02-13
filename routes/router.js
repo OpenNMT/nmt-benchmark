@@ -88,7 +88,7 @@ router.get('/translationSystem/view/:systemId', function (req, res, next) {
     utils.gatherTS(systemId, function (err, data) {
       if (err) {
         logger.warn(systemId, ' - Translation system not found');
-        req.flash('warning', 'Required translation system not found');
+        req.flash('warning', res.__('Required translation system not found'));
         res.redirect('/');
       } else {
         data.mode = 'view';
@@ -103,7 +103,7 @@ router.get('/translationSystem/view/:systemId', function (req, res, next) {
     });
   } else {
     logger.warn(systemId, ' - Translation system not found');
-    req.flash('warning', 'Required translation system not found');
+    req.flash('warning', res.__('Required translation system not found'));
     res.redirect('/');
   }
 });
@@ -112,7 +112,7 @@ router.get('/translationSystem/view/:systemId', function (req, res, next) {
 router.get('/translationSystem/edit/:systemId', function (req, res, next) {
   if (!req.user) {
     logger.warn('Unauthenticated user tried to access ' + req.url);
-    req.flash('warning', 'You cannot edit translation systems submitted by other users');
+    req.flash('warning', res.__('You cannot edit translation systems submitted by other users'));
     res.redirect('/');
   } else {
     var systemId = req.params.systemId;
@@ -120,7 +120,7 @@ router.get('/translationSystem/edit/:systemId', function (req, res, next) {
       utils.gatherTS(systemId, function (err, data) {
         if (err) {
           logger.warn(systemId, ' - Translation system not found');
-          req.flash('warning', 'Translation system ' + systemId + ' not found.');
+          req.flash('warning', res.__('Translation system ' + systemId + ' not found.'));
           res.redirect('/');
         } else {
           data.mode = 'edit';
@@ -132,7 +132,7 @@ router.get('/translationSystem/edit/:systemId', function (req, res, next) {
       });
     } else {
       logger.warn(systemId, ' - Translation system not found');
-      req.flash('warning', 'Translation system not found.');
+      req.flash('warning', res.__('Translation system not found.'));
       res.redirect('/');
     }
   }
@@ -142,7 +142,7 @@ router.get('/translationSystem/edit/:systemId', function (req, res, next) {
 router.post('/translationSystem/add', function (req, res, next) {
   if (!req.user) {
     logger.warn('Unauthenticated user tried to access ' + req.url);
-    req.flash('warning', '<a href="/auth/github">Log in</a> to submit translation systems');
+    req.flash('warning', res.__('<a href="/auth/github">Log in</a> to submit translation systems'));
     res.redirect('/');
   } else {
     var lp = req.body.languagePair || nconf.get('OpenNMTBenchmark:default:LP');
@@ -190,7 +190,7 @@ router.get('/userSystems/:userId', function (req, res, next) {
   utils.gatherUS(userId, function (err, data) {
     if (err) {
       logger.warning('Unable to gather user system data');
-      req.flash('warning', 'Unable to gather user system data');
+      req.flash('warning', res.__('Unable to gather user system data'));
       res.redirect('/');
     } else {
       data.messages = {
