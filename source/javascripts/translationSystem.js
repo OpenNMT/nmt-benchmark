@@ -20,7 +20,7 @@ $(document).ready(function () {
   $('.ui.dropdown').dropdown();
   $('.ui.toggle.checkbox').checkbox({
     onChange: function () {
-      var state = $(this).prop('checked') ? 'On' : 'Off'; // i18n
+      var state = $(this).prop('checked') ? 'Yes' : 'No'; // i18n
       $(this).next('label').text(state);
       $('.trainSet').transition({
         animation: 'slide down',
@@ -293,7 +293,7 @@ function showTestSetCards () {
 
 function testSetTemplate (testSet, testOutput) {
   var buf = [];
-  buf.push('<div class="ui raised centered fluid card" style="width: 450px;">');
+  buf.push('<div class="ui raised fluid card" style="width: 450px;">');
     buf.push('<div class="content">');
 
       // File name
