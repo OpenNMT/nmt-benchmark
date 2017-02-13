@@ -145,6 +145,15 @@ th:not(.nb) {
 
 /* Form */
 
+#systemId {
+  font-size: smaller;
+  color: Silver;
+  font-style: italic;
+  display: inline-block;
+  margin-left: 1em;
+  cursor: pointer;
+}
+
 .dropdown .text {
   white-space: nowrap;
 }
