@@ -59,11 +59,11 @@ mixin radio (f)
     label.large= __(f.label)
     +popup(f.description)
     if mode === 'view'
-      span #{tsData[f.name] ? 'On' : 'Off'}
+      span #{tsData[f.name] ? __('Yes') : __('No')}
     else
       .ui.toggle.checkbox
         input.hidden(type='checkbox' name=f.name checked='checked')
-        label On
+        label= __('Yes')
 
 mixin hidden (f)
   - var required = f.className
@@ -172,7 +172,7 @@ block content
 block append scripts
   if mode === 'view'
     script.
-      var translationSystem = !{JSON.stringify(tsData).replace(/<\//g, '<\\/')} // view
+      var translationSystem = !{JSON.stringify(tsData).replace(/<\//g, '<\\/')}
       var src = '#{tsData.sourceLanguage}'
       var tgt = '#{tsData.targetLanguage}'
   script.
@@ -182,4 +182,4 @@ block append scripts
     var isAuthor = #{visitor ? visitor.id === uData.githubId : false}
   script(src='/javascripts/utils.min.js')
   script(src='/javascripts/translationSystem.min.js')
-  // TODO - i18n
+  //- TODO - i18n
