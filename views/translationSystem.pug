@@ -130,6 +130,7 @@ block content
           span= __('Add translation system')
         if mode === 'view'
           span= __('System description')
+          #systemId(data-content='Click to copy' data-position='right center') #{systemId}
     .row
       #translationSystem.ui.small.form
         .ui.three.column.stackable.grid
@@ -179,5 +180,6 @@ block append scripts
     var systemId = '#{systemId}'
     var c2l = !{JSON.stringify(c2l).replace(/<\//g, '<\\/')}
     var isAuthor = #{visitor ? visitor.id === uData.githubId : false}
+  script(src='/javascripts/utils.min.js')
   script(src='/javascripts/translationSystem.min.js')
   // TODO - i18n
