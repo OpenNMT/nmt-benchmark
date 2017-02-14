@@ -123,10 +123,10 @@ router.get('/getTestSets', function (req, res, next) {
   var tgt = url.parse(req.url, true).query.tgt;
   var query = {};
   if (src) {
-    query['source.language'] = src;
+    query['source.language'] = {'$in': src.split(',')};
   }
   if (tgt) {
-    query['target.language'] = tgt;
+    query['target.language'] = {'$in': tgt.split(',')};
   }
   var projection = {
     'source.content': 0,
