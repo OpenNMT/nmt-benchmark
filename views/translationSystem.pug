@@ -27,17 +27,9 @@ mixin language (f, side)
     label.large= __(f.label)
     +popup(f.description)
     if mode === 'view'
-      span #{tsData[f.name]} - #{c2l[tsData[f.name]]}
+      span #{tsData[f.name].map(function (l) { return c2l[l]; }).join(', ')}
     else
-      .ui.selection.dropdown
-        if side === 'src'
-          .text #{c2l[src]}
-          input(type='hidden' name=f.name value=src)
-        else
-          .text #{c2l[tgt]}
-          input(type='hidden' name=f.name value=tgt)
-        i.dropdown.icon
-        .menu
+      select.ui.selection.dropdown(multiple='true' name=f.name)
 
 mixin textarea (f)
   - var required = ''
