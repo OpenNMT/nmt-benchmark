@@ -12,14 +12,14 @@ block content
     .row
       .tableConfig.ui.form
         .fields
-          .eight.wide.field
+          .field
             label= __('Language pair')
             #languagePairs.ui.selection.dropdown
               input(type='hidden' name='lp')
               .text
               i.dropdown.icon
               .menu
-          .eight.wide.field
+          .field
             label= __('Test file')
             #testFile.ui.selection.dropdown
               input(type='hidden' name='testSet')
@@ -27,7 +27,7 @@ block content
               i.dropdown.icon
               .menu
         if visitor
-          #addSystemButton.ui.basic.fireBrick.button.indented(role='button' aria-label='Add new translation system' tabindex='0' style='align-self: center')
+          #addSystemButton.ui.basic.fireBrick.button.indented(role='button' aria-label='Add new translation system' tabindex='0')
             i.icon.plus
             span= __('Add new translation system')
 
