@@ -224,9 +224,17 @@ function wrapSetDropdownContent () { // TODO - active item
 function setDropdownContent (config) {
   $.get('/getLanguagePairs')
   .done(function (response) {
+    var tmp = {};
     var html = response.data.map(function (lp) {
+      return lp[config.column];
+    }).filter(function (lang) {
+      if (!tmp.hasOwnProperty(lang)) {
+        tmp[lang] = 1;
+        return true;
+      }
+    }).map(function (lang) {
       var buf = [];
-      buf.push('<option value="' + lp[config.column] + '">' + c2l[lp[config.column]] + '</option>');
+      buf.push('<option value="' + lang + '">' + c2l[lang] + '</option>');
       return buf.join('');
     });
     config.$target.html(html);

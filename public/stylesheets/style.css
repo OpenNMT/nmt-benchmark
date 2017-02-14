@@ -145,6 +145,10 @@ th:not(.nb) {
 
 /* Form */
 
+#addSystemButton {
+  align-self: center;
+}
+
 #systemId {
   font-size: smaller;
   color: Silver;
