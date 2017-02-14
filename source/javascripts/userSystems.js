@@ -23,10 +23,14 @@ function getTable () {
       }
     }},
     {data: 'src', sDefaultContent: '', render: function (data, type, full) {
-      return c2l[full.sourceLanguage];
+      return full.sourceLanguage.map(function (l) {
+        return c2l[l];
+      }).join(', ');
     }},
     {data: 'tgt', sDefaultContent: '', render: function (data, type, full) {
-      return c2l[full.targetLanguage];
+      return full.targetLanguage.map(function (l) {
+        return c2l[l];
+      }).join(', ');
     }},
     {data: 'scores', sDefaultContent: '', render: function (data, type, full) {
       var scores = [];

@@ -2,7 +2,6 @@ $(document).ready(function () {
   // TODO - delegate events
   if (mode === 'view') {
     $('.ui.form .input').addClass('transparent');
-    setDescription(translationSystem);
     showTestSetCards();
     $('#systemId').popup();
   } else {
@@ -31,8 +30,12 @@ $(document).ready(function () {
 
   // Enable/disable submit button
   $('#translationSystem .field.required, input[name=trainSet], input[name=constraint]').on('input change', function (e) {
-    var filled = $('#translationSystem .field.required').map(function () {
-      return !!($(this).find('input').val().trim());
+    var filled = $('#translationSystem .field.required').map(function (i, el) {
+      if ($(el).find('input').attr('name')) {
+        return !!$(this).find('input').val().trim();
+      } else {
+        return !!$(this).find('select').val().length;
+      }
     }).toArray()
     .reduce(function (a, b) {
       return a && b;
@@ -154,19 +157,10 @@ function setEventListeners () {
 
 function getDescription () {
   var description = {};
-  $('.ui.form input, .ui.form textarea').each(function (i, input) {
+  $('.ui.form input, .ui.form textarea, .ui.form select').each(function (i, input) {
     description[$(input).attr('name')] = $(input).val();
   });
   return description;
-}
-
-function setDescription (description) {
-  $('.ui.form input, .ui.form textarea').each(function (i, input) {
-    var field = $(input).attr('name');
-    $(input).val(description[field] || '');
-    $(input).attr('placeholder', '');
-    $(input).attr('disabled', true);
-  });
 }
 
 function confirm (config) {
@@ -218,11 +212,11 @@ function confirm (config) {
 
 function wrapSetDropdownContent () { // TODO - active item
   setDropdownContent({
-    target: $('input[name=sourceLanguage]').closest('.dropdown').find('.menu'),
+    $target: $('select[name=sourceLanguage]'),
     column: 'src'
   });
   setDropdownContent({
-    target: $('input[name=targetLanguage]').closest('.dropdown').find('.menu'),
+    $target: $('select[name=targetLanguage]'),
     column: 'tgt'
   });
 }
@@ -232,10 +226,10 @@ function setDropdownContent (config) {
   .done(function (response) {
     var html = response.data.map(function (lp) {
       var buf = [];
-      buf.push('<div class="item active">' + c2l[lp[config.column]] + '</div>');
+      buf.push('<option value="' + lp[config.column] + '">' + c2l[lp[config.column]] + '</option>');
       return buf.join('');
     });
-    config.target.html(html);
+    config.$target.html(html);
   })
   .fail(function (error) {
     flash('error', error);
