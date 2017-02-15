@@ -34,7 +34,7 @@ $(document).ready(function () {
   });
 
   // Draw table
-  wrapGetTable(null, dtConfig);
+  wrapGetTable(defaultLP, dtConfig);
 });
 
 function wrapGetTable (lp, dtConfig) {
