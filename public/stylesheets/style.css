@@ -171,6 +171,11 @@ th:not(.nb) {
   flex-grow: 2;
 }
 
+label.tooltip {
+  text-decoration: underline;
+  cursor: help;
+}
+
 label.large {
   min-width: 140px;
   width: 140px;
