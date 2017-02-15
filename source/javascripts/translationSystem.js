@@ -232,6 +232,8 @@ function setDropdownContent (config) {
         tmp[lang] = 1;
         return true;
       }
+    }).sort(function (a, b) {
+      return c2l[a] < c2l[b] ? -1 : 1;
     }).map(function (lang) {
       var buf = [];
       buf.push('<option value="' + lang + '">' + c2l[lang] + '</option>');

@@ -122,7 +122,8 @@ block content
           span= __('Add translation system')
         if mode === 'view'
           span= __('System description')
-          #systemId(data-content='Click to copy' data-position='right center') #{systemId}
+          if visitor && visitor.id === uData.githubId
+            #systemId(data-content='Click to copy' data-position='right center') #{systemId}
     .row
       #translationSystem.ui.small.form
         .ui.three.column.stackable.grid
