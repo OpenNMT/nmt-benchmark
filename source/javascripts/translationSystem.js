@@ -158,7 +158,11 @@ function setEventListeners () {
 function getDescription () {
   var description = {};
   $('.ui.form input, .ui.form textarea, .ui.form select').each(function (i, input) {
-    description[$(input).attr('name')] = $(input).val();
+    if ($(input).attr('name') === 'constraint') {
+      description[$(input).attr('name')] = $(input).is(':checked');
+    } else {
+      description[$(input).attr('name')] = $(input).val();
+    }
   });
   return description;
 }

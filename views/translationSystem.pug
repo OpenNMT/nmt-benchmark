@@ -6,8 +6,11 @@ mixin field (f)
   - var required = ''
   if mode === 'create' && f.required
     - required = 'required'
+  - var tooltip = ''
+  if f.description
+    - tooltip = 'tooltip'
   .inline.field(class=required)
-    label.large= __(f.label)
+    label.large(class=tooltip)= __(f.label)
     +popup(f.description)
     if f.type === 'user'
       input(type='hidden' name='user' value=uData.githubId || uData.id)
@@ -23,8 +26,11 @@ mixin language (f, side)
   - var required = ''
   if mode === 'create'
     - required = 'required'
+  - var tooltip = ''
+  if f.description
+    - tooltip = 'tooltip'
   .inline.field(class=required)
-    label.large= __(f.label)
+    label.large(class=tooltip)= __(f.label)
     +popup(f.description)
     if mode === 'view'
       span #{tsData[f.name].map(function (l) { return c2l[l]; }).join(', ')}
@@ -35,8 +41,11 @@ mixin textarea (f)
   - var required = ''
   if mode === 'create' && f.required
     - required = 'required'
+  - var tooltip = ''
+  if f.description
+    - tooltip = 'tooltip'
   .inline.field.special(class=required)
-    label.large= __(f.label)
+    label.large(class=tooltip)= __(f.label)
     +popup(f.description)
     if mode === 'view'
       span #{tsData[f.name]}
@@ -47,8 +56,11 @@ mixin radio (f)
   - var required = ''
   if mode === 'create' && f.required
     - required = 'required'
+  - var tooltip = ''
+  if f.description
+    - tooltip = 'tooltip'
   .inline.field(class=required)
-    label.large= __(f.label)
+    label.large(class=tooltip)= __(f.label)
     +popup(f.description)
     if mode === 'view'
       span #{tsData[f.name] ? __('Yes') : __('No')}
@@ -61,8 +73,11 @@ mixin hidden (f)
   - var required = f.className
   if mode === 'create' && f.required
     - required = 'required ' + f.className
+  - var tooltip = ''
+  if f.description
+    - tooltip = 'tooltip'
   .inline.field(style='display: none;' class=required)
-    label.large= __(f.label)
+    label.large(class=tooltip)= __(f.label)
     +popup(f.description)
     if mode === 'view'
       span #{tsData[f.name]}
@@ -74,8 +89,11 @@ mixin dropdown (f)
   - var required = ''
   if mode === 'create' && f.required
     - required = 'required'
+  - var tooltip = ''
+  if f.description
+    - tooltip = 'tooltip'
   .inline.field(class=required)
-    label.large= __(f.label)
+    label.large(class=tooltip)= __(f.label)
     +popup(f.description)
     if mode === 'view'
       span #{tsData[f.name]}
