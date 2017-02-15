@@ -80,5 +80,6 @@
 	"Yes": "Yes",
 	"Translation system successfully deleted": "Translation system successfully deleted",
 	"Translation output successfully uploaded": "Translation output successfully uploaded",
-	"<a href=\"/auth/github\">Log in</a> to submit translation systems": "<a href=\"/auth/github\">Log in</a> to submit translation systems"
+	"<a href=\"/auth/github\">Log in</a> to submit translation systems": "<a href=\"/auth/github\">Log in</a> to submit translation systems",
+	"No": "No"
 }
