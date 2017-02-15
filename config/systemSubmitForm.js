@@ -17,7 +17,7 @@ var systemDescription = [
     'label': 'Constrainted system',
     'required': false,
     'layer': 1,
-    'description': 'A constrainted system is trained with an internal training set.<br /><strong>Note:</strong> Either constraint or trainSet fields should be provided!'
+    'description': 'A constrainted system is trained with an <a href="/trainingSets">internal training set</a>.<br /><strong>Note:</strong> Either constraint or trainSet fields should be provided!'
   },
   {
     'name': 'trainSet',
