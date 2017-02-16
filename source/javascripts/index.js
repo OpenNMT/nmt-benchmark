@@ -106,6 +106,7 @@ function getTable (languagePair, constraint) {
         $('.pagination.menu').addClass('floated right');
         $('i.toggle.icon').popup();
         swapScores($('input[name="testSet"]').val());
+        setTestFileDropdownContent(getLanguagePair());
       }
     });
   })
