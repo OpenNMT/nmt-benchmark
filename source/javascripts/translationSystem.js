@@ -19,12 +19,17 @@ $(document).ready(function () {
   $('.ui.dropdown').dropdown();
   $('.ui.toggle.checkbox').checkbox({
     onChange: function () {
-      var state = $(this).prop('checked') ? 'Yes' : 'No'; // i18n
+      var state = $(this).prop('checked') ? 'Internal' : 'Custom'; // i18n
       $(this).next('label').text(state);
       $('.trainSet').transition({
         animation: 'slide down',
         duration: '0.5s'
       });
+      if (state === 'Custom') {
+        $('.trainSet').addClass('required');
+      } else {
+        $('.trainSet').removeClass('required');
+      }
     }
   });
 
