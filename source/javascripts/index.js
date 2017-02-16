@@ -95,6 +95,7 @@ function getTable (languagePair) {
       drawCallback: function (settings) {
         $('.pagination.menu').addClass('floated right');
         $('i.toggle.icon').popup();
+        swapScores($('input[name="testSet"]').val());
       }
     });
   })
