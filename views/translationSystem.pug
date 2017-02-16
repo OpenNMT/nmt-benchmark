@@ -64,11 +64,11 @@ mixin radio (f)
     label.large(class=tooltip)= __(f.label)
     +popup(f.description)
     if mode === 'view'
-      span #{tsData[f.name] ? __('Internal') : __('Custom')}
+      span #{tsData[f.name] ? __('Yes') : __('No')}
     else
       .ui.toggle.checkbox
         input.hidden(type='checkbox' name=f.name checked='checked')
-        label= __('Internal')
+        label= __('Yes')
 
 mixin hidden (f)
   - var required = f.className

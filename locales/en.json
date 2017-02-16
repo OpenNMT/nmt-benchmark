@@ -89,5 +89,6 @@
 	"Training set description": "Training set description",
 	"Custom": "Custom",
 	"No training data is available for selected languages. Switch \"Training data\" option to \"Custom\" and try again.": "No training data is available for selected languages. Switch \"Training data\" option to \"Custom\" and try again.",
-	"Data source": "Data source"
+	"Data source": "Data source",
+	"Systems provided by": "Systems provided by"
 }
