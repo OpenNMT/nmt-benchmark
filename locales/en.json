@@ -81,5 +81,12 @@
 	"Translation system successfully deleted": "Translation system successfully deleted",
 	"Translation output successfully uploaded": "Translation output successfully uploaded",
 	"<a href=\"/auth/github\">Log in</a> to submit translation systems": "<a href=\"/auth/github\">Log in</a> to submit translation systems",
-	"No": "No"
+	"No": "No",
+	"Trained on internal data": "Trained on internal data",
+	"Train data": "Train data",
+	"Internal": "Internal",
+	"Training data": "Training data",
+	"Training set description": "Training set description",
+	"Custom": "Custom",
+	"No training data is available for selected languages. Switch \"Training data\" option to \"Custom\" and try again.": "No training data is available for selected languages. Switch \"Training data\" option to \"Custom\" and try again."
 }
