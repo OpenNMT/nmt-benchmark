@@ -23,6 +23,7 @@ const testOutput = require('../lib/testOutput');
 const User = require('../lib/user.js');
 const checkFormat = require('../lib/utils.js').checkFormat;
 const uniq = require('../lib/utils.js').getUniqueLPs;
+const trainingSets = require('../lib/trainingSets').list;
 
 /* TODO
 router.post('/translationSystem/update', function (req, res, next) {
@@ -161,6 +162,29 @@ router.post('/translationSystem/create', function (req, res, next) {
     logger.warn('Unauthenticated user tried to access ' + req.url);
     res.json({error: res.__('<a href="/auth/github">Log in</a> to submit translation systems'), data: null});
   } else {
+    // Check if training data exist for a system trained on internal data
+    if (req.body.constraint === 'true') {
+      var sourceLangExists = req.body.sourceLanguage.every(function (code) {
+        return trainingSets.map(function (file) {
+          return file.source.language;
+        }).some(function (lang) {
+          return lang === code;
+        });
+      });
+      var targetLangExists = req.body.targetLanguage.every(function (code) {
+        return trainingSets.map(function (file) {
+          return file.target.language;
+        }).some(function (lang) {
+          return lang === code;
+        });
+      });
+      if (!sourceLangExists || !targetLangExists) {
+        logger.warn('Cannot create a constrainted translation system with no available data');
+        res.json({error: res.__('No training data is available for selected languages. Switch "Training data" option to "Custom" and try again.'), data: null});
+        return;
+      }
+    }
+
     tSystem.createTranslationSystem(req.body, function (err, data) {
       if (err) {
         logger.warn('Unable to create translation system', err);
