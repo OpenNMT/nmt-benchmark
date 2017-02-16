@@ -5,13 +5,13 @@ $(document).ready(function () {
   $('#languagePairs .menu').text(defaultLP);
 
   // Initialize LP selection dropdown
-  setDropdownContent('include Any language pair');
+  setDropdownContent();
   setTestFileDropdownContent(getLanguagePair());
 
   // Language pair selection handler
   $('#languagePairs').dropdown({
     onChange: function (value, text) {
-      getTable(getLanguagePair());
+      getTable(getLanguagePair(), getConstraint());
     }
   });
 
@@ -19,6 +19,13 @@ $(document).ready(function () {
   $('#testFile').dropdown({
     onChange: function (value, text) {
       swapScores(value);
+    }
+  });
+
+  // Constraint selection handler
+  $('#constraint').dropdown({
+    onChange: function (value, text) {
+      getTable(getLanguagePair(), getConstraint());
     }
   });
 
@@ -38,17 +45,20 @@ $(document).ready(function () {
   getTable();
 });
 
-function getTable (languagePair) {
+function getTable (languagePair, constraint) {
   // TODO - i18n for table header
-  var lp = {};
+  var query = {};
   if (languagePair) {
-    lp = {
+    query = {
       sourceLanguage: languagePair.substring(0, 2),
       targetLanguage: languagePair.substring(2)
     };
   }
+  if (constraint) {
+    query.constraint = constraint === 'Yes' ? true : false;
+  }
 
-  $.get('/getDataTable', lp)
+  $.get('/getDataTable', query)
   .done(function (response) {
     var columns = [
       {data: 'user', sDefaultContent: '', render: function (data, type, full) {
@@ -105,7 +115,6 @@ function getTable (languagePair) {
   });
 }
 
-
 function swapScores (fileId) {
   var trans = {
     animation: {
@@ -146,7 +155,6 @@ function swapScores (fileId) {
     });
   }
 }
-
 
 function getTestFileId () {
   return $('input[name="testSet"]').val() || '';
