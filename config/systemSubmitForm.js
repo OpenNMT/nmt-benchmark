@@ -14,19 +14,19 @@ var systemDescription = [
     'default': '',
     'placeholder': '',
     'type': 'radio',
-    'label': 'Constrainted system',
+    'label': 'Training data',
     'required': false,
     'layer': 1,
-    'description': 'A constrainted system is trained with an <a href="/trainingSets">internal training set</a>.<br /><strong>Note:</strong> Either constraint or trainSet fields should be provided!'
+    'description': 'By default, we assume you use an <a href="/trainingSets">internal training set</a> to train your models.<br />You may use your own data, in which case training set description should be provided.'
   },
   {
     'name': 'trainSet',
     'default': '',
-    'placeholder': 'Training set',
+    'placeholder': 'OPUS corpus, 2M',
     'type': 'text/hidden',
     'hidden': true,
     'className': 'trainSet',
-    'label': 'Training data set',
+    'label': 'Training set description',
     'required': false,
     'layer': 1,
     'description': 'Information about training data used for this translation system.'
@@ -61,7 +61,7 @@ var systemDescription = [
   {
     'name': 'sourceLanguage',
     'default': '',
-    'placeholder': '',
+    'placeholder': 'English',
     'type': 'language',
     'label': 'Source language',
     'required': true,
@@ -71,7 +71,7 @@ var systemDescription = [
   {
     'name': 'targetLanguage',
     'default': '',
-    'placeholder': '',
+    'placeholder': 'French',
     'type': 'language',
     'label': 'Target language',
     'required': true,
