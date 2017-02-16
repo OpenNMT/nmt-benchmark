@@ -62,7 +62,7 @@ function getTable (languagePair) {
         }
       }},
       {data: 'constraint', sDefaultContent: '', render: function (data, type, full) {
-        return data ? 'Internal' : 'Custom';
+        return data ? 'Yes' : 'No';
       }},
       {data: 'date', sDefaultContent: '', render: function (data, type, full) {
         if (data) {

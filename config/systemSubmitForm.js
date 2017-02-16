@@ -14,7 +14,7 @@ var systemDescription = [
     'default': '',
     'placeholder': '',
     'type': 'radio',
-    'label': 'Training data',
+    'label': 'Constraint',
     'required': false,
     'layer': 1,
     'description': 'By default, we assume you use an <a href="/trainingSets">internal training set</a> to train your models.<br />You may use your own data, in which case training set description should be provided.'
