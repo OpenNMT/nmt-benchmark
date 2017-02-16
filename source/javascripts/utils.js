@@ -45,14 +45,13 @@ function filterByLp (list, languagePair) {
   return list;
 }
 
-function setDropdownContent () {
+function setDropdownContent (withAny) {
   $.get('/getLanguagePairs')
   .done(function (response) {
-    $('#languagePairs .menu').html(
-      response.data
+    var dropdownHtml = response.data
       .map(function (lp) {
         var active = '';
-        if (lp.src + lp.tgt === defaultLP) {
+        if (!withAny && lp.src + lp.tgt === defaultLP) {
           active = ' active';
           $('#languagePairs .text').text(c2l[lp.src] + ' - ' + c2l[lp.tgt]);
         }
@@ -65,9 +64,13 @@ function setDropdownContent () {
             c2l[lp.src], ' - ', c2l[lp.tgt],
           '</div>'
         ].join('');
-      })
-      .join('')
-    );
+      });
+    if (withAny) {
+      var option = 'Any language pair';
+      dropdownHtml.unshift('<div class="active item" data-value="">' + option + '</div>');
+      $('#languagePairs .text').text(option);
+    }
+    $('#languagePairs .menu').html(dropdownHtml.join(''));
   })
   .fail(function (error) {
     flash('error', error);
