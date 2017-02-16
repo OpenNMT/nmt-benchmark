@@ -7,7 +7,7 @@ mixin field (f)
   if mode === 'create' && f.required
     - required = 'required'
   - var tooltip = ''
-  if f.description
+  if mode === 'create' && f.description
     - tooltip = 'tooltip'
   .inline.field(class=required)
     label.large(class=tooltip)= __(f.label)
@@ -27,7 +27,7 @@ mixin language (f, side)
   if mode === 'create'
     - required = 'required'
   - var tooltip = ''
-  if f.description
+  if mode === 'create' && f.description
     - tooltip = 'tooltip'
   .inline.field(class=required)
     label.large(class=tooltip)= __(f.label)
@@ -36,13 +36,14 @@ mixin language (f, side)
       span #{tsData[f.name].map(function (l) { return c2l[l]; }).join(', ')}
     else
       select.ui.selection.dropdown(multiple='true' name=f.name)
+        option(value='') #{f.placeholder}
 
 mixin textarea (f)
   - var required = ''
   if mode === 'create' && f.required
     - required = 'required'
   - var tooltip = ''
-  if f.description
+  if mode === 'create' && f.description
     - tooltip = 'tooltip'
   .inline.field.special(class=required)
     label.large(class=tooltip)= __(f.label)
@@ -57,26 +58,29 @@ mixin radio (f)
   if mode === 'create' && f.required
     - required = 'required'
   - var tooltip = ''
-  if f.description
+  if mode === 'create' && f.description
     - tooltip = 'tooltip'
   .inline.field(class=required)
     label.large(class=tooltip)= __(f.label)
     +popup(f.description)
     if mode === 'view'
-      span #{tsData[f.name] ? __('Yes') : __('No')}
+      span #{tsData[f.name] ? __('Internal') : __('Custom')}
     else
       .ui.toggle.checkbox
         input.hidden(type='checkbox' name=f.name checked='checked')
-        label= __('Yes')
+        label= __('Internal')
 
 mixin hidden (f)
   - var required = f.className
   if mode === 'create' && f.required
     - required = 'required ' + f.className
   - var tooltip = ''
-  if f.description
+  if mode === 'create' && f.description
     - tooltip = 'tooltip'
-  .inline.field(style='display: none;' class=required)
+  - var hidden = 'display: none;'
+  if mode === 'view' && tsData[f.name]
+    - hidden = ''
+  .inline.field(style=hidden class=required)
     label.large(class=tooltip)= __(f.label)
     +popup(f.description)
     if mode === 'view'
@@ -90,7 +94,7 @@ mixin dropdown (f)
   if mode === 'create' && f.required
     - required = 'required'
   - var tooltip = ''
-  if f.description
+  if mode === 'create' && f.description
     - tooltip = 'tooltip'
   .inline.field(class=required)
     label.large(class=tooltip)= __(f.label)
