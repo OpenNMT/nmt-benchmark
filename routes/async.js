@@ -43,11 +43,11 @@ router.post('/translationSystem/update', function (req, res, next) {
 */
 
 router.get('/getDataTable', function (req, res, next) {
-  var languagePair = url.parse(req.url, true).query || {};
+  var query = url.parse(req.url, true).query || {};
 
   (function getTS () {
     return new Promise(function (resolve, reject) {
-      tSystem.getTranslationSystems(languagePair, function (err, tsData) {
+      tSystem.getTranslationSystems(query, function (err, tsData) {
         if (err) {
           reject('Unable to retrieve translation system data: ' + err);
         } else {
