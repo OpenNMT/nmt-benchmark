@@ -26,6 +26,16 @@ block content
               .text
               i.dropdown.icon
               .menu
+          .field
+            label= __('Constraint')
+            #constraint.ui.selection.dropdown
+              input(type='hidden' name='constraint')
+              .text= __('Any')
+              i.dropdown.icon
+              .menu
+                .active.item(data-value='')= __('Any')
+                .item(data-value='Yes')= __('Yes')
+                .item(data-value='No')= __('No')
         if visitor
           #addSystemButton.ui.basic.fireBrick.button.indented(role='button' aria-label='Add new translation system' tabindex='0')
             i.icon.plus
