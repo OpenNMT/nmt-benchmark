@@ -19,7 +19,7 @@ function getTable () {
       }
     }},
     {data: 'constraint', className: 'systemName', sDefaultContent: '', render: function (data, type, full) {
-      return data ? 'Internal' : 'Custom';
+      return data ? 'Yes' : 'No';
     }},
     {data: 'date', sDefaultContent: '', render: function (data, type, full) {
       if (data) {
