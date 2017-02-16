@@ -14,19 +14,12 @@ $(document).ready(function () {
 function getTable () {
   var columns = [
     {data: 'systemName', className: 'systemName', sDefaultContent: '', render: function (data, type, full) {
-      var c = {
-        'true': {
-          content: 'Trained on internal data',
-          toggle: 'on'
-        },
-        'false': {
-          content: 'Trained on custom data',
-          toggle: 'off'
-        }
-      };
       if (data) {
-        return ('<i class="toggle ' + c[full.constraint].toggle + ' icon" data-content="' + c[full.constraint].content + '" data-position="top center"></i><a href="/translationSystem/view/' + full._id + '">' + data + '</a>');
+        return ('<a href="/translationSystem/view/' + full._id + '">' + data + '</a>');
       }
+    }},
+    {data: 'constraint', className: 'systemName', sDefaultContent: '', render: function (data, type, full) {
+      return data ? 'Internal' : 'Custom';
     }},
     {data: 'date', sDefaultContent: '', render: function (data, type, full) {
       if (data) {
