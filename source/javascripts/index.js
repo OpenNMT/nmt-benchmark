@@ -78,7 +78,7 @@ function getTable (languagePair, constraint) {
         className: 'testFile id_' + $(el).attr('data-value') + active,
         sDefaultContent: 'n/a',
         render: function (data, type, full) {
-          return data[fileId] ? data[fileId].BLEU : '';
+          return data[fileId] ? data[fileId].BLEU.toFixed(2) : '';
         }
       });
     });

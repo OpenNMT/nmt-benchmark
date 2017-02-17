@@ -135,7 +135,7 @@ router.get('/getTestSets', function (req, res, next) {
     'comment': 0,
     'evalTool': 0
   };
-  testSet.getTestSets(query, projection, function (err, data) {
+  testSet.getTestSets({'$query': query, '$orderby': {'primary': -1}}, projection, function (err, data) {
     if (err) {
       res.json(JSON.stringify({error: err, data: null}));
     } else {
