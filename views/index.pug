@@ -5,7 +5,7 @@ block content
     .first.row
       h1 Welcome to NMT&#8209;benchmark initiative!
     .row
-      p The NMT&#8209;benchmark is a platform for sharing and comparing Neural Machine Translation system performance. The primary goal is to compare engines and training parameters for systems trained on reasonably small data sets (1M sentences). Any system output can be shared as long as the "training recipe" is also provided and the result can be reproduced. Considering the vast possible combinations of training parameters, any contribution is good to share. Systems are evaluated using reference test sets used by the research community and on "in&#8209;domain" test sets.
+      p The NMT&#8209;benchmark is a platform for sharing and comparing Neural Machine Translation system performance. The primary goal is to compare engines and training parameters for systems trained on reasonably small data sets (1M sentences). Any system output can be shared as long as the "training recipe" is also provided and the result can be reproduced. Considering the number of possible combinations of training parameters, any contribution is welcome. Systems are evaluated using reference test sets used by the research community and on "in&#8209;domain" test sets.
     .row
       p NMT&#8209;benchmark is an initiative from <a href="http://www.opennmt.net">OpenNMT project</a>, but any other system is welcome to join in and share results!
 
@@ -37,9 +37,9 @@ block content
                 .item(data-value='Yes')= __('Yes')
                 .item(data-value='No')= __('No')
         if visitor
-          #addSystemButton.ui.basic.fireBrick.button.indented(role='button' aria-label='Add new translation system' tabindex='0')
+          #addSystemButton.ui.basic.fireBrick.button.indented(role='button' aria-label='Add a new translation system' tabindex='0')
             i.icon.plus
-            span= __('Add new translation system')
+            span= __('Add a new translation system')
 
         //-
           .dropdown
