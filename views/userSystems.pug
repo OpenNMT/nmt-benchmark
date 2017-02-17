@@ -13,9 +13,9 @@ block content
       form#addSystemForm(action='/translationSystem/add' method='post')
         input(type='hidden' name='languagePair' val='enfr')
       .tableConfig
-        #addSystemButton.ui.basic.fireBrick.button
+        #addSystemButton.ui.basic.fireBrick.button(role='button' aria-label='Add a new translation system' tabindex='0')
           i.icon.plus
-          span= __('Add new translation system')
+          span= __('Add a new translation system')
 
     table#mainTable.ui.celled.table
       thead

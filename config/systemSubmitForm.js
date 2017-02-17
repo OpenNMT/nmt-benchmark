@@ -7,7 +7,7 @@ var systemDescription = [
     'label': 'System name',
     'required': true,
     'layer': 1,
-    'description': 'A comprehensive system name. We recommend to include the <i>language pair</i> and the <i>date</i> in it.<br /><strong>Note:</strong> System names should start with a <i>company name</i> followed by a colon!'
+    'description': 'A comprehensive system name. We recommend including the <i>language pair</i> and the <i>date</i>.<br /><strong>Note:</strong> System names should start with a <i>company name</i> followed by a colon!'
   },
   {
     'name': 'constraint',
@@ -232,7 +232,7 @@ var systemDescription = [
     'default': '13 epochs',
     'placeholder': '13 epochs',
     'type': 'text',
-    'label': 'Training Specific',
+    'label': 'Training specific',
     'required': false,
     'layer': 3,
     'description': 'Number of epochs.'
