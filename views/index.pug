@@ -55,13 +55,6 @@ block content
     .last.row
       #mainTable
         table.ui.celled.striped.sortable.table
-          thead
-            tr
-              th.user= __('User')
-              th.systemName= __('System name')
-              th.constraint= __('Constraint')
-              th.date= __('Added')
-              th.scores= __('Score')
 
   form#addSystemForm(action='/translationSystem/add' method='POST')
     input(type='hidden' name='languagePair' value='enfr')

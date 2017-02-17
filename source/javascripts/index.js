@@ -60,36 +60,33 @@ function getTable (languagePair, constraint) {
 
   $.get('/getDataTable', query)
   .done(function (response) {
+    $('#mainTable').html(getTableHeader());
+    response.data.map(function (row) {
+      $('#testFile .item').each(function (i, el) {
+        row.scores[$(el).attr('data-value')] = {};
+        row.scores[$(el).attr('data-value')].BLEU = (Math.random() * (25 - 5) + 5).toFixed(2);
+      });
+    });
     var columns = [
-      {data: 'user', sDefaultContent: '', render: function (data, type, full) {
-        if (data) {
-          return ('<a href="/userSystems/' + data.githubId + '"><img class="ui avatar image" src="' + data.avatarURL + '" alt="' + data.name + '"/><span class="userName">' + data.name + '</span></a>');
-        }
-      }},
       {data: 'systemName', className: 'systemName', sDefaultContent: '', render: function (data, type, full) {
         if (data) {
           return ('<a href="/translationSystem/view/' + full._id + '">' + data + '</a>');
         }
-      }},
-      {data: 'constraint', sDefaultContent: '', render: function (data, type, full) {
-        return data ? 'Yes' : 'No';
-      }},
-      {data: 'date', sDefaultContent: '', render: function (data, type, full) {
-        if (data) {
-          var d = new Date(data);
-          return d.toLocaleDateString();
-        }
-      }},
-      {data: 'scores', className: 'scores', sDefaultContent: '', render: function (data, type, full) {
-        var scores = [];
-        for (var testId in data) {
-          if (data.hasOwnProperty(testId)) {
-            scores.push('<div class="testFile id_' + testId + '">' + data[testId].BLEU + '</div>');
-          }
-        }
-        return scores.join('');
       }}
     ];
+
+    $('#testFile .item').each(function (i, el) {
+      var fileId = $(el).attr('data-value');
+      var active = $(el).hasClass('active') ? ' active' : '';
+      columns.push({
+        data: 'scores',
+        className: 'testFile id_' + $(el).attr('data-value') + active,
+        sDefaultContent: '',
+        render: function (data, type, full) {
+          return data[fileId] ? data[fileId].BLEU : '';
+        }
+      });
+    });
 
     $('#mainTable table').DataTable({
       destroy: true,
@@ -99,14 +96,12 @@ function getTable (languagePair, constraint) {
       pagingType: 'full_numbers',
       dom: 'ftp',
       'sAjaxDataProp': '',
-      order: [[2, 'desc']],
+      order: [[1, 'desc']],
       data: response.data,
       columns: columns,
       drawCallback: function (settings) {
         $('.pagination.menu').addClass('floated right');
-        $('i.toggle.icon').popup();
         swapScores($('input[name="testSet"]').val());
-        setTestFileDropdownContent(getLanguagePair());
       }
     });
   })
@@ -116,45 +111,21 @@ function getTable (languagePair, constraint) {
   });
 }
 
-function swapScores (fileId) {
-  var trans = {
-    animation: {
-      show: 'fade left',
-      hide: 'fade right'
-    },
-    duration: {
-      show: 750,
-      hide: 250
-    }
-  };
-  var testId = getTestFileId();
-  var $visibleScores = $('.scores .testFile:visible');
-  var hidden = 0;
+function getTableHeader () {
+  var buf = [];
+  buf.push('<table class="ui celled striped sortable table"><thead><tr>');
+  buf.push('<th class="systemName">System name</th>'); // i18n
+  $('#testFile .item').each(function (i, el) {
+    buf.push('<th class="testFile id_' + $(el).attr('data-value') + '"></th>');
+  });
+  buf.push('</tr></thead></table>');
+  return buf.join('');
+}
 
-  if ($visibleScores.length) {
-    // Hide all shown scores
-    $.each($visibleScores, function () {
-      $(this).transition({
-        duration: trans.duration.hide,
-        animation: trans.animation.hide,
-        onComplete: function () {
-          hidden++;
-          if (hidden === $visibleScores.length) {
-            showScores(testId);
-          }
-        }
-      });
-    });
-  } else {
-    showScores(testId);
-  }
-  function showScores (testId) {
-    var $container = $('.scores .id_' + testId);
-    $container.transition({
-      duration: trans.duration.show,
-      animation: trans.animation.show
-    });
-  }
+function swapScores (fileId) {
+  var testId = getTestFileId();
+  $('td.testFile').removeClass('active');
+  $('td.testFile.id_' + testId).addClass('active');
 }
 
 function getTestFileId () {
