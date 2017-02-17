@@ -141,7 +141,7 @@ block content
     .first.row
       h1
         if mode === 'create'
-          span= __('Add translation system')
+          span= __('Add a translation system')
         if mode === 'view'
           span= __('System description')
           if visitor && visitor.id === uData.githubId
@@ -180,7 +180,7 @@ block content
             i.trash.icon
             span= __('Delete this system')
       .row
-        h1= __('Test sets')
+        h1= __('Test Sets')
       .last.row
         .ui.cards
 

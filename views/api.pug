@@ -13,7 +13,7 @@ mixin params (option)
         .ui.label.param(class=option.required ? 'required': '') #{option.name}
       .twelve.wide.column !{option.description}
         if option.default
-          .default= __('Default:')
+          .default= __('Default')
             span.value &nbsp;"#{option.default}"
 
 block content
@@ -26,7 +26,7 @@ block content
         i.copy.icon
   .ui.grid.container
     .first.row
-      p NMT-Benchmark provides a simple API that lets you query existent translation systems, download test files, or upload translation output directly to the server.
+      p NMT-Benchmark provides a simple API that lets you query existent translation systems, download test files and upload translation output directly to the server.
       p All URIs below are relative to&nbsp;
         a(href=server) #{server}
     .header.row
@@ -56,7 +56,7 @@ block content
             code &nbsp;#{apiKey}.
           else
             | &nbsp;Log in to retrieve your API key.
-        p API key is generated authomatically once you log in to the site with github account.
+        p API key is generated authomatically once you log in to the site with your github account.
         p This error is also triggered when users try to modify translation systems created by other users.
     .last.row
       .three.wide.column
