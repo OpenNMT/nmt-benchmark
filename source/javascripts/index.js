@@ -11,7 +11,8 @@ $(document).ready(function () {
   // Language pair selection handler
   $('#languagePairs').dropdown({
     onChange: function (value, text) {
-      getTable(getLanguagePair(), getConstraint());
+      setTestFileDropdownContent(value);
+      getTable(value, getConstraint());
     }
   });
 
@@ -75,7 +76,7 @@ function getTable (languagePair, constraint) {
       columns.push({
         data: 'scores',
         className: 'testFile id_' + $(el).attr('data-value') + active,
-        sDefaultContent: '',
+        sDefaultContent: 'n/a',
         render: function (data, type, full) {
           return data[fileId] ? data[fileId].BLEU : '';
         }
@@ -96,7 +97,6 @@ function getTable (languagePair, constraint) {
       drawCallback: function (settings) {
         $('.pagination.menu').addClass('floated right');
         swapScores($('input[name="testSet"]').val());
-        setTestFileDropdownContent(getLanguagePair());
       }
     });
   })
