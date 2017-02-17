@@ -43,7 +43,7 @@ $(document).ready(function () {
   });
 
   // Initial dataTable draw
-  getTable();
+  getTable('fres');
 });
 
 function getTable (languagePair, constraint) {
@@ -111,7 +111,7 @@ function getTableHeader () {
   buf.push('<table class="ui celled striped sortable table"><thead><tr>');
   buf.push('<th class="systemName">System name</th>'); // i18n
   $('#testFile .item').each(function (i, el) {
-    buf.push('<th class="testFile id_' + $(el).attr('data-value') + '"></th>');
+    buf.push('<th class="testFile id_' + $(el).attr('data-value') + '">' + (++i) + '</th>');
   });
   buf.push('</tr></thead></table>');
   return buf.join('');

@@ -94,9 +94,10 @@ function setTestFileDropdownContent (lp) {
     $('#testFile .menu').html(
       response.data.map(function (f, i) {
         var active = '';
-        if (i === 0) {
+        i++;
+        if (i === 1) {
           active = ' active';
-          $('#testFile .text').text(f.source.fileName);
+          $('#testFile .text').text(i + ' - ' + f.source.fileName);
           $('#testFile input[name="testSet"]').val(f._id);
         }
         return [
@@ -105,7 +106,7 @@ function setTestFileDropdownContent (lp) {
           '" data-value="',
           f._id,
           '">',
-          f.source.fileName,
+          i, ' - ', f.source.fileName,
           '</div>'
         ].join('');
       }).join('')
