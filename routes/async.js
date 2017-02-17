@@ -180,7 +180,7 @@ router.post('/translationSystem/create', function (req, res, next) {
       });
       if (!sourceLangExists || !targetLangExists) {
         logger.warn('Cannot create a constrainted translation system with no available data');
-        res.json({error: res.__('No training data is available for selected languages. Switch "Training data" option to "Custom" and try again.'), data: null});
+        res.json({error: res.__('No training data is available for selected languages. Switch "Constraint" option to "No" and try again.'), data: null});
         return;
       }
     }
