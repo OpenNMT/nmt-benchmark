@@ -61,12 +61,6 @@ function getTable (languagePair, constraint) {
   $.get('/getDataTable', query)
   .done(function (response) {
     $('#mainTable').html(getTableHeader());
-    response.data.map(function (row) {
-      $('#testFile .item').each(function (i, el) {
-        row.scores[$(el).attr('data-value')] = {};
-        row.scores[$(el).attr('data-value')].BLEU = (Math.random() * (25 - 5) + 5).toFixed(2);
-      });
-    });
     var columns = [
       {data: 'systemName', className: 'systemName', sDefaultContent: '', render: function (data, type, full) {
         if (data) {
