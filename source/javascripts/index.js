@@ -96,6 +96,7 @@ function getTable (languagePair, constraint) {
       drawCallback: function (settings) {
         $('.pagination.menu').addClass('floated right');
         swapScores($('input[name="testSet"]').val());
+        setTestFileDropdownContent(getLanguagePair());
       }
     });
   })
