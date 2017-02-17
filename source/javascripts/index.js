@@ -43,7 +43,7 @@ $(document).ready(function () {
   });
 
   // Initial dataTable draw
-  getTable('fres');
+  getTable(defaultLP);
 });
 
 function getTable (languagePair, constraint) {

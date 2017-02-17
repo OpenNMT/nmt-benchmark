@@ -49,6 +49,9 @@ function setDropdownContent (withAny) {
   $.get('/getLanguagePairs')
   .done(function (response) {
     var dropdownHtml = response.data
+      .sort(function (a, b) {
+        return (a.src + a.tgt) > (b.src + b.tgt) ? 1 : -1;
+      })
       .map(function (lp) {
         var active = '';
         if (!withAny && lp.src + lp.tgt === defaultLP) {
