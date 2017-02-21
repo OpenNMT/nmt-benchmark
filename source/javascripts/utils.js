@@ -86,7 +86,7 @@ function getLanguagePair () {
 }
 
 function getConstraint () {
-  return $('#constraint').dropdown('get value') || '';
+  return $('#constraint').dropdown('get value') || 'Yes';
 }
 
 function setTestFileDropdownContent (lp) {

@@ -1,6 +1,4 @@
 $(document).ready(function () {
-  // Enable dropdowns
-  $('.ui.dropdown').dropdown();
   // Language pair selection init
   $('#languagePairs .menu').text(defaultLP);
 
@@ -43,7 +41,7 @@ $(document).ready(function () {
   });
 
   // Initial dataTable draw
-  getTable(defaultLP);
+  getTable(defaultLP, 'Yes');
 });
 
 function getTable (languagePair, constraint) {
@@ -55,7 +53,7 @@ function getTable (languagePair, constraint) {
       targetLanguage: languagePair.substring(2)
     };
   }
-  if (constraint) {
+  if (constraint !== 'Any') {
     query.constraint = constraint === 'Yes' ? true : false;
   }
 

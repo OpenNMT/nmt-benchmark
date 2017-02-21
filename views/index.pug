@@ -30,12 +30,12 @@ block content
             label= __('Constraint')
             #constraint.ui.selection.dropdown
               input(type='hidden' name='constraint')
-              .text= __('Any')
+              .text= __('Yes')
               i.dropdown.icon
               .menu
-                .active.item(data-value='')= __('Any')
-                .item(data-value='Yes')= __('Yes')
+                .active.item(data-value='Yes')= __('Yes')
                 .item(data-value='No')= __('No')
+                .item(data-value='Any')= __('Any')
         if visitor
           #addSystemButton.ui.basic.fireBrick.button.indented(role='button' aria-label='Add a new translation system' tabindex='0')
             i.icon.plus
