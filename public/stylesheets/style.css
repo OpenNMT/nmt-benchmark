@@ -204,6 +204,10 @@ label.large {
 
 /* Everything else */
 
+.info.card {
+  margin-top: 28px !important;
+}
+
 a {
   color: #00B7FF;
   cursor: pointer;
@@ -229,7 +233,7 @@ a:hover {
 
 .testSetContainer table,
 .trainingSetContainer table {
-  margin: 10px auto !important;
+  /*margin: 10px auto !important;*/
 }
 
 .testSetContainer td,
@@ -245,6 +249,9 @@ a:hover {
   text-align: center;
 }
 
+.row p {
+  width: 100%;
+}
 /* API */
 
 .param {
