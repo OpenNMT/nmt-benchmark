@@ -4,7 +4,7 @@ OpenNMTBenchmark:
       - host: localhost
         port: 27017
     replicaSet: null
-    poolSize: 15
+    poolSize: 150
     mongoose:
       debug: false
     ssl: false
@@ -18,14 +18,22 @@ OpenNMTBenchmark:
       login:
       password:
   default:
-    LP: enfr
+    LP: fres
     metric: BLEU
     locale: en
   locales: ['en']
   datapath: ./data
   scorer_cli: ./scripts/multi-bleu.perl
-  URL: http://www.opennmtbenchmark.com:3000
-  passport:
-    clientID: cdb6ff225507c68d0c4a
-    clientSecret: d1a90e6ff3ea1f8bcedc504d64ea2664428fc97f
-    callbackPath: /auth/github/callback
+  env:
+    dev:
+      URL: http://www.opennmtbenchmark.com:3000
+      passport:
+        clientID: 8dee7589e42c31b7314f
+        clientSecret: bb2c8f2c602f0c626debab6615d8dc9bb5b008db
+        callbackPath: /auth/github/callback
+    prod:
+      URL: http://scorer.nmt-benchmark.net
+      passport:
+        clientID: 20f0778ece2352e6717c
+        clientSecret: 72fad106821047127d23bd447e550bcfffd87bf0
+        callbackPath: /auth/github/callback

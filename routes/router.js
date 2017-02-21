@@ -22,6 +22,8 @@ const User = require('../lib/user.js');
 const fieldSet = require('../config/systemSubmitForm').systemDescription;
 const trainingSets = require('../lib/trainingSets').list;
 
+const NODE_ENV = process.env.NODE_ENV || 'prod';
+
 router.get('/', function (req, res, next) {
   res.render('index', {
     messages: {
@@ -59,7 +61,7 @@ router.get('/api', function (req, res, next) {
   var githubId = req.user ? req.user.id : undefined;
   User.getUser({githubId: githubId}, function (err, user) {
     var apiKey = user ? user.apiKey : '';
-    var server = nconf.get('OpenNMTBenchmark:URL');
+    var server = nconf.get('OpenNMTBenchmark:env:' + NODE_ENV + ':URL');
     api.map(function (entry) {
       if (entry.method === 'GET' && entry.params.length) {
         entry.getParams = '?' + entry.params.map(function (p) { return p + '={' + p + '}'; }).join('&');
