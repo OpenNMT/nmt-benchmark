@@ -133,7 +133,7 @@ router.get('/getLanguagePairs', function (req, res, next) {
               return TOdata.map(function (d) {
                 return d.fileId;
               }).some(function (el) {
-                return el === ts._id;
+                return el === ts._id.toString();
               });
             }));
             res.json({data: data});
