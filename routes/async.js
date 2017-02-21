@@ -103,18 +103,45 @@ router.get('/getDataTable', function (req, res, next) {
 });
 
 router.get('/getLanguagePairs', function (req, res, next) {
-  var query = {};
+  var restricted = url.parse(req.url, true).query.restricted;
+  var query = {'primary': true};
   var projection = {
     'source.content': 0,
     'target.content': 0,
     'comment': 0,
     'evalTool': 0
   };
-  testSet.getTestSets(query, projection, function (err, data) {
+  testSet.getTestSets(query, projection, function (err, TSdata) {
     if (err) {
       res.json(JSON.stringify({error: err, data: null}));
     } else {
-      res.json({data: uniq(data)});
+      if (restricted) {
+        query = {
+          'fileId': {
+            '$in': TSdata.map(function (d) {
+              return d._id;
+            })}
+        };
+        projection = {
+          'fileId': 1
+        };
+        testOutput.getTestOutputs(query, projection, function (err, TOdata) {
+          if (err) {
+            res.json(JSON.stringify({error: err, data: null}));
+          } else {
+            var data = uniq(TSdata.filter(function (ts) {
+              return TOdata.map(function (d) {
+                return d.fileId;
+              }).some(function (el) {
+                return el === ts._id;
+              });
+            }));
+            res.json({data: data});
+          }
+        });
+      } else {
+        res.json({data: uniq(TSdata)});
+      }
     }
   });
 });
