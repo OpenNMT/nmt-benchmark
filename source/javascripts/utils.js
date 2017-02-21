@@ -50,7 +50,7 @@ function setDropdownContent (withAny) {
   .done(function (response) {
     var dropdownHtml = response.data
       .sort(function (a, b) {
-        return (a.src + a.tgt) > (b.src + b.tgt) ? 1 : -1;
+        return (c2l[a.src] + c2l[a.tgt]) > (c2l[b.src] + c2l[b.tgt]) ? 1 : -1;
       })
       .map(function (lp) {
         var active = '';
