@@ -46,7 +46,7 @@ function filterByLp (list, languagePair) {
 }
 
 function setDropdownContent (withAny) {
-  $.get('/getLanguagePairs')
+  $.get('/getLanguagePairs?restricted=true')
   .done(function (response) {
     var dropdownHtml = response.data
       .sort(function (a, b) {
