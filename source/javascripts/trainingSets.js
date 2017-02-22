@@ -8,11 +8,11 @@ $(document).ready(function () {
     target: '#trainingSetTable',
     type: 'training',
     columns: [
-      {data: 'languagePair', render: function (data, type, full) {
+      {data: 'languagePair', className: 'languagePair', render: function (data, type, full) {
         return [c2l[full.source.language], c2l[full.target.language]].join('&nbsp;-&nbsp;');
       }},
-      {data: 'fileName', render: function (data, type, full) {
-        return full.fileName;
+      {data: 'fileName', className: 'fileName', render: function (data, type, full) {
+        return '<i class="info circle icon" data-fileId="' + full._id + '"></i>' + full.fileName;
       }},
       {data: 'download', sortable: false, sDefaultContent: '', render: function (data, type, full) {
         return '<div class="downloadSrc circular ui basic icon fireBrick button" data-fileName="' + full.fileName + '.tgz" role="button" aria-label="download" tabindex="1" data-tooltip="Download training data" data-variation="mini" data-position="right center"><i class="download icon"></i></div>';

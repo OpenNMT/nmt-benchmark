@@ -1,16 +1,25 @@
 extends layout
 
 block content
-  .ui.grid.container
+  .ui.stackable.grid.container
     .first.row
-      h1= __('Training Sets')
+      .eight.wide.column
+        h1= __('Training Sets')
     .last.row
-      table#trainingSetTable.ui.table
-        thead
-          tr
-            th.languagePair= __('Language pair')
-            th.fileName= __('File name')
-            th.download
+      .eight.wide.column
+        table#trainingSetTable.ui.striped.table
+          thead
+            tr
+              th.languagePair= __('Language pair')
+              th.fileName= __('Filename')
+              th.download
+      .eight.wide.column
+        .ui.fluid.info.card(style='display:none;')
+          .content
+            .center.aligned.header
+            .center.aligned.description
+          .extra.content
+            .description
 
 block append scripts
   script.

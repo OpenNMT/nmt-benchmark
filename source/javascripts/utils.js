@@ -12,6 +12,9 @@ function getTable (list, config) {
       $('table').on('click', function (e) {
         var $target;
         if (e.target.nodeName === 'I') {
+          if (e.target.className.indexOf('info') !== -1) {
+            showInfo(e.target);
+          }
           $target = $(e.target).closest('div');
         } else if (e.target.nodeName === 'DIV') {
           $target = $(e.target);
@@ -138,4 +141,80 @@ function click2copy (trigger, id) {
       document.execCommand('Copy');
     }
   });
+}
+
+function showInfo (target) {
+  var id = target.getAttribute('data-fileId');
+  var languagePair = $($(target).closest('tr').find('td.languagePair')[0]).text();
+  var corpusName = $($(target).closest('tr').find('td.fileName')[0]).text();
+  var animation = {
+    show: 'slide right',
+    hide: 'slide left'
+  };
+  var $container = $('.info.card');
+  if ($container.is(':visible')) {
+    $container.transition({
+      duration: 250,
+      animation: animation.hide,
+      onComplete: function () {
+        show();
+      }
+    });
+  } else {
+    show();
+  }
+
+  function show () {
+    var licenses = trainingSets.filter(function (ts) {
+      return ts._id === id;
+    })[0].licenses;
+    $container.find('.content .header').text(languagePair);
+    $container.find('.content .description').text(corpusName);
+    $container.find('.extra.content .description').html(getCorpusInfo(licenses));
+    $container.transition({
+      duration: 500,
+      animation: animation.show
+    });
+  }
+}
+
+function getCorpusInfo (licenses) {
+  if (licenses.length > 0) {
+    var buf = [];
+    buf.push('<div class="ui list">');
+    licenses.forEach(function (l) {
+      buf.push('<div class="item">');
+      buf.push('<i class="text file outline icon"></i>');
+      buf.push('<div class="content">');
+      buf.push('<div class="header">' + l.fileName + '</div>');
+      buf.push('<div class="description">');
+      buf.push('<div class="ui list">');
+      buf.push('Licence: ');
+      if (l.license.match(/http/)) {
+        l.license = l.license.replace(/(.*)\((.*)\)/, '<a href="$2">$1</a>');
+      }
+      buf.push(l.license);
+      buf.push('</div>');
+      buf.push('<div class="ui list">');
+      buf.push('References: ');
+      l.references.forEach(function (ref) {
+        buf.push('<div class="item">');
+        if (ref.match(/^http/)) {
+          ref = '<a href="' + ref + '">' + ref + '</a>';
+          buf.push(ref);
+        } else {
+          buf.push(ref);
+        }
+        buf.push('</div>');
+      });
+      buf.push('</div>');
+      buf.push('</div>');
+      buf.push('</div>');
+      buf.push('</div>');
+    });
+    buf.push('</div>');
+    return buf.join('');
+  } else {
+    return '<div class="center aligned">No description</div>';
+  }
 }
