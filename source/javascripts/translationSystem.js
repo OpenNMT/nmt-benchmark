@@ -281,27 +281,29 @@ function getTranslationOutputs (systemId) {
 }
 
 function showTestSetCards () {
-  var testSets;
-  getTestSets()
-  .then(function (ts) {
-    testSets = ts;
-    return getTranslationOutputs(systemId);
-  })
-  .then(function (to) {
-    var html = testSets.map(function (testSet) {
-      var testOutput = to.filter(function (output) {
-        return testSet._id === output.fileId;
-      })[0];
-      return testSetTemplate(testSet, testOutput);
-    }).join('');
-    $('.last.row .ui.cards').html(html);
-    customizeFileOutput();
-    setEventListeners();
-  })
-  .catch(function (error) {
-    console.log(error);
-    flash('error', error);
-  });
+  if (isAuthor) {
+    var testSets;
+    getTestSets()
+    .then(function (ts) {
+      testSets = ts;
+      return getTranslationOutputs(systemId);
+    })
+    .then(function (to) {
+      var html = testSets.map(function (testSet) {
+        var testOutput = to.filter(function (output) {
+          return testSet._id === output.fileId;
+        })[0];
+        return testSetTemplate(testSet, testOutput);
+      }).join('');
+      $('.last.row .ui.cards').html(html);
+      customizeFileOutput();
+      setEventListeners();
+    })
+    .catch(function (error) {
+      console.log(error);
+      flash('error', error);
+    });
+  }
 }
 
 function testSetTemplate (testSet, testOutput) {
