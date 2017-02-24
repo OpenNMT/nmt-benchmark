@@ -3,7 +3,7 @@ $(document).ready(function () {
   $('#languagePairs .menu').text(defaultLP);
 
   // Initialize LP selection dropdown
-  setDropdownContent();
+  setDropdownContent(undefined, 'restricted');
   setTestFileDropdownContent(getLanguagePair());
 
   // Language pair selection handler
