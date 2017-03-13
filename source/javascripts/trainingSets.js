@@ -12,7 +12,7 @@ $(document).ready(function () {
         return [c2l[full.source.language], c2l[full.target.language]].join('&nbsp;-&nbsp;');
       }},
       {data: 'fileName', className: 'fileName', render: function (data, type, full) {
-        return '<i class="info circle icon" data-fileId="' + full._id + '"></i>' + full.fileName;
+        return '<i class="info circle icon" data-fileId="' + full._id + '" role="button" aria-label="license information" tabindex="1"></i>' + full.fileName;
       }},
       {data: 'download', sortable: false, sDefaultContent: '', render: function (data, type, full) {
         return '<div class="downloadSrc circular ui basic icon fireBrick button" data-fileName="' + full.fileName + '.tgz" role="button" aria-label="download" tabindex="1" data-tooltip="Download training data" data-variation="mini" data-position="right center"><i class="download icon"></i></div>';

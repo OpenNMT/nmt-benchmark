@@ -204,6 +204,10 @@ label.large {
 
 /* Everything else */
 
+.info.icon {
+  cursor: pointer;
+}
+
 .info.card {
   margin-top: 28px !important;
 }
