@@ -323,7 +323,7 @@ function testSetTemplate (testSet, testOutput) {
           buf.push('<li>Origin: ' + testSet.origin + '</li>');
           // Output file info
           if (testOutput) {
-            buf.push('<li>File: ' + testSet.fileName);
+            buf.push('<li>File: ' + testOutput.fileName);
             if (isAuthor) { // Delete translation button
               buf.push('<i class="trash icon fireBrick deleteOutput" data-testOutputId="' + testOutput._id + '" role="button" tabindex="0" aria-label="Delete translation output"></i>');
             }
