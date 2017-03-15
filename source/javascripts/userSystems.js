@@ -41,10 +41,10 @@ function getTable () {
       var scores = [];
       for (var testId in data) {
         if (data.hasOwnProperty(testId)) {
-          scores.push(data[testId].BLEU);
+          scores.push(+data[testId].BLEU);
         }
       }
-      return Math.max(scores) || '';
+      return scores.reduce(function (a, b) { return a > b ? a : b; }, 0);
     }}
   ];
 
